@@ -1,3 +1,3 @@
 oh~ no~~
 
-we're all noobs
+we're all boobs
