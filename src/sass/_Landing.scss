@@ -1,0 +1,51 @@
+
+
+.logo{
+    width: 261px;
+    height: 167px;
+    z-index: 1;
+    margin: 12vh auto;
+}
+
+.signin{
+    z-index: 2;
+    margin-top: 40%;
+    // border: 2px solid white;
+    display: flex;
+    justify-content: center;
+    
+}
+
+#signintext{
+    font-size: 25px;
+    color: #414141;
+    background-color:rgba(245, 245, 245, 0.47);
+    text-align: center;
+    border: 2px solid rgba(245, 245, 245, 0.47);
+    width: 140px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-radius: 5px;
+
+    // -webkit-transition: color 0.3s, border-color 0.3s;
+    // -moz-transition: color 0.3s, border-color 0.3s;
+    // transition: color 0.3s, border-color 0.3s;
+
+}
+
+// #signintext:hover{
+//     background-color:rgba(245, 245, 245, 0.47);
+//     border: 2px solid rgba(245, 245, 245, 0.47);
+//     color: #414141;
+// }
+
+
+
+
+#landingvid{
+    display: block;
+    position: absolute;
+    top:0;
+    left:0;
+    z-index: -1;
+}
