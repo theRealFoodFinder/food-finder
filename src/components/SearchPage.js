@@ -47,7 +47,7 @@ handleChange (e){
 
 //getting profile info from backend to put on state to prefill filters
 componentWillMount(res) {
-    axios.get('/getPreferences').then((res)=> {
+    axios.get('/getProfile').then((res)=> {
         this.setState({
             profile: res
         })
