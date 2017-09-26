@@ -6,9 +6,9 @@ import axios from 'axios';
 
 
 export default class SearchPage extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
-        this.state={
+        this.state = {
             searchInput: "",
             profile: {},
             filterModal: false,
@@ -19,58 +19,71 @@ export default class SearchPage extends Component {
         this.handleSearch = this.handleSearch.bind(this);
     }
 
-handleFilter(filterModal){
-    filterModal = this.state.filterModal
-    this.setState({
-        filterModal: !filterModal
-    })
-}
+    handleFilter(filterModal) {
+        filterModal = this.state.filterModal
+        // this.setState({
+        //     filterModal: !filterModal
+        // })
+    }
 
-handleSearch(){
+    handleSearch() {
         //send data to backend
-    let profile = this.state.profile 
-    axios.post('/getRecipes', {profile}).then((res)=>{
-        this.setState({
-            searchResults: res
+        let profile = this.state.profile
+        axios.post('/getRecipes', { profile }).then((res) => {
+            this.setState({
+                searchResults: res
+            })
         })
-    })
 
-}
+    }
 
-handleChange (e){
-    this.setState({
-        searchInput: e
-    })
-    console.log(this.state.searchInput)
-}
-
-
+<<<<<<< HEAD
 //getting profile info from backend to put on state to prefill filters
 componentWillMount(res) {
     axios.get('/getProfile').then((res)=> {
+=======
+    handleChange(e) {
+>>>>>>> master
         this.setState({
-            profile: res
+            searchInput: e
         })
-        console.log(res, 'res from willmount')
-    })
-
-}
-
-	render(){
+        console.log(this.state.searchInput)
+    }
 
 
+    //getting profile info from backend to put on state to prefill filters
+    componentWillMount(res) {
+        // axios.get('/getPreferences').then((res) => {
+        //     this.setState({
+        //         profile: res
+        //     })
+        //     console.log(res, 'res from willmount')
+        // })
+
+    }
+
+    render() {
 
 
-		return (
-			<div className='SearchPageContainer'>
+
+
+        return (
+            <div className='SearchPageContainer'>
                 <div className='menubutton'></div>
-                <button onClick={this.handleFilter} className='SearchPage button'>Filter
-                </button>
-                <input onChange={(e=>{this.handleChange(e.target.value)})} className='searchPage input'type='search'/> {/* onclick action to open a new search box when value changes*/}
-                <button onClick={this.handleSearch} className='SearchPage button'>Submit
 
-                </button>
-			</div>
-		)
-	}
+
+                <div className='filterinputsubmit'>
+                    <div className='searchtitle'>
+                    Main Ingredients Search
+                    </div>
+                    <button onClick={this.handleFilter} className='SearchPage button'>Filter
+                    </button>
+                    <input onChange={(e => { this.handleChange(e.target.value) })} className='searchPage input' type='search' placeholder='ex)chicken' /> {/* onclick action to open a new search box when value changes*/}
+                    <button onClick={this.handleSearch} className='SearchPage button'>Submit
+                    </button>
+                </div>
+
+            </div>
+        )
+    }
 }

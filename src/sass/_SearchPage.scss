@@ -10,5 +10,46 @@
 input {
     height: 35px;
     margin: 4px;
+    -webkit-animation: inputfield 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite both;
+    animation: inputfield 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite both;
+}
 
+@-webkit-keyframes inputfield {
+    0% {
+      -webkit-box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+              box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+    100% {
+      -webkit-box-shadow: 0 0 20px 0px rgba(255, 255, 255, 2);
+              box-shadow: 0 0 20px 0px rgba(255, 255, 255, 2);
+    }
+  }
+  @keyframes inputfield {
+    0% {
+      -webkit-box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+              box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+    100% {
+      -webkit-box-shadow: 0 0 20px 0px rgba(255, 255, 255, 2);
+              box-shadow: 0 0 20px 0px rgba(255, 255, 255, 2);
+    }
+  }
+
+.SearchPage, button{
+    background-color: pink;
+    border-radius: 5px;
+    height: 35px;
+}
+
+.filterinputsubmit{
+    background-image: url('../img/SearchpageBG.png');
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.searchtitle{
+    float: left;
+    margin: 10px auto;
 }
