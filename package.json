@@ -17,10 +17,10 @@
     "react-scripts": "1.0.13"
   },
   "devDependencies": {
-    "concurrently":"3.5.0"
+    "concurrently": "3.5.0"
   },
   "scripts": {
-    "start": "concurrently \"watch-css\" \"start-js\"",
+    "start": "concurrently \"npm run watch-css\" \"npm run start-js\"",
     "build": "npm run build-css && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
