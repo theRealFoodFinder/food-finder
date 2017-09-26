@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-// import '../sass/_SearchPage.scss';
 import axios from 'axios';
 
 
@@ -36,7 +35,6 @@ export default class SearchPage extends Component {
         })
 
     }
-
     handleChange(e) {
         this.setState({
             searchInput: e
@@ -66,15 +64,17 @@ export default class SearchPage extends Component {
                 <div className='menubutton'></div>
 
 
-                <div className='filterinputsubmit'>
-                    <div className='searchtitle'>
-                    Main Ingredients Search
+                <div className='mainSearchContainer'>
+                    <div className='searchTitle'>
+                        Main Ingredients Search
                     </div>
-                    <button onClick={this.handleFilter} className='SearchPage button'>Filter
-                    </button>
-                    <input onChange={(e => { this.handleChange(e.target.value) })} className='searchPage input' type='search' placeholder='ex)chicken' /> {/* onclick action to open a new search box when value changes*/}
-                    <button onClick={this.handleSearch} className='SearchPage button'>Submit
-                    </button>
+                    <div className='searchButtonContainer' >
+                        <button onClick={this.handleFilter} className='SearchPage button'>Filter
+                        </button>
+                        <input onChange={(e => { this.handleChange(e.target.value) })} className='searchPage input' type='search' placeholder='ex)chicken' /> {/* onclick action to open a new search box when value changes*/}
+                        <button onClick={this.handleSearch} className='SearchPage button'>Submit
+                        </button>
+                    </div>
                 </div>
 
             </div>
