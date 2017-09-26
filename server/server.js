@@ -42,29 +42,29 @@ passport.use(new Auth0Strategy({
 	const db = app.get('db');
 
 	return done(null, profile)
-	
-	// db.find_user([ profile._json.email ])
-  // .then( user => {
-  //  if ( user[0] ) {
-  //   //    console.log(user[0])
-  //    return done( null, { user: user[0] } );
-  //  }
-  //   else {
-  //       if (profile.provider === 'auth0') {
-  //           let date = new Date()
-  //           db.create_user([ profile._json.user_metadata.first_name, profile._json.user_metadata.last_name, profile._json.email, profile.identities[0].user_id, date ])
-  //           .then( user => {
-  //               return done( null, { user: user[0] } );
-  //           })
-  //       } else {
-  //           let date = new Date()
-  //           db.create_user([ profile._json.given_name, profile._json.family_name, profile._json.email, profile.identities[0].user_id, date ])
-  //           .then( user => {
-  //               return done( null, { user: user[0] } );
-  //           })
-  //       }
-  //   }
-  // })
+
+	db.find_user([ profile._json.email ])
+  .then( user => {
+   if ( user[0] ) {
+    //    console.log(user[0])
+     return done( null, { user: user[0] } );
+   }
+    else {
+        if (profile.provider === 'auth0') {
+            let date = new Date()
+            db.create_user([ profile._json.user_metadata.first_name, profile._json.user_metadata.last_name, profile._json.email, profile.identities[0].user_id, date ])
+            .then( user => {
+                return done( null, { user: user[0] } );
+            })
+        } else {
+            let date = new Date()
+            db.create_user([ profile._json.given_name, profile._json.family_name, profile._json.email, profile.identities[0].user_id, date ])
+            .then( user => {
+                return done( null, { user: user[0] } );
+            })
+        }
+    }
+  })
 
 }));
 
@@ -99,12 +99,33 @@ app.get('/auth/logout', (req,res) => {
     return res.redirect(302, '/#/')
 })
 
+app.get('/getProfile', (req, res) => {
+	res.status(200).send(db.profile)
+})
 
+app.get('/getRecipe', (req, res) => {
+	app.get('db').testing().then(response => {
 
+		response = JSON.parse(response[0].recipe);
 
+		let userData = {
+			recipeID: response.RecipeID,
+			title: response.Title,
+			image: response.ImageURL,
+			ingredients: response.Ingredients,
+			directions: response.Instructions,
+			country: response.Cuisine,
+			category: response.Category,
+			serves: response.YeildNumber,
+		};
+
+		res.send(response);
+	})
+})
 
 app.get('/api/test', (req, res) => {
 	app.get('db').test().then((response) => {
+
 		return res.status(200).send(response);
 	})
 })
