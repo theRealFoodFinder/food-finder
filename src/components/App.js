@@ -9,8 +9,8 @@ export default class App extends Component {
 		return (
 			<div className='App'>
 				<Switch>
-				<Route component= {Landing} exact path='/'/>
-				<Route component= {SearchPage} path='/search'/>
+				  <Route component= {Landing} exact path='/'/>
+				  <Route component= {SearchPage} path='/search'/>
 				</Switch>
 			</div>
 		)
