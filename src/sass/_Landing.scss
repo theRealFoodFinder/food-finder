@@ -20,18 +20,18 @@ a a:hover, a:visited, a:link, a:active {
 }
 
 #signintext{
-    font-size: 25px;
+    font-size: 20px;
     color: #414141;
     background-color:rgba(245, 245, 245, 0.47);
     text-align: center;
-    border: 2px solid rgba(245, 245, 245, 0.47);
+    // border: 2px solid rgba(245, 245, 245, 0.47);
     width: 140px;
-    padding-top: 12px;
-    padding-bottom: 12px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     border-radius: 5px;
-    font-family: Arial, Helvetica, sans-serif;
-    -webkit-animation: signintext 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite both;
-            animation: signintext 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite both;
+    font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    -webkit-animation: signintext 2s cubic-bezier(0.550, 0.760, 0.750, 1.990) infinite both;
+            animation: signintext 2s cubic-bezier(0.550, 0.760, 0.750, 1.990) infinite both;
 }
 
 
