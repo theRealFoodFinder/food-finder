@@ -38,29 +38,26 @@ passport.use(new Auth0Strategy({
   callbackURL: config.AUTH_CALLBACK
 }, function(accessToken, refreshToken, extraParams, profile, done) {
 
-	console.log('new auth')
 	const db = app.get('db');
-
-	return done(null, profile)
-
-	db.find_user([ profile._json.email ])
+	db.find_session_user([ profile._json.email ])
   .then( user => {
    if ( user[0] ) {
-    //    console.log(user[0])
-     return done( null, { user: user[0] } );
+		 console.log("db: ", user[0])
+     return done( null, user[0]);
    }
     else {
+
         if (profile.provider === 'auth0') {
-            let date = new Date()
-            db.create_user([ profile._json.user_metadata.first_name, profile._json.user_metadata.last_name, profile._json.email, profile.identities[0].user_id, date ])
+            db.create_user([ profile._json.user_metadata.first_name, profile._json.user_metadata.last_name, profile._json.email, profile.identities[0].user_id])
             .then( user => {
-                return done( null, { user: user[0] } );
+                return done( null, user[0]);
             })
         } else {
-            let date = new Date()
-            db.create_user([ profile._json.given_name, profile._json.family_name, profile._json.email, profile.identities[0].user_id, date ])
+
+            db.create_user([ profile._json.given_name, profile._json.family_name, profile._json.email, profile.identities[0].user_id ])
             .then( user => {
-                return done( null, { user: user[0] } );
+
+                return done( null, user[0]);
             })
         }
     }
@@ -69,16 +66,15 @@ passport.use(new Auth0Strategy({
 }));
 
 passport.serializeUser(function(user, done){
-    let sessionUser = {id: user.id, first: user._json.given_name, last: user._json.family_name, email: user._json.email}
-		console.log('serialize', sessionUser)
+
+    let sessionUser = {id: user.user_id, first: user.first_name, last: user.last_name, email: user.user_email}
     done(null, sessionUser);
 })
 
 passport.deserializeUser(function(user, done){
-	console.log('deserialize')
-    app.get('db').find_session_user([user.user_email]).then( userDeserialize => {
-        done(null, userDeserialize);
-    })
+		if (user) {
+			return done(null, user)
+		}
 })
 
 app.get('/auth', passport.authenticate('auth0'));
@@ -89,7 +85,7 @@ app.get('/auth/callback', passport.authenticate('auth0', {
 }));
 
 app.get('/auth/me', (req, res, next) => {
-    console.log('req.USER', req.user)
+
     return res.status(200).send(req.user);
 })
 
@@ -123,11 +119,11 @@ app.get('/getRecipe', (req, res) => {
 	})
 })
 
-app.get('/api/test', (req, res) => {
-	app.get('db').test().then((response) => {
 
-		return res.status(200).send(response);
-	})
+app.get('/api/getPreferences', (req, res)=> {
+    app.get('db').get_preferences([req.user.id]).then(response => {
+        return res.status(200).send(response);
+    })
 })
 
 

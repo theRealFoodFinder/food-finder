@@ -1,0 +1,152 @@
+*{
+  box-sizing: border-box;
+}
+
+body{
+  padding-top:40px;
+  padding-left: 40px;
+  background: linear-gradient(rgb(200,200,200), rgb(240,240,240));
+  min-height: 100vh;
+}
+
+
+.name{
+  font-size: 1.5em;
+  color: rgba(15,15,15,.55);
+  font-family: Helvetica, cursive, sans-serif;
+  font-weight: lighter;
+  border-bottom: 1px solid rgba(15,15,15,.55);
+  margin-bottom: 5px;
+
+}
+
+input {
+  font-size: 1em;
+}
+
+button {
+  font-size: 1em;
+}
+
+.picture{
+  height:150px;
+  width:190px;
+  margin:0 auto;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.cardList{
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card{
+  width: 200px;
+  padding: 10px;
+  border: 1px solid black;
+  background: linear-gradient(lightblue, teal);
+  border-radius: 15px;
+  margin-left: 15px;
+  margin-bottom: 25px;
+  position: relative;
+  transition: 1s;
+  top:0px;
+  height:316.25px;
+  box-shadow: inset 0px 0px 3px rgba(0,0,0,0.9);
+}
+
+.slideInFromLeft {
+  animation: .75s ease-out 0s 1 slideInFromLeft;
+}
+
+.selection-overlay{
+  padding:10px;
+  transition: 1s;
+  background: rgba(100,100,200,0);
+  height:100%;
+  width:100%;
+}
+
+.stat-label{
+  display: inline-block;
+  width:5em;
+}
+
+input, select{
+  width:85%;
+  margin: 0 auto;
+  display: block;
+}
+
+select{
+  height:2.25em;
+}
+
+.selected .selection-overlay{
+
+  background:rgba(100,100,200, .5);
+}
+
+.stats{
+  margin-top:10px;
+  height:100px;
+  background: rgba(255,255,255,.7);
+  padding:5px;
+  border-radius: 2px;
+  font-family:Courier;
+  overflow: auto;
+  box-shadow: inset 1px 1px 3px rgba(0,0,0,0.9);
+
+}
+
+.stats::-webkit-scrollbar {
+  width: 5px;
+  height: 8px;
+  background-color: #aaa;
+}
+
+.selected{
+  top: 15px;
+}
+
+.selected.card{
+  background: lightblue;
+}
+
+.addNew{
+  animation: .55s ease-in 0s 1 expandDown;
+  display: flex;
+  overflow: hidden;
+  padding-left: 15px;
+}
+
+.filter{
+  width:300px;
+  display: inline-block;
+  position: relative;
+  top: 2px;
+}
+
+.filters{
+  padding: 10px;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100vw);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+@keyframes expandDown {
+  0% {
+    height:0px;
+  }
+  100% {
+    height:316.25px;
+  }
+}
