@@ -64,11 +64,11 @@ export default class SearchPage extends Component {
                 <div className='menubutton'></div>
 
 
-                <div className='mainSearchContainer'>
+                <div id='mainSearchContainer'>
                     <div className='searchTitle'>
-                        Main Ingredients Search
+                        Main Ingredient Search
                     </div>
-                    <div className='searchButtonContainer' >
+                    <div id='searchButtonContainer' >
                         <button onClick={this.handleFilter} className='SearchPage button'>Filter
                         </button>
                         <input onChange={(e => { this.handleChange(e.target.value) })} className='searchPage input' type='search' placeholder='ex)chicken' /> {/* onclick action to open a new search box when value changes*/}
