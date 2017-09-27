@@ -1,0 +1,49 @@
+.modalcontainer{
+    position: absolute;
+    // top:0;
+    // left:0;
+    width: 70%;
+    height: 40%;
+    background-color: rgba(255, 192, 206, 0.66);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    // z-index: 2;
+    
+}
+
+.nutritionselect{
+    width:80px;
+    height:20px;
+    background-color: #FFCD29;
+    font-size: 13px;
+
+}
+
+.clalorieselect{
+    width:150px;
+    height:20px;
+    background-color: #FFCD29;
+    font-size: 15px;
+}
+
+option{
+    text-align: center;
+}
+
+#searchmodalbutton{
+    width:80px;
+    height: 30px;
+    background-color: orange;
+}
+
+.buttonfamily{
+    // background-color: green;
+    height:10%;
+    display: flex;
+    align-items: center;
+}
+
+.selectfamily{
+    
+}
