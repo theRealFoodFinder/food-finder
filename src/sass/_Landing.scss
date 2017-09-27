@@ -5,11 +5,25 @@ a a:hover, a:visited, a:link, a:active {
     scroll-behavior: smooth; }
 
 .logo{
+    // background-image: url('../img/logobigsize.png');
     width: 261px;
-    height: 167px;
+    height: auto;
+    background-size: cover;
     z-index: 1;
     margin: 12vh auto;
 }
+
+.landing{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    // background-color: pink;
+    width: 100vw;
+    height: 100vh;
+    height:60vh;
+}
+
 
 .signin{
     z-index: 2;
@@ -56,10 +70,54 @@ a a:hover, a:visited, a:link, a:active {
     }
   }
 
-#landingvid{
-    display: block;
+#landingvidapp{
+    display: none;
     position: absolute;
     top:0;
     left:0;
     z-index: -1;
+
+}
+
+#landingvidfullscreen{
+    position: fixed;
+    right: 0; 
+    bottom: 0;
+    min-width: 100%; 
+    min-height: 100%;
+    width: auto; 
+    height: auto;
+    z-index: -100;
+    display: none;
+}
+
+
+
+
+
+
+@media (min-width:376px){
+    // .logo{
+    //     width: 400px;
+    //     z-index: 1;
+    //     margin: 12vh auto;
+    // }
+        #landingvidfullscreen{
+            display: block;
+        }
+}
+
+
+@media (max-width:376px){
+    #landingvidapp{
+        display: block;
+    }
+}
+
+@media(min-width:1000px){
+    .logo{
+        width: 400px;
+        z-index: 1;
+        // margin: 12vh auto;
+    }
 }
