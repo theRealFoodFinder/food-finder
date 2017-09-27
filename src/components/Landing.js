@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import bgvid from '../videos/landingvideo - converted.mp4'
-import logo from '../img/Logo.png'
+import logo from '../img/logobigsize.png'
+import bgfullscreenvid from '../videos/landingvideo - fullscreen.mp4'
 
 class Landing extends Component {
     constructor(){
@@ -18,14 +19,21 @@ handleClick(){
     render() {
         return (
             <div className='landing'>
-                <div className='logo'><img src={logo} alt=""/></div>
+                <img src={logo} className='logo'></img>
+                {/* <div className='logo'></div> */}
                 <a href='http://localhost:3005/auth'>
                 <div className='signin' onClick={this.handleClick}><p id='signintext'>SIGN IN</p></div>
                 </a>
 
-                <video  id='landingvid' autoPlay muted loop className="css-background-video" data-state="play">
+                <video id='landingvidapp' autoPlay muted loop className="css-background-video" data-state="play">
                      <source src={bgvid} type="video/mp4"/>
                  </video>
+
+                 <video  id='landingvidfullscreen' autoPlay muted loop className="css-background-video" data-state="play">
+                     <source src={bgfullscreenvid} type="video/mp4"/>
+                 </video>
+
+
             </div>
         );
     }
