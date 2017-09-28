@@ -7,8 +7,11 @@ import ShoppingList from './ShoppingList';
 import Results from './Results';
 
 export default class App extends Component {
-	constructor(props){
-
+	constructor(){
+		super();
+		this.state={
+				 
+		}
 	}
 
 	setUserInfo (info) {
