@@ -8,18 +8,17 @@ export default class SearchPage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            searchInput: "",
             profile: {
                 cuisine: "",
                 blacklist: "",
             },
-
+            
         //     user_preferences: {
-        //         cuisine(country of origin),
+            //         cuisine(country of origin),
         //         mainIngredient: '',
         //         moreIngredients: [],
         //         nutrition_info: [
-        //         calories, (range)
+            //         calories, (range)
         //         total_fat, (range)
         //         sodium, (range)
         //         carbs, (range)
@@ -27,16 +26,26 @@ export default class SearchPage extends Component {
         //         protein (range)
         //     ]
         // }
-            filterModal: false,
-            searchResults: []
+        filterModal: true,
+        searchInput: "",  //ingredient to add
+        searchResults: [],  //recipes from back
+        searchByIngredients: []  //ingredients sent to back
         }
+        this.handleAdd = this.handleAdd.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleFilter = this.handleFilter.bind(this);
-        this.handlemenu = this.handlemenu.bind(this);
+        this.filterRender = this.filterRender.bind(this);
     }
 
-    handlemenu(){
-        //menu display javascript
+    handleAdd(){
+        let tempIngredient = this.state.searchInput;
+        let tempArray = this.state.searchByIngredients;
+        tempArray.push(tempIngredient);
+        this.setState({
+            searchByIngredients: tempArray,
+            searchInput:""
+        })
+        console.log(this.state.searchByIngredients)
     }
 
     handleFilter(filterModal) {
@@ -47,55 +56,34 @@ export default class SearchPage extends Component {
     }
 
     handleSearch() {
-       
-        // let profile = this.state.profile
-
-        //delete for testing only
-        let res = [{ 
-            "Title": "Teriyaki Chicken", 
-            "Cuisine": "Japanese", 
-            
-            },
-            {
-                "Title": "Orange Chicken", 
-                "Cuisine": "Greek", 
-
-            }
-        ]
-               //delete for testing only
-               console.log(res)
-               
-        
-        // axios.post('/api/getRecipes', { profile }).then((res) => {
-            this.setState({
-                searchResults: res
-            // })
-        })
-        console.log(this.state.searchInput)
-
+        let ingredients = this.state.searchByIngredients;
+        // let filters = this.state
     }
     handleChange(e) {
         this.setState({
             searchInput: e
         })
-        console.log(this.state.searchInput)
     }
 
 
-    //getting profile info from backend to put on state to prefill filters
-    componentWillMount(res) {
+    //getting profile info from backend to put on state to prefill filters when we need profile info
+    // componentWillMount(res) {
         // axios.get('/api/getProfile').then((res) => {
         //     this.setState({
         //         profile: res
         //     })
-            console.log('from willmount')
         // })
+    // }
 
+    filterRender (filters){
+        return (filters.map((el, i)=> {
+         return   <h4 key={i}>{el}</h4>}))
     }
 
     render() {
-
-
+const ingredientRender = this.state.searchByIngredients.map((el, i)=> {
+  return  <h4 key={i}>{el}</h4>})
+    console.log(this.state.fintermodel)
 
 
         return (
@@ -104,17 +92,31 @@ export default class SearchPage extends Component {
 
 
                 <div id='mainSearchContainer'>
+                    <div className='searchParamDisplay'>
+                    Search By:
+                    {ingredientRender}{}
+                    </div>
+
+
                     <div className='searchTitle'>
                         Main Ingredient Search
                     </div>
                     <div id='searchButtonContainer' >
                         <button onClick={this.handleFilter} className='SearchPage button'>Filter
                         </button>
-                        <input onChange={(e => { this.handleChange(e.target.value) })} className='searchPage input' type='search' placeholder='ex:  chicken' /> {/* onclick action to open a new search box when value changes*/}
-                        <button onClick={this.handleSearch} className='SearchPage button'>Submit
+
+                        <input value = {this.state.searchInput} onChange={(e => { this.handleChange(e.target.value) })} className='searchPage input' type='search' placeholder='ex:  chicken' />
+                         {/* onclick action to open a new search box when value changes*/}
+
+                        <button onClick={this.handleAdd} className='SearchPage button'>Add Ingredient
                         </button>
+
+
                     </div>
-                    <SearchModal />
+                    { !this.state.filterModal ? <div></div>  :props => <SearchModal {...props} profile={this.state.profile}/>}
+                    
+                    <button onClick={this.handleSearch} className='getRecipes button'>Get Recipes
+                    </button>
                 </div>
             </div>
         )

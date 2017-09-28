@@ -66,16 +66,18 @@ handleSelectCal(value){
 
 
 submitAdd(){
-    console.log(this.state.amount, "amount");
+    // console.log(this.state.amount, "amount");
  let tempModalObject=this.state.modalObject;
  let selected = this.state.selected;
  let amount = this.state.amount;
  tempModalObject[selected] = amount;
- console.log(tempModalObject);
+//  console.log(tempModalObject);
  console.log(tempModalObject.calories);
-//  tempModalObject = tempModalObject.push(tempModalAdd)
-//  console.log(tempModalObject, 'tempModalObject');
-                                                                                        //set to state on modalobject
+this.setState({
+    modalObject: tempModalObject
+})
+this.props.filterRender(this.state.modalObject)
+ console.log(this.state.ModalObject, 'ModalObject');
 }
 
 
