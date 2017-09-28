@@ -4,9 +4,7 @@ class SearchModal extends Component {
     constructor(){
         super();
         this.state={
-            modalObject:{
-
-                },
+            modalObject: [],
             nutritionOptions:[
                 "calories",
                 "total_fat",
@@ -16,26 +14,29 @@ class SearchModal extends Component {
                 "protein"
             ],
             calorieOptions:[
-                "< 400",
-                "400 - 600",
-                "600 - 800",
-                "800 - 1000",
-                "1000 - R U SURE?"
+                "< 400 cal",
+                "400 - 600 cal",
+                "600 - 800 cal",
+                "800 - 1000 cal",
+                "1000 cal - R U SURE?"
             ],
             gramOptions:[
-                "< 10",
-                "10 - 20",
-                "20 - 30",
-                "30 - 40",
-                "40 - 50",
-                "50 - 60",
-                "60 - 70",
-                "70 - >70"
+                "< 10g",
+                "10g - 20g",
+                "20g - 30g",
+                "30g - 40g",
+                "40g - 50g",
+                "50g - 60g",
+                "60g - 70g",
+                "70g - >70g"
             ],
             selected: 'calories',
-            amount: 0
+            amount: "< 400 cal"
       }
-    //   this.submitModal=this.submitModal.bind(this)
+        this.submitModal=this.submitModal.bind(this)
+        this.handleSelectNutrition = this.handleSelectNutrition.bind(this);
+        this.handleSelectCal = this.handleSelectCal.bind(this);
+
     }
 
 
@@ -44,27 +45,31 @@ handleSelectNutrition(value){
     this.setState({
         selected: value
     })
-    // console.log(this.state.selected);
-    // console.log(this.state.selected);
 }
 
-x(){
-    console.log(this.state.selected);
-}
+
 
 handleSelectCal(value){
     this.setState({
         amount: value
     })
-    console.log(this.state.amount);
-    // console.log(this.state.selected);
+    // console.log(this.state.selected, 'selected');
 }
 
 
 
-// submitModal(){
-//  tempobject=this.state.modalObject
-// }
+submitModal(){
+    // console.log(this.state.amount, "amount");
+ let tempModalObject=this.state.modalObject;
+ let tempModalAdd = {
+     selected : this.state.selected,
+     amount : this.state.amount
+ };
+ console.log(tempModalObject);
+ tempModalObject = tempModalObject.push(tempModalAdd)
+ console.log(tempModalObject, 'tempModalObject');
+                                                                                        //set to state on modalobject
+}
 
 
 
@@ -102,13 +107,12 @@ handleSelectCal(value){
                     <select className='nutritionselect' onChange={(e) => {this.handleSelectNutrition(e.target.value)}}>
                     {nutritionOptionsMap}
                     </select>
-                    <select className='clalorieselect' onChange={(e) => {this.handleSelectCal(e.target.value)}}>
+                    <select className='calorieSelect' onChange={(e) => {this.handleSelectCal(e.target.value)}}>
                     {calorieOptionsMap}
                     </select>
                 </div>
                 <button id='searchmodalbutton' onClick={this.submitModal}>Submit</button>
                 </div>
-                <button onClick={_=>this.x()}>oooo</button>
             </div>
         );
     }
