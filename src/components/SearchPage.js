@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 // import axios from 'axios';
-
+import SearchModal from './SearchModal'
 
 
 
@@ -114,8 +114,9 @@ export default class SearchPage extends Component {
                         <button onClick={this.handleSearch} className='SearchPage button'>Submit
                         </button>
                     </div>
+                    <SearchModal />
                 </div>
-
+                {/* <SearchModal /> */}
             </div>
         )
     }
