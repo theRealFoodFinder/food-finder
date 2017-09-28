@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 // import axios from 'axios';
-import SearchModal from './SearchModal'
+import SearchModal from './SearchModal';
+import Sidebar from './Sidebar';
+import axios from 'axios';
 
 
 
@@ -8,27 +10,12 @@ export default class SearchPage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            profile: {
-                cuisine: "",
-                blacklist: "",
-            },
-            
-        //     user_preferences: {
-            //         cuisine(country of origin),
-        //         mainIngredient: '',
-        //         moreIngredients: [],
-        //         nutrition_info: [
-            //         calories, (range)
-        //         total_fat, (range)
-        //         sodium, (range)
-        //         carbs, (range)
-        //         sugar, (range)
-        //         protein (range)
-        //     ]
-        // }
+        cuisine: "",
+        blacklist: "",
         filterModal: true,
         searchInput: "",  //ingredient to add
         searchResults: [],  //recipes from back
+        filterResults: [],
         searchByIngredients: []  //ingredients sent to back
         }
         this.handleAdd = this.handleAdd.bind(this);
@@ -56,9 +43,17 @@ export default class SearchPage extends Component {
     }
 
     handleSearch() {
-        let ingredients = this.state.searchByIngredients;
-        // let filters = this.state
+        let profile ={};
+        profile.nutrition_info = this.state.filterResults;
+        profile.ingredients = this.state.searchByIngredients;
+        profile.cuisine = this.state.cuisine;
+        axios.post('/getRecipe', {profile}).then((res)=>{
+
+        }).catch((error)=>{
+            console.log(error)
+        })
     }
+
     handleChange(e) {
         this.setState({
             searchInput: e
@@ -88,6 +83,7 @@ const ingredientRender = this.state.searchByIngredients.map((el, i)=> {
 
         return (
             <div className='SearchPageContainer'>
+            <Sidebar />
                 <div onClick={this.handlemenu} className='menubutton'></div>
 
 
