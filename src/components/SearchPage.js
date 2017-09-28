@@ -9,18 +9,34 @@ export default class SearchPage extends Component {
         super(props)
         this.state = {
             searchInput: "",
-            profile: {},
+            profile: {
+                cuisine: "",
+                blacklist: "",
+            },
+
+        //     user_preferences: {
+        //         cuisine(country of origin),
+        //         mainIngredient: '',
+        //         moreIngredients: [],
+        //         nutrition_info: [
+        //         calories, (range)
+        //         total_fat, (range)
+        //         sodium, (range)
+        //         carbs, (range)
+        //         sugar, (range)
+        //         protein (range)
+        //     ]
+        // }
             filterModal: false,
             searchResults: []
         }
-        this.handleChange = this.handleChange.bind(this);
-        this.handleClick = this.handleFilter.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
+        this.handleFilter = this.handleFilter.bind(this);
         this.handlemenu = this.handlemenu.bind(this);
     }
 
     handlemenu(){
-        //menu display here
+        //menu display javascript
     }
 
     handleFilter(filterModal) {
@@ -31,13 +47,30 @@ export default class SearchPage extends Component {
     }
 
     handleSearch() {
-        //send data to backend
+       
         // let profile = this.state.profile
-        // axios.post('/getRecipes', { profile }).then((res) => {
-        //     this.setState({
-        //         searchResults: res
-        //     })
-        // })
+
+        //delete for testing only
+        let res = [{ 
+            "Title": "Teriyaki Chicken", 
+            "Cuisine": "Japanese", 
+            
+            },
+            {
+                "Title": "Orange Chicken", 
+                "Cuisine": "Greek", 
+
+            }
+        ]
+               //delete for testing only
+               console.log(res)
+               
+        
+        // axios.post('/api/getRecipes', { profile }).then((res) => {
+            this.setState({
+                searchResults: res
+            // })
+        })
         console.log(this.state.searchInput)
 
     }
@@ -51,7 +84,7 @@ export default class SearchPage extends Component {
 
     //getting profile info from backend to put on state to prefill filters
     componentWillMount(res) {
-        // axios.get('/getProfile').then((res) => {
+        // axios.get('/api/getProfile').then((res) => {
         //     this.setState({
         //         profile: res
         //     })
