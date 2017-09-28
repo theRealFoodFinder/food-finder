@@ -1,2 +1,2 @@
 SELECT * FROM recipes
-WHERE recipe_id = 40;
+WHERE recipe_id IN (40,41,42,43,44,45,46,47,48,49,50);
