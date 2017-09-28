@@ -4,7 +4,14 @@ class SearchModal extends Component {
     constructor(){
         super();
         this.state={
-            modalObject: [],
+            modalObject: {
+                "calories": "",
+                "total_fat": "",
+                "sodium": '',
+                "carbs":'',
+                "sugar":'',
+                "protein":''
+            },
             nutritionOptions:[
                 "calories",
                 "total_fat",
@@ -18,7 +25,7 @@ class SearchModal extends Component {
                 "400 - 600 cal",
                 "600 - 800 cal",
                 "800 - 1000 cal",
-                "1000 cal - R U SURE?"
+                "1000+"
             ],
             gramOptions:[
                 "< 10g",
@@ -33,7 +40,7 @@ class SearchModal extends Component {
             selected: 'calories',
             amount: "< 400 cal"
       }
-        this.submitModal=this.submitModal.bind(this)
+        this.submitAdd=this.submitAdd.bind(this)
         this.handleSelectNutrition = this.handleSelectNutrition.bind(this);
         this.handleSelectCal = this.handleSelectCal.bind(this);
 
@@ -58,16 +65,16 @@ handleSelectCal(value){
 
 
 
-submitModal(){
-    // console.log(this.state.amount, "amount");
+submitAdd(){
+    console.log(this.state.amount, "amount");
  let tempModalObject=this.state.modalObject;
- let tempModalAdd = {
-     selected : this.state.selected,
-     amount : this.state.amount
- };
+ let selected = this.state.selected;
+ let amount = this.state.amount;
+ tempModalObject[selected] = amount;
  console.log(tempModalObject);
- tempModalObject = tempModalObject.push(tempModalAdd)
- console.log(tempModalObject, 'tempModalObject');
+ console.log(tempModalObject.calories);
+//  tempModalObject = tempModalObject.push(tempModalAdd)
+//  console.log(tempModalObject, 'tempModalObject');
                                                                                         //set to state on modalobject
 }
 
@@ -111,7 +118,7 @@ submitModal(){
                     {calorieOptionsMap}
                     </select>
                 </div>
-                <button id='searchmodalbutton' onClick={this.submitModal}>Submit</button>
+                <button id='searchmodalbutton' onClick={this.submitAdd}>Submit</button>
                 </div>
             </div>
         );
