@@ -116,7 +116,6 @@ export default class SearchPage extends Component {
                     </div>
                     <SearchModal />
                 </div>
-                {/* <SearchModal /> */}
             </div>
         )
     }
