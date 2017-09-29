@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Details from './Details'
 // import logo from '../img/Logo.png'
 
 class Results extends Component {
@@ -42,6 +43,7 @@ class Results extends Component {
 // }
         return (
             <div className='resultsContainer'>
+                <Details />
               <header>
               </header>
               <h2 id='resultsTitle'>Recipes</h2>
