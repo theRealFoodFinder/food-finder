@@ -101,11 +101,6 @@ app.get('/api/getProfile', (req, res) => {
 	res.status(200).send(db.profile)
 })
 
-app.post('/api/getRecipes', (req, res) => {
-	let items = req.body;
-
-})
-
 
 app.get('/api/getPreferences', (req, res)=> {
     app.get('db').get_preferences([req.user.id]).then(response => {
