@@ -10,6 +10,7 @@ const express = require('express'),
 
 const app = express();
 
+//pull in the database
 massive({
   host: config.DB_HOST,
   port: config.DB_PORT,
