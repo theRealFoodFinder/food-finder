@@ -116,10 +116,10 @@ app.get('/getProfile', (req, res) => {
 // 	})
 // })
 
-app.get('/api/getRecipe').then((req,res) => {
-	app.get('db').get_recipe().then((response) => {
-		res.status(200).send(response);
-	})
+app.post('/api/getRecipe', (req,res) => {
+    app.get('db').get_recipe().then((response) => {
+        res.status(200).send(response);
+    })
 })
 
 app.post('/api/getRecipes', (req, res)=> {

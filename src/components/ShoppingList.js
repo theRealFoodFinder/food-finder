@@ -45,7 +45,7 @@ class ShoppingList extends Component {
     
     handleBoxChecked(e){
     let listItem = e.target.className
-    let isChecked = e.target.checked
+    // let isChecked = e.target.checked
     let list = this.state.shoppingLists
     list[listItem]=!list[listItem]
     console.log(list);
