@@ -12,43 +12,67 @@ export default class SearchPage extends Component {
         this.state = {
         cuisine: "",
         blacklist: "",
-        filterModal: true,
+        filterModal: false,
+        modalObject: {
+            "calories": "",
+            "total_fat": "",
+            "sodium": '',
+            "carbs":'',
+            "sugar":'',
+            "protein":''
+        }, 
         searchInput: "",  //ingredient to add
         searchResults: [],  //recipes from back
-        filterResults: [],
         searchByIngredients: []  //ingredients sent to back
         }
         this.handleAdd = this.handleAdd.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleFilter = this.handleFilter.bind(this);
-        this.filterRender = this.filterRender.bind(this);
+        // this.filterRender = this.filterRender.bind(this);
+        this.handleGetFilters = this.handleGetFilters.bind(this);
+    }
+
+    handleGetFilters(selected, amount){
+        let tempModalObject=this.state.modalObject;
+        tempModalObject[selected] = amount;
+        this.setState({
+            modalObject: tempModalObject,
+            filterModal: false
+        })
+        
     }
 
     handleAdd(){
         let tempIngredient = this.state.searchInput;
         let tempArray = this.state.searchByIngredients;
-        tempArray.push(tempIngredient);
+        if (tempIngredient){tempArray.push(tempIngredient);
         this.setState({
             searchByIngredients: tempArray,
             searchInput:""
-        })
-        console.log(this.state.searchByIngredients)
+        })}
+        else 
+        alert('Please input an ingredient!')
     }
 
-    handleFilter(filterModal) {
-        filterModal = this.state.filterModal
+    handleFilter() {
+        let filterModal = this.state.filterModal
         this.setState({
-            filterModal: !filterModal
+            filterModal: !(filterModal)
         })
+        // console.log('filter on state', this.state.filterModal)
     }
 
     handleSearch() {
         let profile ={};
-        profile.nutrition_info = this.state.filterResults;
+        profile.nutrition_info = this.state.modalObject;
         profile.ingredients = this.state.searchByIngredients;
         profile.cuisine = this.state.cuisine;
-        axios.post('/getRecipe', {profile}).then((res)=>{
-
+        console.log(profile, 'profile');
+        axios.post('http://localhost:3005/api/getRecipe', profile).then((res)=>{
+            console.log('return from axios post', res)
+            this.setState({
+                searchResults: res
+            })
         }).catch((error)=>{
             console.log(error)
         })
@@ -70,16 +94,18 @@ export default class SearchPage extends Component {
         // })
     // }
 
-    filterRender (filters){
-        return (filters.map((el, i)=> {
-         return   <h4 key={i}>{el}</h4>}))
-    }
-
+    
     render() {
-const ingredientRender = this.state.searchByIngredients.map((el, i)=> {
-  return  <h4 key={i}>{el}</h4>})
-    console.log(this.state.fintermodel)
-
+        // console.log(this.state.modalObject, 'filter results')
+        // console.log(this.state.searchByIngredients, 'ingredients results')
+        const ingredientRender = this.state.searchByIngredients.map((el, i)=> {
+            return  <h4 key={i}>{el}</h4>})
+            
+         const filterRender = ()=> {
+                // let filters = this.state.modalObject;
+                // return (filters.map((el, i)=> {
+                //  return   <h4 key={i}>{el}</h4>}))
+            }
 
         return (
             <div className='SearchPageContainer'>
@@ -90,7 +116,7 @@ const ingredientRender = this.state.searchByIngredients.map((el, i)=> {
                 <div id='mainSearchContainer'>
                     <div className='searchParamDisplay'>
                     Search By:
-                    {ingredientRender}{}
+                    {ingredientRender}{filterRender}
                     </div>
 
 
@@ -109,10 +135,13 @@ const ingredientRender = this.state.searchByIngredients.map((el, i)=> {
 
 
                     </div>
-                    { !this.state.filterModal ? <div></div>  :props => <SearchModal {...props} profile={this.state.profile}/>}
+                    { this.state.filterModal===true ? <SearchModal handleGetFilters={this.handleGetFilters
+                    } /> : console.log('filtermodal false')} 
+                   
+                    {/* <SearchModal /> */}
                     
-                    <button onClick={this.handleSearch} className='getRecipes button'>Get Recipes
-                    </button>
+                    <a href='#/results'><button onClick={this.handleSearch} className='getRecipes button'>Get Recipes
+                    </button></a>
                 </div>
             </div>
         )

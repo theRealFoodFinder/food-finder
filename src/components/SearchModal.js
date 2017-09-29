@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
 class SearchModal extends Component {
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state={
             modalObject: {
                 "calories": "",
@@ -38,7 +38,7 @@ class SearchModal extends Component {
                 "70g - >70g"
             ],
             selected: 'calories',
-            amount: "< 400 cal"
+            amount: ""
       }
         this.submitAdd=this.submitAdd.bind(this)
         this.handleSelectNutrition = this.handleSelectNutrition.bind(this);
@@ -48,43 +48,40 @@ class SearchModal extends Component {
 
 
 
-handleSelectNutrition(value){
+    handleSelectNutrition(value){
+        this.setState({
+            selected: value
+        })
+    }
+
+
+
+    handleSelectCal(value){
+        this.setState({
+            amount: value
+        })
+        // console.log(this.state.selected, 'selected');
+    }
+
+
+
+    submitAdd(){
+        // console.log(this.state.amount, "amount");
+    let tempModalObject=this.state.modalObject;
+    let selected = this.state.selected;
+    let amount = this.state.amount;
+    tempModalObject[selected] = amount;
     this.setState({
-        selected: value
+        modalObject: tempModalObject
     })
-}
-
-
-
-handleSelectCal(value){
-    this.setState({
-        amount: value
-    })
-    // console.log(this.state.selected, 'selected');
-}
-
-
-
-submitAdd(){
-    // console.log(this.state.amount, "amount");
- let tempModalObject=this.state.modalObject;
- let selected = this.state.selected;
- let amount = this.state.amount;
- tempModalObject[selected] = amount;
-//  console.log(tempModalObject);
- console.log(tempModalObject.calories);
-this.setState({
-    modalObject: tempModalObject
-})
-this.props.filterRender(this.state.modalObject)
- console.log(this.state.ModalObject, 'ModalObject');
-}
+    this.props.handleGetFilters(this.state.selected, this.state.amount)
+    }
 
 
 
 
     render() {
-
+        // console.log(this.props.handleGetFilters, 'props modal')
         const nutritionOptionsMap = this.state.nutritionOptions.map((nutrition, i)=>{
             return(
                 <option value ={nutrition} key={i}>

@@ -29,9 +29,11 @@
     }
 
     
-    input {
+    .searchPage, .input {
         height: 35px;
         margin: 4px;
+        width: 50vw;
+        max-width: 200px;
         // border: 20px;
         -webkit-animation: inputfield 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite both;
     animation: inputfield 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite both;
