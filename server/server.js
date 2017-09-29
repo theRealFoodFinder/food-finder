@@ -96,51 +96,46 @@ app.get('/getProfile', (req, res) => {
 	res.status(200).send(db.profile)
 })
 
-// app.get('/getRecipe', (req, res) => {
-// 	app.get('db').testing().then(response => {
-
-// 		response = JSON.parse(response[0].recipe);
-
-// 		let userData = {
-// 			recipeID: response.RecipeID,
-// 			title: response.Title,
-// 			image: response.ImageURL,
-// 			ingredients: response.Ingredients,
-// 			directions: response.Instructions,
-// 			country: response.Cuisine,
-// 			category: response.Category,
-// 			serves: response.YeildNumber,
-// 		};
-
-// 		res.send(response);
-// 	})
-// })
-
 app.post('/api/getRecipe', (req,res) => {
-	// console.log('hit')
-	// let search = req.body
+	console.log('/getRecipe hit')
+	let search = req.body
+	let searchParams = []
 
-	// if (search){
-	// 	console.log('has body')
-	// 	if (search.cuisine){
-	// 			url += `&cuisine=${search.cuisine}`;
-	// 	}
-	// 	if (search.ingredients){
-	// 			console.log('ingr', search.ingredients)
-	// 			let ingList = search.ingredients
-	// 			url += `&include_ing=${ingList}`;
-	// 	}
-	// 	if (search.category){
-	// 			url += `&include_cat=${search.category}`;
-	// 	}
-	// 	if (search.title){
-	// 			url += `&title_kw=${search.title}`;
-	// 	}
-	// }
-
-	app.get('db').get_recipe().then((response) => {
-		res.status(200).send(response);
-	})
+	if (search){
+		console.log('request has body!')
+		if (search.cuisine){
+			console.log('cuisine searching')
+		}
+		if (search.ingredients){
+				let ingList = search.ingredients
+				console.log('ingr', ingList)
+				if (ingList.length === 1) {
+					searchParams = ingList;
+					console.log('1 ingredient')
+					app.get('db').get_recipe_1(searchParams).then((response) => {
+						res.status(200).send(response);
+					})
+				} else if (ingList.length === 2) {
+					console.log('2 ingredient')
+					searchParams = ingList;
+					app.get('db').get_recipe_2(searchParams).then((response) => {
+						res.status(200).send(response);
+					})
+				} else if (ingList.length === 3) {
+					console.log('3 ingredient')
+					searchParams = ingList;
+					app.get('db').get_recipe_3(searchParams).then((response) => {
+						res.status(200).send(response);
+					})
+				}
+		}
+		if (search.category){
+			console.log('category searching')
+		}
+		if (search.title){
+			console.log('title searching')
+		}
+	}
 })
 
  app.post('/api/postShoppingList', (req, res) => {
@@ -174,27 +169,8 @@ app.post('/api/hitBigOven', (req, res)=> {
 		let search = req.body;
 		console.log('endpoint hit')
 		let url = `http://api2.bigoven.com/recipes/random?api_key=${config.bigOvenKey}`
-		
-		// if (search){
-		// 	console.log('has body')
-		// 	if (search.cuisine){
-		// 			url += `&cuisine=${search.cuisine}`;
-		// 	}
-		// 	if (search.ingredients){
-		// 			console.log('ingr', search.ingredients)
-		// 			let ingList = search.ingredients
-		// 			url += `&include_ing=${ingList}`;
-		// 	}
-		// 	if (search.category){
-		// 			url += `&include_cat=${search.category}`;
-		// 	}
-		// 	if (search.title){
-		// 			url += `&title_kw=${search.title}`;
-		// 	}
 
-			// console.log('done concat:', url)
-
-			for (let i = 0; i < 51; i++){
+			for (let i = 0; i < 200; i++){
 				let randy = (Math.random() * (8 - 3) + 3)
 				setTimeout(() => {
 				console.log(~~randy + ' seconds')
@@ -225,8 +201,6 @@ app.post('/api/hitBigOven', (req, res)=> {
 							console.log('recipe added')
 						})
 					})
-
-					// console.log(i)
 				}, (~~randy * 1000) * i)
 			}
 
