@@ -1,2 +1,3 @@
-INSERT INTO pantries(user_id, items)
-VALUES ($1, $2);
+UPDATE pantries
+SET items =
+$2 WHERE user_id = $1;
