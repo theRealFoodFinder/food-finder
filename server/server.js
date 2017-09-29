@@ -113,19 +113,257 @@ app.post('/api/getRecipe', (req,res) => {
 					searchParams = ingList;
 					console.log('1 ingredient')
 					app.get('db').get_recipe_1(searchParams).then((response) => {
-						res.status(200).send(response);
+
+
+
+						let filters = {min: {}, max: {}}
+						let nutInf = search.nutrition_info;
+						for (let ing in nutInf){
+							
+							switch (ing){
+								case 'calories':
+									nutInf.TotalCalories = nutInf[ing];
+									delete nutInf.calories
+									break;
+								case 'total_fat':
+									nutInf.TotalFat = nutInf[ing];
+									delete nutInf.total_fat
+									break;
+								case 'sodium':
+									nutInf.Sodium = nutInf[ing];
+									delete nutInf.sodium;
+									break;
+								case 'carbs':
+									nutInf.TotalCarbs = nutInf[ing];
+									delete nutInf.carbs;
+									break;
+								case 'sugar':
+									nutInf.Sugar = nutInf[ing];
+									delete nutInf.sugar;
+									break;
+								case 'protein':
+									nutInf.Protein = nutInf[ing];
+									delete nutInf.protein;
+									break;
+								default:
+									break;
+							}
+						}
+
+						for (var prop in nutInf){
+							if (nutInf[prop]){
+								if (nutInf[prop].includes('-')) {
+									let item = nutInf[prop].replace(/[a-z]/gi, '')
+									item = item.split('-')
+									filters.min[prop] = +item[0]
+									filters.max[prop] = +item[1]
+								}
+								if (nutInf[prop].includes('<')) {
+									let item = nutInf[prop].split(' ')
+									filters.min[prop] = 0
+									filters.max[prop] = +item[1]
+								}
+								if (nutInf[prop].includes('+')) {
+									let item = nutInf[prop].replace(/\+/g, '')
+									filters.min[prop] = +item
+									filters.max[prop] = 9999
+								}
+							}
+						}
+
+						let recipeList = [];
+						for (var go = 0; go < response.length; go++){
+
+						response[go].ingredients = JSON.parse(response[go].ingredients)
+						response[go].nutrition_info = JSON.parse(response[go].nutrition_info)
+						recipeList.push(response[go])
+						}
+							
+						let filteredRecipes = response.filter((recipe,i,a)=>{
+							let result = true
+							for (var type in filters.min){
+								if (recipe.nutrition_info[type] <= filters.min[type] || recipe.nutrition_info[type] >= filters.max[type]){
+									result = false
+								}
+							}
+							if (result) return recipe
+						})
+
+						res.status(200).send(filteredRecipes);
 					})
 				} else if (ingList.length === 2) {
-					console.log('2 ingredient')
+					// console.log('2 ingredient')
+					// searchParams = ingList;
+					// app.get('db').get_recipe_2(searchParams).then((response) => {
+					// 	res.status(200).send(response);
+					// })
 					searchParams = ingList;
+					console.log('2 ingredient')
 					app.get('db').get_recipe_2(searchParams).then((response) => {
-						res.status(200).send(response);
+
+
+
+						let filters = {min: {}, max: {}}
+						let nutInf = search.nutrition_info;
+						for (let ing in nutInf){
+							
+							switch (ing){
+								case 'calories':
+									nutInf.TotalCalories = nutInf[ing];
+									delete nutInf.calories
+									break;
+								case 'total_fat':
+									nutInf.TotalFat = nutInf[ing];
+									delete nutInf.total_fat
+									break;
+								case 'sodium':
+									nutInf.Sodium = nutInf[ing];
+									delete nutInf.sodium;
+									break;
+								case 'carbs':
+									nutInf.TotalCarbs = nutInf[ing];
+									delete nutInf.carbs;
+									break;
+								case 'sugar':
+									nutInf.Sugar = nutInf[ing];
+									delete nutInf.sugar;
+									break;
+								case 'protein':
+									nutInf.Protein = nutInf[ing];
+									delete nutInf.protein;
+									break;
+								default:
+									break;
+							}
+						}
+
+						for (var prop in nutInf){
+							if (nutInf[prop]){
+								if (nutInf[prop].includes('-')) {
+									let item = nutInf[prop].replace(/[a-z]/gi, '')
+									item = item.split('-')
+									filters.min[prop] = +item[0]
+									filters.max[prop] = +item[1]
+								}
+								if (nutInf[prop].includes('<')) {
+									let item = nutInf[prop].split(' ')
+									filters.min[prop] = 0
+									filters.max[prop] = +item[1]
+								}
+								if (nutInf[prop].includes('+')) {
+									let item = nutInf[prop].replace(/\+/g, '')
+									filters.min[prop] = +item
+									filters.max[prop] = 9999
+								}
+							}
+						}
+
+						let recipeList = [];
+						for (var go = 0; go < response.length; go++){
+
+						response[go].ingredients = JSON.parse(response[go].ingredients)
+						response[go].nutrition_info = JSON.parse(response[go].nutrition_info)
+						recipeList.push(response[go])
+						}
+							
+						let filteredRecipes = response.filter((recipe,i,a)=>{
+							let result = true
+							for (var type in filters.min){
+								if (recipe.nutrition_info[type] <= filters.min[type] || recipe.nutrition_info[type] >= filters.max[type]){
+									result = false
+								}
+							}
+							if (result) return recipe
+						})
+
+						res.status(200).send(filteredRecipes);
 					})
 				} else if (ingList.length === 3) {
-					console.log('3 ingredient')
+					// console.log('3 ingredient')
+					// searchParams = ingList;
+					// app.get('db').get_recipe_3(searchParams).then((response) => {
+					// 	res.status(200).send(response);
+					// })
 					searchParams = ingList;
+					console.log('3 ingredient')
 					app.get('db').get_recipe_3(searchParams).then((response) => {
-						res.status(200).send(response);
+
+
+
+						let filters = {min: {}, max: {}}
+						let nutInf = search.nutrition_info;
+						for (let ing in nutInf){
+							
+							switch (ing){
+								case 'calories':
+									nutInf.TotalCalories = nutInf[ing];
+									delete nutInf.calories
+									break;
+								case 'total_fat':
+									nutInf.TotalFat = nutInf[ing];
+									delete nutInf.total_fat
+									break;
+								case 'sodium':
+									nutInf.Sodium = nutInf[ing];
+									delete nutInf.sodium;
+									break;
+								case 'carbs':
+									nutInf.TotalCarbs = nutInf[ing];
+									delete nutInf.carbs;
+									break;
+								case 'sugar':
+									nutInf.Sugar = nutInf[ing];
+									delete nutInf.sugar;
+									break;
+								case 'protein':
+									nutInf.Protein = nutInf[ing];
+									delete nutInf.protein;
+									break;
+								default:
+									break;
+							}
+						}
+
+						for (var prop in nutInf){
+							if (nutInf[prop]){
+								if (nutInf[prop].includes('-')) {
+									let item = nutInf[prop].replace(/[a-z]/gi, '')
+									item = item.split('-')
+									filters.min[prop] = +item[0]
+									filters.max[prop] = +item[1]
+								}
+								if (nutInf[prop].includes('<')) {
+									let item = nutInf[prop].split(' ')
+									filters.min[prop] = 0
+									filters.max[prop] = +item[1]
+								}
+								if (nutInf[prop].includes('+')) {
+									let item = nutInf[prop].replace(/\+/g, '')
+									filters.min[prop] = +item
+									filters.max[prop] = 9999
+								}
+							}
+						}
+
+						let recipeList = [];
+						for (var go = 0; go < response.length; go++){
+
+						response[go].ingredients = JSON.parse(response[go].ingredients)
+						response[go].nutrition_info = JSON.parse(response[go].nutrition_info)
+						recipeList.push(response[go])
+						}
+							
+						let filteredRecipes = response.filter((recipe,i,a)=>{
+							let result = true
+							for (var type in filters.min){
+								if (recipe.nutrition_info[type] <= filters.min[type] || recipe.nutrition_info[type] >= filters.max[type]){
+									result = false
+								}
+							}
+							if (result) return recipe
+						})
+
+						res.status(200).send(filteredRecipes);
 					})
 				}
 		}
@@ -203,11 +441,7 @@ app.post('/api/hitBigOven', (req, res)=> {
 					})
 				}, (~~randy * 1000) * i)
 			}
-
-
-
 })
-
 
 app.get('/api/getPreferences', (req, res)=> {
     app.get('db').get_preferences([req.user.id]).then(response => {
