@@ -106,6 +106,7 @@ app.post('/api/getRecipes', (req, res) => {
 
 })
 
+
 app.get('/api/getPreferences', (req, res)=> {
     app.get('db').get_preferences([req.user.id]).then(response => {
         return res.status(200).send(response);
@@ -126,6 +127,24 @@ app.get('/api/getShoppingList', (req, res) => {
 
 app.post('/api/postShoppingList', (req, res) => {
 	function formatIngredients(ingArr){
+
+
+app.post('/api/favoriteRecipe', (req, res) => {
+	let {recipe_id} = req.body;
+
+	app.get('db').get_favorites([1]).then((response) => {
+		response = response[0].user_favorites
+		if (!response.includes(`,${recipe_id},`)){
+			response += recipe_id + ','
+			app.get('db').add_to_favorites([response, 1]).then((responseTwo) => {
+				res.status(200).send(responseTwo);
+			})
+		} else res.status(200).send(response);
+	})
+})
+
+ app.post('/api/postShoppingList', (req, res) => {
+    function formatIngredients(ingArr){
         let regex = /\(.*\)|\(.*|\'|;|\*|^ | or .*| in .*| for .*| to taste .*|=/g
         for (var x=ingArr.length-1; x >= 0; x--){
           ingArr[x] = ingArr[x].toLowerCase();
@@ -158,13 +177,48 @@ app.post('/api/postShoppingList', (req, res) => {
 	.then( (currentShoppingList) => {
 		app.get('db').post_shopping_list([8, shoppingList.join(', ') + ',' + currentShoppingList[0].items])
 	})
-
-
-
 	res.status('200').send("success");
 })
 
 
+app.post('/api/hitBigOven', (req, res)=> {
+    let search = req.body;
+    console.log('endpoint hit')
+    let url = `http://api2.bigoven.com/recipes/random?api_key=${config.bigOvenKey}`
+
+        for (let i = 0; i < 500; i++){
+            let randy = (Math.random() * (8 - 3) + 3)
+            setTimeout(() => {
+            console.log(~~randy + ' seconds')
+                axios.get(url).then((respond) => {
+                    let {Title, Description, Cuisine, Category, Subcategory, PrimaryIngredient, WebURL, ImageURL, Ingredients, Instructions, YieldNumber, TotalMinutes, ActiveMinutes, NutritionInfo, AllCategoriesText, HeroPhotoUrl} = respond.data
+                    
+                    Ingredients = JSON.stringify(Ingredients)
+                    NutritionInfo = JSON.stringify(NutritionInfo)
+
+                    app.get('db').big_oven_is_noob([
+                        Title, 
+                        Description, 
+                        Cuisine, 
+                        Category, 
+                        Subcategory, 
+                        PrimaryIngredient, 
+                        WebURL, 
+                        ImageURL, 
+                        Ingredients, 
+                        Instructions, 
+                        YieldNumber, 
+                        TotalMinutes, 
+                        ActiveMinutes, 
+                        NutritionInfo, 
+                        AllCategoriesText, 
+                        HeroPhotoUrl
+                    ]).then((response) => {
+                        console.log('recipe added')
+                    })
+                })
+            }, (~~randy * 1000) * i)
+        }
 
 
 
