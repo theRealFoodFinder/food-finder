@@ -102,7 +102,7 @@ app.get('/api/getProfile', (req, res) => {
 })
 
 
-app.get('/api/getPreferences', (req, res)=> {
+app.get('/api/getPreferences', (req, res) => {
     app.get('db').get_preferences([req.user.id]).then(response => {
         return res.status(200).send(response);
     })
@@ -114,13 +114,6 @@ app.post('/api/recipeFilter', (req, res) => {
 
 
 })
-
-
-
-app.get('/api/getShoppingList', (req, res) => {
-	req.user.id, req.body
-})
-
 
 app.get('/api/favoriteRecipe/:id', (req, res) => {
     let {recipe_id} = req.params.id;
@@ -496,5 +489,61 @@ app.post('/api/getRecipe', (req,res) => {
         })
 
 
+////////// =========== TO-DO ========== ////////////////
+
+        app.put('/api/addToBlacklist', (req, res)=> {
+            let {items} - req.body
+            app.get('db').get_blacklist([req.user.id]).then((response)=>{
+                let response = response[0]
+                if (response){
+                    response += ',' + items
+                    app.get('db').update_blacklist([response]).then((response)=>{
+                        res.status(200).send(response)
+                    })
+                }
+            })
+        })
+        
+        app.put('/api/removeFromBlacklist', (req, res)=>{
+            let {items} = req.body
+            app.get('db').get_blacklist([req.user.id]).then((response)=>{
+                let response = response[0]
+                if (response){
+                    let newList = response.split(',').map((e,i,a)=>{
+                        if (!items.includes(e)) return e
+                    })
+                    newList = newList.filter((e,i,a)=>{
+                    return e !== undefined
+                    })
+                    newList = newList.join(',')
+                    app.get('db').update_blacklist([newList]).then((response)=>{
+                        res.status(200).send(response)
+                    })
+                }
+            })
+        })
+
+
+        app.get('/api/getShoppingList', (req, res) => {
+            app.get('db').get_shopping_list([req.user.id])
+            .then( ( response ) => {
+                res.status(200).send(response[0].items)
+            })
+        })
+        
+        app.put('/api/updateShoppingList', (req, res) => {
+            if (req.query === 'clearAll') {
+                app.get('db').clear_shopping_list([req.user.id])
+                .then( (response) => {
+                    res.status('200').send('Successfully Cleared')
+                })
+            }
+        })
+
+
+
+
+
+        
 
 app.listen(config.port, () => {console.log(`Success!  Listening on port: ${config.port}`)});
