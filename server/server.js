@@ -376,6 +376,20 @@ app.post('/api/getRecipe', (req,res) => {
 	}
 })
 
+app.post('/api/favoriteRecipe', (req, res) => {
+	let {recipe_id} = req.body;
+
+	app.get('db').get_favorites([1]).then((response) => {
+		response = response[0].user_favorites
+		if (!response.includes(`,${recipe_id},`)){
+			response += recipe_id + ','
+			app.get('db').add_to_favorites([response, 1]).then((responseTwo) => {
+				res.status(200).send(responseTwo);
+			})
+		} else res.status(200).send(response);
+	})
+})
+
  app.post('/api/postShoppingList', (req, res) => {
     function formatIngredients(ingArr){
         let regex = /\(.*\)|\(.*|\'|;|\*|^ | or .*| in .*| for .*| to taste .*|=/g
@@ -408,7 +422,7 @@ app.post('/api/hitBigOven', (req, res)=> {
 		console.log('endpoint hit')
 		let url = `http://api2.bigoven.com/recipes/random?api_key=${config.bigOvenKey}`
 
-			for (let i = 0; i < 200; i++){
+			for (let i = 0; i < 500; i++){
 				let randy = (Math.random() * (8 - 3) + 3)
 				setTimeout(() => {
 				console.log(~~randy + ' seconds')
