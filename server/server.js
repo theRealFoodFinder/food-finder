@@ -376,10 +376,10 @@ app.post('/api/getRecipe', (req,res) => {
 	}
 })
 
-app.post('/api/favoriteRecipe', (req, res) => {
-	let {recipe_id} = req.body;
+app.get('/api/favoriteRecipe/:id', (req, res) => {
+	let {recipe_id} = req.params.id;
 
-	app.get('db').get_favorites([1]).then((response) => {
+	app.get('db').get_favorites([req.user.id]).then((response) => {
 		response = response[0].user_favorites
 		if (!response.includes(`,${recipe_id},`)){
 			response += recipe_id + ','
@@ -387,6 +387,12 @@ app.post('/api/favoriteRecipe', (req, res) => {
 				res.status(200).send(responseTwo);
 			})
 		} else res.status(200).send(response);
+	})
+})
+
+app.get('/api/getFavorites', (req, res) => {
+	app.get('db').get_favorites([req.user.id]).then((response) => {
+		res.status(200).send(response);
 	})
 })
 
