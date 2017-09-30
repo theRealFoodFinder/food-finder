@@ -68,6 +68,7 @@ noHandleClick(){
         // console.log(this.state.results[0].ingredients[0].Name);
         return (
             <div className='detailsContainer'>
+
                 <div className="detailsson">
                     <img src={this.state.results[0].hero_photo_url} alt="photourl"/>
                     <div className='titlebackground'>
@@ -89,6 +90,7 @@ noHandleClick(){
                     <p id='detailsingredientstitle'>🥗  Ingredients🥗</p>
                     <div id='ingredientsmap'>{ingredientsMap}</div>
                 </div> */}
+
             </div>
         );
     }
