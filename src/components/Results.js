@@ -58,14 +58,20 @@ class Results extends Component {
     }
     toggleDetailedView(){
         let detailedview = this.state.showDetailedView;
-        console.log(detailedview)
         this.setState((prevState)=>{
             return {showDetailedView: !prevState.showDetailedView}
         })
+        console.log(detailedview)
+    }
+    componentWillMount() {
+        let renderModal = this.state.showDetailedView === true ? <Details toggleDetailedView={this.toggleDetailedView}/> : "";
     }
     
     render() {
-
+        // let renderModal = this.state.toggleDetailedView===true ? <Details toggleDetailedView={this.toggleDetailedView}/> : {renderResults};
+        let renderModal = this.state.showDetailedView === true ? <Details toggleDetailedView={this.toggleDetailedView}/> : "";
+        
+      
         const renderResults = this.state.results.map((el, i)=> {
             // console.log(el.recipe_id)
             return  <div key={i}>
@@ -82,6 +88,7 @@ class Results extends Component {
             <div className='resultsContainer'>
                 <header id='resultsTitle'> Recipes</header>
                 <div className='gridContainer' >
+                    {renderModal}
                     {renderResults}
                 </div>
 
