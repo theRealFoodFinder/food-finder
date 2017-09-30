@@ -14,11 +14,11 @@ class SearchModal extends Component {
             },
             nutritionOptions:[
                 "calories",
-                "total_fat",
-                "sodium",
                 "carbs",
+                "protein",
+                "sodium",
                 "sugar",
-                "protein"
+                "total_fat",
             ],
             calorieOptions:[
                 "< 400 cal",

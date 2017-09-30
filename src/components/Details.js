@@ -16,7 +16,13 @@ yesHandleClick(){
     
     }
 
-
+componentWillMount() {
+    console.log(this.props, 'props on detailedpage')
+    this.setState({
+        results: this.props.recipe
+    })
+    
+}
 
     render() {
         // const ingredients = {this.state.results.ingredients[0]['name']}
@@ -25,7 +31,8 @@ yesHandleClick(){
 
         const ingredientsMap = ingredients.map(( ingredient,i ) => {
             // console.log(ingredient);
-            return <div className='oneingredient'> •&nbsp;<div className='unit'>
+
+            return <div key={i} className='oneingredient'> •&nbsp;<div className='unit'>
 {ingredient.DisplayQuantity} {ingredient.Unit} </div> &nbsp; {ingredient.Name} </div>
             // console.log(ingredient);
         })
@@ -39,8 +46,9 @@ yesHandleClick(){
         // })
 
         // console.log(this.state.results[0].ingredients[0].Name);
-
+        console.log('details state', this.state)
         return (
+
             <div className='detailsContainer'>
 
                 <div className="detailsson">
@@ -50,7 +58,7 @@ yesHandleClick(){
                     </div>
 
                     <div className="detailsson" id='seconddetailsson'>
-                        <p id='detailsingredientstitle'>🥗  Ingredients🥗</p>
+                        <p id='detailsingredientstitle'>🥗 Ingredients 🥗</p>
                         <div id='ingredientsmap'>{ingredientsMap}</div>
                         <div className='detailquestion'> 
                             <button onClick={this.yesHandleClick}>Yes</button> 
@@ -58,6 +66,17 @@ yesHandleClick(){
                             <button onClick={this.props.toggleDetailedView}>No</button>  
                         </div>
                     </div>
+{/*comment field below was attempting to eliminate error from emojis*/}
+                    {/* <div className="detailsson" id='seconddetailsson'>
+                        <p id='detailsingredientstitle'><span role="img">🥗</span>  Ingredients<span role="img">🥗</span></p>
+                        <div id='ingredientsmap'>{ingredientsMap}</div>
+                        <div className='detailquestion'> 
+                            <button onClick={this.yesHandleClick}>Yes</button> 
+                            Do you want to try this recipe? 
+                            <button onClick={this.props.toggleDetailedView}>No</button>  
+                        </div>
+                    </div> */}
+
                 </div>
 
                 {/* <div className="detailsson" id='seconddetailsson'>
