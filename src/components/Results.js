@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-// import Details from './Details';
+import Details from './Details'
+
 
 class Results extends Component {
     constructor(){
@@ -46,7 +47,6 @@ class Results extends Component {
              }],
              showDetailedView: 'false'
       }
-    //   this.handleImgClick=this.handleImgClick.bind(this);
       this.handleFavIcon = this.handleFavIcon.bind(this);
       this.toggleDetailedView = this.toggleDetailedView.bind(this);
     }
@@ -56,9 +56,6 @@ class Results extends Component {
         });
 
     }
-    // handleImgClick(key){
-    //    console.log(key, 'recieved')
-    // }
     toggleDetailedView(){
         let detailedview = this.state.showDetailedView;
         console.log(detailedview)
@@ -87,6 +84,7 @@ class Results extends Component {
                 <div className='gridContainer' >
                     {renderResults}
                 </div>
+
             </div>
         );
     }

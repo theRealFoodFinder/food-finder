@@ -1,0 +1,71 @@
+.detailsContainer{
+    // float:left;
+    position: absolute;
+    width: 100vw;
+    height: 10vh;
+    // min-height: 100vh;
+    // min-height: 100vh; //scroll
+    background-color: rgba(158, 165, 202, 0.34);
+    display: grid;
+    grid-template-columns: 1fr ;
+    grid-template-rows: 1fr 1fr ;
+    grid-gap: 1px
+}
+
+.detailsson{
+    img{
+        // padding-top:40px;
+        width:100vw;
+        // background-color: rgba(241, 218, 4, 0.69);
+    }
+    // background-color: rgba(241, 218, 4, 0.69);
+}
+
+#seconddetailsson{
+    
+    text-align: center;
+    width:100vw;
+    margin-top:10%;
+    color:#E6E6E6;
+}
+
+.titlebackground{
+    background-color: black;
+}
+
+
+#foodtitle{
+    position: absolute;
+    background-color: rgba(58, 58, 58, 0.66);
+    text-align: center;
+    color: #E4E4E4;
+    padding-top: 5px;
+    // background-color: black;
+    height: 20px;
+    width: 100vw;
+    margin-top:-50px;
+}
+
+#ingredientsmap{
+    margin-top:12px;
+}
+
+.oneingredient{
+    margin:5px;
+    display: flex;
+    justify-content: center;
+}
+
+#detailsingredientstitle{
+    font-size:18px;
+}
+
+.unit{
+    font-style: italic;
+    color:#C5C2C2;
+}
+
+.detailquestion{
+    font-style: italic;
+    color:#C7E7C5;
+}
