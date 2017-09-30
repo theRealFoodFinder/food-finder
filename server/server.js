@@ -117,12 +117,60 @@ app.get('/getProfile', (req, res) => {
 // })
 
 app.post('/api/getRecipe', (req,res) => {
-    app.get('db').get_recipe().then((response) => {
-        res.status(200).send(response);
-    })
+	// console.log('hit')
+	// let search = req.body
+
+	// if (search){
+	// 	console.log('has body')
+	// 	if (search.cuisine){
+	// 			url += `&cuisine=${search.cuisine}`;
+	// 	}
+	// 	if (search.ingredients){
+	// 			console.log('ingr', search.ingredients)
+	// 			let ingList = search.ingredients
+	// 			url += `&include_ing=${ingList}`;
+	// 	}
+	// 	if (search.category){
+	// 			url += `&include_cat=${search.category}`;
+	// 	}
+	// 	if (search.title){
+	// 			url += `&title_kw=${search.title}`;
+	// 	}
+	// }
+
+	app.get('db').get_recipe().then((response) => {
+		res.status(200).send(response);
+	})
 })
 
-app.post('/api/getRecipes', (req, res)=> {
+ app.post('/api/postShoppingList', (req, res) => {
+    function formatIngredients(ingArr){
+        let regex = /\(.*\)|\(.*|\'|;|\*|^ | or .*| in .*| for .*| to taste .*|=/g
+        for (var x=ingArr.length-1; x >= 0; x--){
+          ingArr[x] = ingArr[x].toLowerCase();
+          ingArr[x] = ingArr[x].replace(regex, '');
+          ingArr[x] = ingArr[x].replace(/^ |\s$/g, '');
+          if(/ and |[0-9]|[-!$%^&*()_+|~=`{}\[\]:<>?,.\/]/.test(ingArr[x])){
+            ingArr.splice(x, 1);
+          }
+        } return ingArr;
+      }
+
+    var ingredients = [];
+    var shoppingList = [];
+    for (let i in req.body){
+        if (req.body[i]){
+            shoppingList.push(i);
+        }
+        else {
+            ingredients.push(i)
+        }
+    }
+    app.get('db').post_shopping_list([1, shoppingList.join(',')]);
+    app.get('db').post_ingredient_list([1, formatIngredients(ingredients).join(',')])
+})
+
+app.post('/api/hitBigOven', (req, res)=> {
 		let search = req.body;
 		console.log('endpoint hit')
 		let url = `http://api2.bigoven.com/recipes/random?api_key=${config.bigOvenKey}`
