@@ -67,15 +67,13 @@ export default class SearchPage extends Component {
         profile.nutrition_info = this.state.modalObject;
         profile.ingredients = this.state.searchByIngredients;
         profile.cuisine = this.state.cuisine;
-        console.log(profile, 'profile');
+        // console.log(profile, 'profile');
         axios.post('http://localhost:3005/api/getRecipe', profile).then((res)=>{
-            console.log('return from axios post', res)
-            this.setState({
-                searchResults: res
-            })
-        }).catch((error)=>{
-            console.log(error)
-        })
+            // console.log('return from axios post', res.data)
+            this.props.passRecipes(res.data)
+            // console.log(this.props)
+// setting timeout trying to get props to set delete when code clean to results
+        }).catch((error)=>{ console.log(error)})
     }
 
     handleChange(e) {
@@ -106,7 +104,7 @@ export default class SearchPage extends Component {
                 // return (filters.map((el, i)=> {
                 //  return   <h4 key={i}>{el}</h4>}))
             }
-
+                // console.log(this.props, 'props on search')
         return (
             <div className='SearchPageContainer'>
             <Sidebar />
@@ -136,12 +134,13 @@ export default class SearchPage extends Component {
 
                     </div>
                     { this.state.filterModal===true ? <SearchModal handleGetFilters={this.handleGetFilters
-                    } /> : console.log('filtermodal false')} 
+                    } /> : "" } 
                    
                     {/* <SearchModal /> */}
                     
                     <a href='#/results'><button onClick={this.handleSearch} className='getRecipes button'>Get Recipes
                     </button></a>
+                    {/* onClick={this.props.passRecipes(this.state.searchResults)} */}
                 </div>
             </div>
         )

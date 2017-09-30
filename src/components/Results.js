@@ -7,45 +7,9 @@ class Results extends Component {
     constructor(){
         super();
         this.state={
-             results: [{
-                title:"Salad1",
-                hero_photo_url:"https://photos.bigoven.com/recipe/hero/mediterranean-edamame-quinoa-salad.jpg",
-                recipe_id:1
-             }, {
-                title:"Quinoa Salad2",
-                hero_photo_url:"https://photos.bigoven.com/recipe/hero/mediterranean-edamame-quinoa-salad.jpg",
-                recipe_id:2
-             }, {
-                title:"Mediterranean Edamame Quinoa Salad3",
-                hero_photo_url:"https://photos.bigoven.com/recipe/hero/mediterranean-edamame-quinoa-salad.jpg",
-                recipe_id:3
-             }, {
-                title:"Mediterranean Edamame Quinoa Salad4",
-                hero_photo_url:"https://photos.bigoven.com/recipe/hero/mediterranean-edamame-quinoa-salad.jpg",
-                recipe_id:4
-             }, {
-                title:"Mediterranean Edamame Quinoa Salad5",
-                hero_photo_url:"https://photos.bigoven.com/recipe/hero/mediterranean-edamame-quinoa-salad.jpg",
-                recipe_id:5
-             }, {
-                title:"Mediterranean Edamame Quinoa Salad6",
-                hero_photo_url:"https://photos.bigoven.com/recipe/hero/mediterranean-edamame-quinoa-salad.jpg",
-             }, {
-                title:"Mediterranean Edamame Quinoa Salad7",
-                hero_photo_url:"https://photos.bigoven.com/recipe/hero/mediterranean-edamame-quinoa-salad.jpg",
-             }, {
-                title:"Mediterranean Edamame Quinoa Salad8",
-                hero_photo_url:"https://photos.bigoven.com/recipe/hero/mediterranean-edamame-quinoa-salad.jpg",
-             }, {
-                title:"Mediterranean Edamame Quinoa Salad9",
-                hero_photo_url:"https://photos.bigoven.com/recipe/hero/mediterranean-edamame-quinoa-salad.jpg",
-                recipe_id:2
-             }, {
-                title:"Mediterranean Edamame Quinoa Salad10",
-                hero_photo_url:"https://photos.bigoven.com/recipe/hero/mediterranean-edamame-quinoa-salad.jpg",
-                recipe_id:2
-             }],
-             showDetailedView: 'false'
+             results: [],
+             showDetailedView: 'false',
+             recipePicked: {}
       }
       this.handleFavIcon = this.handleFavIcon.bind(this);
       this.toggleDetailedView = this.toggleDetailedView.bind(this);
@@ -56,22 +20,33 @@ class Results extends Component {
         });
 
     }
-    toggleDetailedView(){
-        let detailedview = this.state.showDetailedView;
+    toggleDetailedView(id){
+        // let detailedview = this.state.showDetailedView;
         this.setState((prevState)=>{
             return {showDetailedView: !prevState.showDetailedView}
         })
-        console.log(detailedview)
+        let temparray = this.state.results;
+        let foundRecipe = temparray.filter((recipe, i)=>{
+            return recipe.recipe_id === id;
+        })
+        this.setState({
+            recipePicked: foundRecipe
+        })
     }
-    componentWillMount() {
-        let renderModal = this.state.showDetailedView === true ? <Details toggleDetailedView={this.toggleDetailedView}/> : "";
-    }
+
     
     render() {
+
+
         // let renderModal = this.state.toggleDetailedView===true ? <Details toggleDetailedView={this.toggleDetailedView}/> : {renderResults};
-        let renderModal = this.state.showDetailedView === true ? <Details toggleDetailedView={this.toggleDetailedView}/> : "";
-        
-      
+
+
+//render modal when button is clicked and state changes
+let renderModal = this.state.showDetailedView === true ? <Details  recipe={this.state.recipePicked} toggleDetailedView={this.toggleDetailedView}/> : "";
+console.log(this.state.results[0])
+
+
+//render search results 
         const renderResults = this.state.results.map((el, i)=> {
             // console.log(el.recipe_id)
             return  <div key={i}>
@@ -87,7 +62,7 @@ class Results extends Component {
         return (
             <div className='resultsContainer'>
                 <header id='resultsTitle'> Recipes</header>
-                <div className='gridContainer' >
+                <div id='resultsGrid' className='gridContainer' >
                     {renderModal}
                     {renderResults}
                 </div>
