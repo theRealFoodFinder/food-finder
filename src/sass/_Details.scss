@@ -2,14 +2,15 @@
     // float:left;
     position: absolute;
     width: 100vw;
-    height: 10vh;
-    // min-height: 100vh;
+    // height: 10vh;
+    min-height: 100vh;
     // min-height: 100vh; //scroll
-    background-color: rgba(158, 165, 202, 0.34);
+    background-color: rgba(158, 165, 202, 1);
     display: grid;
     grid-template-columns: 1fr ;
     grid-template-rows: 1fr 1fr ;
-    grid-gap: 1px
+    grid-gap: 1px;
+    z-index: 100;
 }
 
 .detailsson{
