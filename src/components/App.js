@@ -13,10 +13,12 @@ export default class App extends Component {
 		super(props)
 		this.state={
 			profile: {},
-			recipes: {}
+			recipes: {},
+			search:{}
 		}
 this.setUserInfo = this.setUserInfo.bind(this);
 this.passRecipes = this.passRecipes.bind(this);
+this.passSearchParams = this.passSearchParams.bind(this);
 	}
 
 	setUserInfo (info) {
@@ -30,6 +32,11 @@ this.passRecipes = this.passRecipes.bind(this);
 			recipes: searchedRecipes
 		})
 	}	
+	passSearchParams(info){
+		this.setState({
+			search: info
+		})
+	}
 
 	
 
@@ -41,9 +48,9 @@ this.passRecipes = this.passRecipes.bind(this);
 			<div className='App'>
 				<Switch>
 				  <Route component= {Landing} exact path='/'/>
-				  <Route component= { props => <SearchPage {...props} passRecipes={this.passRecipes} setUserInfo={this.setUserInfo}/>} path='/search'/>
+				  <Route component= { props => <SearchPage {...props} passSearchParams={this.passSearchParams}passRecipes={this.passRecipes} setUserInfo={this.setUserInfo}/>} path='/search'/>
 				  <Route component= { props => <ShoppingList {...props} profile={this.state.profile}/>} path='/shoppinglist'/>
-				  <Route component= { props => <Results recipes={this.state.recipes} {...props} />} path='/results'/>
+				  <Route component= { props => <Results search={this.state.search} recipes={this.state.recipes} {...props} />} path='/results'/>
 				  <Route component= { props => <ProfilePage {...props} profile={this.state.profile}/>} path='/profile'/>
 				</Switch>
 			</div>

@@ -4,30 +4,43 @@ import Details from './Details'
 
 
 class Results extends Component {
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state={
-             results: [],
-             showDetailedView: 'false',
-             recipePicked: {}
+            search:{},
+            results: [{sample:'data'},{sample:'data'}],
+            showDetailedView: 'false',
+            recipePicked: {}
       }
       this.handleFavIcon = this.handleFavIcon.bind(this);
       this.toggleDetailedView = this.toggleDetailedView.bind(this);
     }
-    handleFavIcon(id){
-        axios.get('http://localhost/3005/api/favoriteRecipe/' + id).then(console.log('Recipe added to favorites')).catch((error)=>{
-            console.log(error)
-        });
 
+
+componentWillMount() {
+    // console.log(this.state.search, 'profile');
+    let profile = this.props.search
+    axios.post('http://localhost:3005/api/getRecipe', profile).then((res)=>{
+        this.setState({
+            results: res.data
+        })
+    })
+}
+
+    handleFavIcon(id){
+        axios.get('http://localhost/3005/api/favoriteRecipe/' + id).then(console.log('Recipe added to favorites'));
     }
-    toggleDetailedView(id){
-        // let detailedview = this.state.showDetailedView;
+
+    toggleDetailedView(recipeId){
+        // console.log(recipeId);
+        // console.log('clicked');
+        // console.log(this.state.showDetailedView);
         this.setState((prevState)=>{
             return {showDetailedView: !prevState.showDetailedView}
         })
         let temparray = this.state.results;
         let foundRecipe = temparray.filter((recipe, i)=>{
-            return recipe.recipe_id === id;
+            return recipe.recipe_id === recipeId;
         })
         this.setState({
             recipePicked: foundRecipe
@@ -37,18 +50,12 @@ class Results extends Component {
     
     render() {
 
-
-        // let renderModal = this.state.toggleDetailedView===true ? <Details toggleDetailedView={this.toggleDetailedView}/> : {renderResults};
-
-
-//render modal when button is clicked and state changes
-let renderModal = this.state.showDetailedView === true ? <Details  recipe={this.state.recipePicked} toggleDetailedView={this.toggleDetailedView}/> : "";
-console.log(this.state.results[0])
-
-
+//render details modal
+        let renderModal =this.state.showDetailedView === true ? <Details  recipe={this.state.recipePicked} toggleDetailedView={this.toggleDetailedView}/> : "";
+            
+    
 //render search results 
         const renderResults = this.state.results.map((el, i)=> {
-            // console.log(el.recipe_id)
             return  <div key={i}>
                 <div key={i} className='imgDiv' >
                     <div onClick={(e)=> {this.handleFavIcon(el.recipe_id)}} className='favicon' >&#9829;</div>
@@ -56,11 +63,11 @@ console.log(this.state.results[0])
                 </div>
                 <h3 className='resultsTitle'>{el.title}</h3>
             </div>
-            
         })
-
+        
         return (
             <div className='resultsContainer'>
+                <div>You have {this.state.results.length} results...</div>
                 <header id='resultsTitle'> Recipes</header>
                 <div id='resultsGrid' className='gridContainer' >
                     {renderModal}
