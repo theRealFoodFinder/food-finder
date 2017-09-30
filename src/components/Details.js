@@ -7,14 +7,13 @@ class Details extends Component {
         this.state={
              
       }
-      this.handleClick=this.handleClick.bind(this)
-      this.handlemenu = this.handlemenu.bind(this);
+
     }
 
     render() {
         return (
             <div className='detailsContainer'>
-             
+             Details
             </div>
         );
     }
