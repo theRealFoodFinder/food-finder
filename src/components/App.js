@@ -20,12 +20,19 @@ export default class App extends Component {
 			profile: {},
 			recipes: {},
 			search:{},
-			recipe: {}
+			recipe: {},
+			history: []
 		}
 this.setUserInfo = this.setUserInfo.bind(this);
 this.passRecipes = this.passRecipes.bind(this);
 this.passSearchParams = this.passSearchParams.bind(this);
 this.getRecipe = this.getRecipe.bind(this);
+this.passHistory = this.passHistory.bind(this);
+	}
+	passHistory(historyObj){
+		this.setState({
+			history: historyObj
+		})
 	}
 
 	setUserInfo (info) {
@@ -66,11 +73,11 @@ this.getRecipe = this.getRecipe.bind(this);
 					
 					<Route component= { props => <Details {...props} recipe={this.state.recipe}/>} path='/details'/>
 					
-					<Route component= { props => <Results getRecipe={this.getRecipe} search={this.state.search} recipes={this.state.recipes} {...props} />} path='/results'/>
+					<Route component= { props => <Results historyLog={this.state.history} passHistory={this.passHistory} getRecipe={this.getRecipe} search={this.state.search} recipes={this.state.recipes} {...props} />} path='/results'/>
 					
 					<Route component= { props => <SuperDetails getRecipe={this.getRecipe} search={this.state.search} recipes={this.state.recipes} {...props} />} path='/recipe'/>
 
-					<Route component= { props => <History {...props} profile={this.state.profile}/>} path='/history'/>
+					<Route component= { props => <History historyLog={this.state.history} {...props} profile={this.state.profile}/>} path='/history'/>
 					
 					<Route component= { props => <ProfilePage {...props} profile={this.state.profile}/>} path='/profile'/>
 					<Route component= {Landing} exact path='/'/>

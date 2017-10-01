@@ -4,9 +4,6 @@ import axios from 'axios';
 
 
 class AddToList extends Component {
-
-    
-    
     
     constructor() {
         super();

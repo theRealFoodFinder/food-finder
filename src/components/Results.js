@@ -11,7 +11,8 @@ class Results extends Component {
             search:{},
             results: [{sample:'data'},{sample:'data'}],
             showDetailedView: false,
-            recipePicked: {}
+            recipePicked: {},
+            history: []
       }
       this.handleFavIcon = this.handleFavIcon.bind(this);
       this.toggleDetailedView = this.toggleDetailedView.bind(this);
@@ -38,12 +39,20 @@ componentWillMount() {
         let foundRecipe = temparray.filter((recipe, i)=>{
             return recipe.recipe_id === recipeId;
         })
+        debugger
+        let id = foundRecipe[0].recipe_id;
+        let newtitle = foundRecipe[0].title;
+        let newObj = {name:newtitle, id:id}
+        let tempHistory = this.props.historyLog;
+        tempHistory.unshift(newObj);
+        if (tempHistory.length>10){tempHistory = tempHistory.splice(9)}
         this.setState({
-            recipePicked: foundRecipe
+            recipePicked: foundRecipe,
+            history: tempHistory
         })
-        this.props.getRecipe(foundRecipe)
+        this.props.getRecipe(foundRecipe);
+        this.props.passHistory(tempHistory);
     }
-
     
     render() {
         const renderResults = this.state.results.map((el, i)=> {
