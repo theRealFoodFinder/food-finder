@@ -18,24 +18,19 @@ class ShoppingList extends Component {
                 
             },
             
-            shoppingLists:{}
+            shoppingLists:{ingredients:'none'}
         }
         this.addtoCart=this.addtoCart.bind(this)
         this.handleBoxChecked=this.handleBoxChecked.bind(this)
     }
     
     componentDidMount() {
+        console.log('shopping list mounted')
+        let recipe = this.props.recipe[0];
         this.setState({
-            shoppingLists:{
-                mooMilk: false,
-                Bread: false,
-                Cheese: false,
-                Flour: false,
-                Sugar: false,
-                Banana: false,
-                Apple: false
-            }
+            shoppingLists: recipe
         })
+        console.log(this.state.shoppingLists)
     }
     
     
@@ -44,14 +39,14 @@ class ShoppingList extends Component {
     }
     
     handleBoxChecked(e){
-    let listItem = e.target.className
-    // let isChecked = e.target.checked
-    let list = this.state.shoppingLists
-    list[listItem]=!list[listItem]
-    console.log(list);
-    this.setState({
-        shoppingListBackend: list
-    })
+    // let listItem = e.target.className
+    // // let isChecked = e.target.checked
+    // let list = this.state.shoppingLists
+    // list[listItem]=!list[listItem]
+    // console.log(list);
+    // this.setState({
+    //     shoppingListBackend: list
+    // })
     
 }
 
@@ -60,34 +55,35 @@ class ShoppingList extends Component {
 
     render() {
 
-        const shoppinglistsMap = ()=>{
-            let list = this.state.shoppingLists
-            let map= []
-            for(let item in list){
-                map.push (
-                    <div>{item}<input onChange={this.handleBoxChecked} className={item} type="checkbox" key={item} />
-                    </div>
-                )
-            } return map
-        }
+        // const shoppinglistsMap = ()=>{
+        //     let list = this.state.shoppingLists
+        //     let map= []
+        //     for(let item in list){
+        //         map.push (
+        //             <div>{item}<input onChange={this.handleBoxChecked} className={item} type="checkbox" key={item} />
+        //             </div>
+        //         )
+        //     } return map
+        // }
 
 
-        // const shoppinglistsMap =
-        //     this.state.shoppingLists.map((list, i) => {
+        // const shoppinglistsMap2 = this.state.shoppingLists
+        //  this.state.shoppingLists.ingredients.map((list, i) => {
         //         console.log(list)
         //         return(
-        //            <div>{list}<input onChange={this.handleBoxChecked} className={list} type="checkbox" key={i} />
+        //            <div className={list}>{list}<input onChange={this.handleBoxChecked} className={list} type="checkbox" key={i} />
         //             </div>
         //         )
         //     })
 
         return (
             <div className='shoppinglistcontainer'>
-            <Sidebar />
+                <Sidebar />
                 <div className='addtocartq'><p>Add to Shopping Cart?</p></div>
 
                 <div className='shoppinglistmap'>
-                    {shoppinglistsMap()}
+                    {/* {shoppinglistsMap2} */}
+                    {/* {shoppinglistsMap()} */}
                 </div>
 
 

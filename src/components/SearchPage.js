@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
-// import axios from 'axios';
 import SearchModal from './SearchModal';
 import Sidebar from './Sidebar';
-// import axios from 'axios';
-
-
+import { Link } from 'react-router-dom'
 
 export default class SearchPage extends Component {
     constructor(props) {
@@ -70,15 +67,6 @@ export default class SearchPage extends Component {
         profile.ingredients = this.state.searchByIngredients;
         profile.cuisine = this.state.cuisine;
         this.props.passSearchParams(profile)
-        // console.log(this.props)
-
-        // console.log(profile, 'profile');
-        // axios.post('http://localhost:3005/api/getRecipe', profile).then((res)=>{
-            // console.log('return from axios post', res.data)
-            // this.props.passRecipes(res.data)
-            // console.log(this.props)
-// setting timeout trying to get props to set delete when code clean to results
-        // }).catch((error)=>{ console.log(error)})
     }
 
     handleChange(e) {
@@ -99,8 +87,6 @@ export default class SearchPage extends Component {
 
     
     render() {
-        // console.log(this.state.modalObject, 'filter results')
-        // console.log(this.state.searchByIngredients, 'ingredients results')
         const ingredientRender = this.state.searchByIngredients.map((el, i)=> {
             return  <h4 key={i}>{el}</h4>})
             
@@ -140,12 +126,9 @@ export default class SearchPage extends Component {
                     </div>
                     { this.state.filterModal===true ? <SearchModal handleGetFilters={this.handleGetFilters
                     } /> : "" } 
-                   
-                    {/* <SearchModal /> */}
                     
-                    <a href='#/results'><button onClick={this.handleSearch} className='getRecipes button'>Get Recipes
-                    </button></a>
-                    {/* onClick={this.props.passRecipes(this.state.searchResults)} */}
+                    < Link to='/results'><button onClick={this.handleSearch} className='getRecipes button'>Get Recipes
+                    </button></Link>
                 </div>
             </div>
         )

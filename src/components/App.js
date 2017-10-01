@@ -6,6 +6,7 @@ import SearchPage from './SearchPage'
 import ShoppingList from './ShoppingList';
 import Results from './Results';
 import ProfilePage from './ProfilePage';
+import Details from './Details';
 
 
 export default class App extends Component {
@@ -14,11 +15,13 @@ export default class App extends Component {
 		this.state={
 			profile: {},
 			recipes: {},
-			search:{}
+			search:{},
+			recipe: {}
 		}
 this.setUserInfo = this.setUserInfo.bind(this);
 this.passRecipes = this.passRecipes.bind(this);
 this.passSearchParams = this.passSearchParams.bind(this);
+this.getRecipe = this.getRecipe.bind(this);
 	}
 
 	setUserInfo (info) {
@@ -37,7 +40,11 @@ this.passSearchParams = this.passSearchParams.bind(this);
 			search: info
 		})
 	}
-
+	getRecipe(recipe){
+		this.setState({
+			recipe: recipe
+		})
+	}
 	
 
 
@@ -47,11 +54,16 @@ this.passSearchParams = this.passSearchParams.bind(this);
 		return (
 			<div className='App'>
 				<Switch>
-				  <Route component= {Landing} exact path='/'/>
-				  <Route component= { props => <SearchPage {...props} passSearchParams={this.passSearchParams}passRecipes={this.passRecipes} setUserInfo={this.setUserInfo}/>} path='/search'/>
-				  <Route component= { props => <ShoppingList {...props} profile={this.state.profile}/>} path='/shoppinglist'/>
-				  <Route component= { props => <Results search={this.state.search} recipes={this.state.recipes} {...props} />} path='/results'/>
-				  <Route component= { props => <ProfilePage {...props} profile={this.state.profile}/>} path='/profile'/>
+				<Route component= { props => <ShoppingList {...props} recipe={this.state.recipe}/>} path='/shoppinglist'/>
+				<Route component= {Landing} exact path='/'/>
+
+				<Route component= { props => <SearchPage {...props} passSearchParams={this.passSearchParams}passRecipes={this.passRecipes} setUserInfo={this.setUserInfo}/>} path='/search'/>
+
+				<Route component= { props => <Details {...props} recipe={this.state.recipe}/>} path='/details'/>
+
+				<Route component= { props => <Results getRecipe={this.getRecipe} search={this.state.search} recipes={this.state.recipes} {...props} />} path='/results'/>
+
+				<Route component= { props => <ProfilePage {...props} profile={this.state.profile}/>} path='/profile'/>
 				</Switch>
 			</div>
 		)

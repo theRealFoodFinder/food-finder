@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import Details from './Details'
-
+// import Details from './Details'
+import { Link } from 'react-router-dom'
 
 class Results extends Component {
     constructor(props){
@@ -9,7 +9,7 @@ class Results extends Component {
         this.state={
             search:{},
             results: [{sample:'data'},{sample:'data'}],
-            showDetailedView: 'false',
+            showDetailedView: false,
             recipePicked: {}
       }
       this.handleFavIcon = this.handleFavIcon.bind(this);
@@ -30,14 +30,9 @@ componentWillMount() {
     handleFavIcon(id){
         axios.get('http://localhost/3005/api/favoriteRecipe/' + id).then(console.log('Recipe added to favorites'));
     }
-
+    
     toggleDetailedView(recipeId){
-        // console.log(recipeId);
-        // console.log('clicked');
         // console.log(this.state.showDetailedView);
-        this.setState((prevState)=>{
-            return {showDetailedView: !prevState.showDetailedView}
-        })
         let temparray = this.state.results;
         let foundRecipe = temparray.filter((recipe, i)=>{
             return recipe.recipe_id === recipeId;
@@ -45,22 +40,17 @@ componentWillMount() {
         this.setState({
             recipePicked: foundRecipe
         })
+        this.props.getRecipe(foundRecipe)
     }
 
     
     render() {
-
-//render details modal
-        let renderModal =this.state.showDetailedView === true ? <Details  recipe={this.state.recipePicked} toggleDetailedView={this.toggleDetailedView}/> : "";
-            
-    
-//render search results 
         const renderResults = this.state.results.map((el, i)=> {
             return  <div key={i}>
-                <div key={i} className='imgDiv' >
+            <Link to='/details'><div key={i} className='imgDiv' >
                     <div onClick={(e)=> {this.handleFavIcon(el.recipe_id)}} className='favicon' >&#9829;</div>
                     <img alt={i}  key={el.recipe_id} onClick={()=>this.toggleDetailedView(el.recipe_id)} src={el.hero_photo_url}></img>
-                </div>
+                </div></Link>
                 <h3 className='resultsTitle'>{el.title}</h3>
             </div>
         })
@@ -70,7 +60,6 @@ componentWillMount() {
                 <div>You have {this.state.results.length} results...</div>
                 <header id='resultsTitle'> Recipes</header>
                 <div id='resultsGrid' className='gridContainer' >
-                    {renderModal}
                     {renderResults}
                 </div>
 
