@@ -18,71 +18,63 @@ class ShoppingList extends Component {
                 
             },
             
-            shoppingLists:{ingredients:'none'}
+            shoppingLists:[]
         }
         this.addtoCart=this.addtoCart.bind(this)
         this.handleBoxChecked=this.handleBoxChecked.bind(this)
     }
     
     componentDidMount() {
-        console.log('shopping list mounted')
-        let recipe = this.props.recipe[0];
+        console.log('shopping list will mounted')
+        let recipe = this.props.recipe;
         this.setState({
             shoppingLists: recipe
         })
-        console.log(this.state.shoppingLists)
+        console.log(this.state.shoppingLists, 'shopping list mounted')
     }
     
     
     addtoCart(){
         
     }
-    
+
     handleBoxChecked(e){
-    // let listItem = e.target.className
-    // // let isChecked = e.target.checked
-    // let list = this.state.shoppingLists
-    // list[listItem]=!list[listItem]
-    // console.log(list);
-    // this.setState({
-    //     shoppingListBackend: list
-    // })
+    let listItem = e.target.className
+    // let isChecked = e.target.checked
+    let list = this.state.shoppingLists
+    list[listItem]=!list[listItem]
+    console.log(list);
+    this.setState({
+        shoppingListBackend: list
+    })
+    console.log(this.state.shoppingListBackend, 'shopping list to backend sent')
     
 }
 
-
-
-
     render() {
 
-        // const shoppinglistsMap = ()=>{
-        //     let list = this.state.shoppingLists
-        //     let map= []
-        //     for(let item in list){
-        //         map.push (
-        //             <div>{item}<input onChange={this.handleBoxChecked} className={item} type="checkbox" key={item} />
-        //             </div>
-        //         )
-        //     } return map
-        // }
+        let recipeItems;
+    if (this.state && this.state.shoppingLists && this.state.shoppingLists.length>0){
+        let recipe = this.state.shoppingLists[0];
+        if(recipe.ingredients && recipe.ingredients.length>0){
 
-
-        // const shoppinglistsMap2 = this.state.shoppingLists
-        //  this.state.shoppingLists.ingredients.map((list, i) => {
-        //         console.log(list)
-        //         return(
-        //            <div className={list}>{list}<input onChange={this.handleBoxChecked} className={list} type="checkbox" key={i} />
-        //             </div>
-        //         )
-        //     })
-
+            recipeItems = recipe.ingredients.map((list, i) => {
+                // console.log(list)
+                return(
+                    <div className={list.Name}>{list.Name}<input onChange={this.handleBoxChecked} className={list.Name} type="checkbox" key={i} />
+                        </div>
+                    )
+                })
+            }
+    }
         return (
+            
             <div className='shoppinglistcontainer'>
                 <Sidebar />
                 <div className='addtocartq'><p>Add to Shopping Cart?</p></div>
 
                 <div className='shoppinglistmap'>
-                    {/* {shoppinglistsMap2} */}
+                    {recipeItems}
                     {/* {shoppinglistsMap()} */}
                 </div>
 
