@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import Sidebar from './Sidebar';
 
-class ProfilePage extends Component {
+class History extends Component {
     render() {
         return (
-            <div className='profilePageContainer'>
+            <div>
             <Sidebar />
-                Profile Page
+                History Page
             </div>
         );
     }
 }
 
-export default ProfilePage;
+export default History;

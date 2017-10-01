@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 // import Details from './Details'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import Sidebar from './Sidebar';
 
 class Results extends Component {
     constructor(props){
@@ -57,6 +58,7 @@ componentWillMount() {
         
         return (
             <div className='resultsContainer'>
+                <Sidebar />
                 <div>You have {this.state.results.length} results...</div>
                 <header id='resultsTitle'> Recipes</header>
                 <div id='resultsGrid' className='gridContainer' >

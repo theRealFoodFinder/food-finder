@@ -99,7 +99,7 @@ export default class SearchPage extends Component {
         return (
             <div className='SearchPageContainer'>
             <Sidebar />
-                <div onClick={this.handlemenu} className='menubutton'></div>
+                
 
 
                 <div id='mainSearchContainer'>

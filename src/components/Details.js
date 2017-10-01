@@ -50,7 +50,7 @@ componentWillMount() {
                         <p id='detailsingredientstitle'>🥗 Ingredients 🥗</p>
                         <div id='ingredientsmap'>{ingredientsMap}</div>
                         <div className='detailquestion'> 
-                        <Link to='/shoppinglist'><button> Add these to your shopping list?? </button></Link>
+                        <Link to='/add'><button> Add these to your shopping list?? </button></Link>
                             
                               
                         </div>
