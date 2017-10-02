@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Sidebar from './Sidebar';
 import axios from 'axios';
+import AppBar from './AppBar'
 
 
 class ShoppingList extends Component {
@@ -63,7 +64,9 @@ class ShoppingList extends Component {
         return (
             
             <div className='shoppinglistcontainer'>
-                <Sidebar />
+                <div className='allappbarcomponents'>
+                  <AppBar />
+                </div>
                 <div className='removeFromCart'><p>Your Shopping Cart</p></div>
 
                 <div className='removeFromCartbutton'>
