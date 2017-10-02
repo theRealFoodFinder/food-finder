@@ -1,24 +1,20 @@
 import React, { Component } from 'react';
-import Sidebar from './Sidebar';
 import axios from 'axios';
 import AppBar from './AppBar'
 
-
 class AddToList extends Component {
     
-    constructor() {
+   constructor() {
         super();
         this.state = {
-            shoppingListBackend:{
-                items: ""
-            },
+            shoppingListBackend:{},
             shoppingList:[]
         }
         this.addtoCart=this.addtoCart.bind(this)
         this.handleBoxChecked=this.handleBoxChecked.bind(this)
     }
     
-    componentDidMount() {
+   componentDidMount() {
         console.log('shopping list will mounted')
         let recipe = this.props.recipe;
         this.setState({
@@ -27,19 +23,20 @@ class AddToList extends Component {
         console.log(this.state.shoppingList, 'shopping list mounted')
     }
     
-    
-    addtoCart(){
-        // axios.get('/auth/me').then
-(axios.post('/api/postShoppingList', this.state.shoppingListBackend).then(_=>console.log('items added to shopping list')))
+   
+   addtoCart(){
+      
+        // true = shopping list
+        // false = add to pantry
+        console.log(this.state.shoppingListBackend);
+// (axios.post('/api/postShoppingList', this.state.shoppingListBackend).then(_=>console.log('items added to shopping list')))
     }
-//items: items seperated my commas
-    handleBoxChecked(e){
+
+   handleBoxChecked(e){
     let listItem = e.target.className
-    
     // let isChecked = e.target.checked
-    let list = this.state.shoppingListBackend.list
+    let list = this.state.shoppingList
     list[listItem]=!list[listItem]
-    console.log(list, 'list')
     // console.log(list);
     this.setState({
         shoppingListBackend: list
@@ -48,17 +45,14 @@ class AddToList extends Component {
     
 }
 
-    render() {
+   render() {
 
-
-
-
-        let recipeItems;
+       let recipeItems;
     if (this.state && this.state.shoppingList && this.state.shoppingList.length>0){
         let recipe = this.state.shoppingList[0];
         if(recipe.ingredients && recipe.ingredients.length>0){
 
-            recipeItems = recipe.ingredients.map((list, i) => {
+           recipeItems = recipe.ingredients.map((list, i) => {
                 // console.log(list)
                 return(
                     <div className={list.Name}>{list.Name}<input onChange={this.handleBoxChecked} className={list.Name} type="checkbox" key={i} />
@@ -69,16 +63,16 @@ class AddToList extends Component {
     }
         return (
             
-            <div className='shoppinglistcontainer'>
+           <div className='addToListContainer shoppinglistcontainer'>
                 <div className='allappbarcomponents'>
-                  <AppBar />
+                    <AppBar />
                 </div>
-                <div className='addtocartq'><p>Add to Shopping Cart?</p></div>
-                <div className='shoppinglistmap'>
+                <div className='addtocartq'><p>Check to add to Shopping Cart...</p></div>
+                <div className='addToListContainer shoppinglistmap'>
                     {recipeItems}
                 </div>
                 <div className='addtocartbutton'>
-                    <button onSubmit={this.addtoCart}>Add to Cart</button>
+                    <button onClick={this.addtoCart}>Add to Cart</button>
                 </div>
             </div>
         );
