@@ -3,6 +3,7 @@ import axios from 'axios';
 // import Details from './Details'
 import { Link } from 'react-router-dom';
 import Sidebar from './Sidebar';
+import AppBar from './AppBar'
 
 class Results extends Component {
     constructor(props){
@@ -66,9 +67,11 @@ componentWillMount() {
         
         return (
             <div className='resultsContainer'>
-                <Sidebar />
+                 <div className='allappbarcomponents'>
+                  <AppBar />
+                </div>
                 <div>You have {this.state.results.length} results...</div>
-                <header id='resultsTitle'> Recipes</header>
+                {/* <header id='resultsTitle'> Recipes</header> */}
                 <div id='resultsGrid' className='gridContainer' >
                     {renderResults}
                 </div>

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import SearchModal from './SearchModal';
 import Sidebar from './Sidebar';
 import { Link } from 'react-router-dom'
+import AppBar from './AppBar'
 
 export default class SearchPage extends Component {
     constructor(props) {
@@ -87,6 +88,10 @@ export default class SearchPage extends Component {
 
     
     render() {
+
+
+
+
         const ingredientRender = this.state.searchByIngredients.map((el, i)=> {
             return  <h4 key={i}>{el}</h4>})
             
@@ -98,8 +103,9 @@ export default class SearchPage extends Component {
                 // console.log(this.props, 'props on search')
         return (
             <div className='SearchPageContainer'>
-            <Sidebar />
-                
+                <div className='allappbarcomponents'>
+                  <AppBar />
+                </div>
 
 
                 <div id='mainSearchContainer'>
