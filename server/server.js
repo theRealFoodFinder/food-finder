@@ -44,19 +44,19 @@ passport.use(new Auth0Strategy({
 	db.find_session_user([ profile._json.email ])
   .then( user => {
    if ( user[0] ) {
-		 console.log("db: ", user[0])
+		 
      return done( null, user[0]);
    }
     else {
 
         if (profile.provider === 'auth0') {
-            db.create_user([ profile._json.user_metadata.first_name, profile._json.user_metadata.last_name, profile._json.email, profile.identities[0].user_id])
+            db.create_user([ profile._json.user_metadata.first_name, profile._json.user_metadata.last_name, profile._json.email, profile.identities[0].user_id, true])
             .then( user => {
                 return done( null, user[0]);
             })
         } else {
 
-            db.create_user([ profile._json.given_name, profile._json.family_name, profile._json.email, profile.identities[0].user_id ])
+            db.create_user([ profile._json.given_name, profile._json.family_name, profile._json.email, profile.identities[0].user_id, true])
             .then( user => {
 
                 return done( null, user[0]);
@@ -69,7 +69,7 @@ passport.use(new Auth0Strategy({
 
 passport.serializeUser(function(user, done){
 
-    let sessionUser = {id: user.user_id, first: user.first_name, last: user.last_name, email: user.user_email}
+    let sessionUser = {id: user.user_id, first: user.first_name, last: user.last_name, email: user.user_email, initLogin: user.init_login}
     done(null, sessionUser);
 })
 
@@ -81,14 +81,32 @@ passport.deserializeUser(function(user, done){
 
 app.get('/auth', passport.authenticate('auth0'));
 
+
 app.get('/auth/callback', passport.authenticate('auth0', {
-    successRedirect: 'http://localhost:3000/#/search',
+    successRedirect: 'http://localhost:3005/atla40',
     failureRedirect: 'http://localhost:3000/#/failed'
 }));
 
-app.get('/auth/me', (req, res, next) => {
 
+app.get('/auth/me', (req, res, next) => {
     return res.status(200).send(req.user);
+})
+
+app.get('/atla40', (req, res) => {
+    app.get('db').user_lookup([req.user.id])
+    .then( response => {
+         if (response[0].init_login){
+             app.get('db').update_init_login([req.user.id])
+             .then(() => {
+                 res.redirect('http://localhost:3000/#/initialSetup')
+             }), 
+             () => {console.log("Couldnt update init setup.  Passing to search page")
+            res.status('500').redirect('http://localhost:3000/#/search')
+            }
+         } else {
+            res.status('200').redirect('http://localhost:3000/#/search')
+         }
+    })
 })
 
 
@@ -100,7 +118,7 @@ app.get('/auth/logout', (req,res) => {
 
 
 app.get('/api/getProfile', (req, res) => {
-	res.status(200).send(db.profile)
+	res.status(200).send(req.user)
 })
 
 
@@ -518,7 +536,7 @@ app.post('/api/getRecipe', (req,res) => {
         })
 
         app.get('/api/getShoppingList', (req, res) => {
-            app.get('db').get_shopping_list([8])
+            app.get('db').get_shopping_list([req.user.id])
             .then( ( response ) => {
                 res.status(200).send(response[0].items)
             })
@@ -526,7 +544,7 @@ app.post('/api/getRecipe', (req,res) => {
         
 
         app.post('/api/updateShoppingList', (req, res) => {
-            app.get('db').update_shopping_list([8, req.body.items])
+            app.get('db').update_shopping_list([req.user.id, req.body.items])
                 .then( (response) => {
                     res.status('200').send('Cart Successfully Updated')
                 })
@@ -534,7 +552,7 @@ app.post('/api/getRecipe', (req,res) => {
         )
 
         app.post('/api/appendShoppingList', (req, res) => {
-            app.get('db').get_shopping_list([8])
+            app.get('db').get_shopping_list([req.user.id])
             .then( (response) => {
                 axios.post('http://localhost:3005/api/updateShoppingList', {
                     items: response[0].items + req.body.items
@@ -544,6 +562,8 @@ app.post('/api/getRecipe', (req,res) => {
                   })
             })
         })
+
+        
 
         
 
