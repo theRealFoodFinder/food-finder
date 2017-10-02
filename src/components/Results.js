@@ -10,7 +10,7 @@ class Results extends Component {
         super(props);
         this.state={
             search:{},
-            results: [{sample:'data'},{sample:'data'}],
+            results: [],
             showDetailedView: false,
             recipePicked: {},
             history: []

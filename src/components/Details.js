@@ -36,14 +36,8 @@ componentWillMount() {
 
 
 
-        // console.log(titles);
-        // const foodtitleMap = titles.map((foodtitle,i)=>{
-        //     console.log(foodtitle);
-        //     return<div>{foodtitle.title}</div>
-        // })
 
-        // console.log(this.state.results[0].ingredients[0].Name);
-        // console.log('details state', this.state)
+        let titles = this.state.results[0].title
         return (
 
             <div className='detailsContainer'>
@@ -56,21 +50,15 @@ componentWillMount() {
                     <div className='titlebackground'>
                         {/* <div id='foodtitle'>{titles}</div> */}
                     </div>
-
                     <div className="detailsson" id='seconddetailsson'>
-                        <p id='detailsingredientstitle'>Ingredients </p>
-                        {/* <div id='ingredientsmap'>{ingredientsMap}</div> */}
+                        <p id='detailsingredientstitle'>Ingredients</p>
+                        <div id='ingredientsmap'>{ingredientsMap}</div>
                         <div className='detailquestion'> 
                         <Link to='/add'><button> Add these to your shopping list?? </button></Link>
-                            
-                              
                         </div>
                     </div>
 
                 </div></a>
-
-         
-
             </div>
         );
     }
