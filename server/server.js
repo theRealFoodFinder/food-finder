@@ -524,6 +524,8 @@ app.post('/api/getRecipe', (req,res) => {
         })
 
 
+        
+
         app.get('/api/getShoppingList', (req, res) => {
             app.get('db').get_shopping_list([req.user.id])
             .then( ( response ) => {
