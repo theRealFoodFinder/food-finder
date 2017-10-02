@@ -91,11 +91,13 @@ app.get('/auth/me', (req, res, next) => {
     return res.status(200).send(req.user);
 })
 
+
 app.get('/auth/logout', (req,res) => {
     console.log(`user ${req.user.id} has logged out`)
     req.logOut();
     return res.redirect(302, '/#/')
 })
+
 
 app.get('/api/getProfile', (req, res) => {
 	res.status(200).send(db.profile)
@@ -108,12 +110,6 @@ app.get('/api/getPreferences', (req, res) => {
     })
 })
 
-
-
-app.post('/api/recipeFilter', (req, res) => {
-
-
-})
 
 app.get('/api/favoriteRecipe/:id', (req, res) => {
     let {recipe_id} = req.params.id;
@@ -130,7 +126,6 @@ app.get('/api/favoriteRecipe/:id', (req, res) => {
 })
 
  app.post('/api/postShoppingList', (req, res) => {
-     console.log('recieved shopping list')
     function formatIngredients(ingArr){
         let regex = /\(.*\)|\(.*|\'|;|\*|^ | or .*| in .*| for .*| to taste .*|=/g
         for (var x=ingArr.length-1; x >= 0; x--){
@@ -164,7 +159,7 @@ app.get('/api/favoriteRecipe/:id', (req, res) => {
 	.then( (currentShoppingList) => {
 		app.get('db').post_shopping_list([req.body.id, shoppingList.join(', ') + ',' + currentShoppingList[0].items])
 	})
-	res.status('200').send("success");
+	res.status('200').send("success????");
 })
 
 
@@ -490,12 +485,10 @@ app.post('/api/getRecipe', (req,res) => {
         })
 
 
-////////// =========== TO-DO ========== ////////////////
-
         app.put('/api/addToBlacklist', (req, res)=> {
-            let {items} - req.body
+            let {items} = req.body
             app.get('db').get_blacklist([req.user.id]).then((response)=>{
-                let response = response[0]
+                 response = response[0]
                 if (response){
                     response += ',' + items
                     app.get('db').update_blacklist([response]).then((response)=>{
@@ -508,7 +501,7 @@ app.post('/api/getRecipe', (req,res) => {
         app.put('/api/removeFromBlacklist', (req, res)=>{
             let {items} = req.body
             app.get('db').get_blacklist([req.user.id]).then((response)=>{
-                let response = response[0]
+                 response = response[0]
                 if (response){
                     let newList = response.split(',').map((e,i,a)=>{
                         if (!items.includes(e)) return e
@@ -524,8 +517,8 @@ app.post('/api/getRecipe', (req,res) => {
             })
         })
 
+////////// =========== TO-DO ========== ////////////////
 
-        
 
         app.get('/api/getShoppingList', (req, res) => {
             app.get('db').get_shopping_list([req.user.id])
@@ -534,15 +527,14 @@ app.post('/api/getRecipe', (req,res) => {
             })
         })
         
-        app.put('/api/updateShoppingList', (req, res) => {
-            if (req.query === 'clearAll') {
-                app.get('db').clear_shopping_list([req.user.id])
+
+        app.post('/api/updateShoppingList', (req, res) => {
+            app.get('db').update_shopping_list([req.user.id, req.body.items])
                 .then( (response) => {
-                    res.status('200').send('Successfully Cleared')
+                    res.status('200').send('Cart Successfully Updated')
                 })
             }
-        })
-
+        )
 
 
 
@@ -550,3 +542,5 @@ app.post('/api/getRecipe', (req,res) => {
         
 
 app.listen(config.port, () => {console.log(`Success!  Listening on port: ${config.port}`)});
+
+
