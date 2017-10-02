@@ -137,7 +137,6 @@ app.get('/api/favoriteRecipe/:id', (req, res) => {
 })
 
  app.post('/api/postShoppingList', (req, res) => {
-     console.log('recieved shopping list')
     function formatIngredients(ingArr){
         let regex = /\(.*\)|\(.*|\'|;|\*|^ | or .*| in .*| for .*| to taste .*|=/g
         for (var x=ingArr.length-1; x >= 0; x--){

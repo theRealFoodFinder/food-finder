@@ -16,19 +16,14 @@ class ShoppingList extends Component {
     }
     
     componentDidMount() {
-        //get user id?
-        // axios.get('/api/getShoppingList')
+    
+        // axios.get('/api/getShoppingList').then((res)=>);
 
-        let recipe = this.props.recipe;
-        this.setState({
-            shoppingLists: recipe
-        })
     }
     
     
     removeFromCart(){
-        // axios.get('/auth/me').then
-//remove items from cart
+        // app.post('/api/postShoppingList').then()
     }
 
     handleBoxChecked(e){
