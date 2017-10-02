@@ -14,10 +14,10 @@ class Sidebar extends Component {
             <div>
                 <Menu>
                     <Link to={'/search'} id="msearch" className="menu-item">Search</Link>
-                    <Link to={'/shoppinglist'} id="mshoppinglists" className="menu-item" href="/about">Shopping Lists</Link>
-                    <Link to={'/history'} id="mhistory" className="menu-item" href="/contact">History</Link>
-                    <Link to={'/profile'} id="mprofile" className="menu-item" href="/contact">Profile</Link>
-                    <Link to={'/logout'} id="mlogout" className="menu-item" href="/contact">Log out</Link>
+                    <Link to={'/shoppinglist'} id="mshoppinglists" className="menu-item" >Shopping Lists</Link>
+                    <Link to={'/history'} id="mhistory" className="menu-item" >History</Link>
+                    <Link to={'/profile'} id="mprofile" className="menu-item" >Profile</Link>
+                    <Link to={'/profile'} id="mlogout" className="menu-item" >Log out</Link>
                     {/* <a onClick={ this.showSettings } className="menu-item--small" href="">Settings</a> */}
                 </Menu>
             </div>
