@@ -1,0 +1,21 @@
+.appbarcontainer{
+ position: absolute;
+ width: 100vw;
+ height: 50px;
+ background-color: white;
+//  background: white;  
+
+//  background: -webkit-linear-gradient(to left, #00CFFD, #FF5F5F);  
+//  background: linear-gradient(to left, #CECECE, #FFFFFF); 
+
+}
+
+
+.Appbarserchtitle{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    color:#3A3A3A;
+    font-size: 20px;
+}
