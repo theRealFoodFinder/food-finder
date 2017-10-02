@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Sidebar from './Sidebar';
 import axios from 'axios';
+import AppBar from './AppBar'
 
 
 class AddToList extends Component {
@@ -45,6 +46,9 @@ class AddToList extends Component {
 
     render() {
 
+
+
+
         let recipeItems;
     if (this.state && this.state.shoppingList && this.state.shoppingList.length>0){
         let recipe = this.state.shoppingList[0];
@@ -62,7 +66,9 @@ class AddToList extends Component {
         return (
             
             <div className='shoppinglistcontainer'>
-                <Sidebar />
+                <div className='allappbarcomponents'>
+                  <AppBar />
+                </div>
                 <div className='addtocartq'><p>Add to Shopping Cart?</p></div>
                 <div className='shoppinglistmap'>
                     {recipeItems}

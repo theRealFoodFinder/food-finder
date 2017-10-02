@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Sidebar from './Sidebar';
+import AppBar from './AppBar'
 
 class History extends Component {
     constructor(props) {
@@ -33,7 +34,9 @@ class History extends Component {
     
         return (
             <div>
-            <Sidebar />
+            <div className='allappbarcomponents'>
+                  <AppBar />
+                </div>
                 History Page
                 {renderHistory}
             </div>
