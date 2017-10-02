@@ -25,7 +25,7 @@ class History extends Component {
             let id, title;
             renderHistory = this.props.historyLog.map((item, i) => {
                 id = item.recipe_id;
-                title = item.title;
+                title = item.name;
                 return <div className="historyItem" key={id}>{title}</div>
             })
         }

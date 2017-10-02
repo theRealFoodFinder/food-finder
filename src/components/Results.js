@@ -39,7 +39,6 @@ componentWillMount() {
         let foundRecipe = temparray.filter((recipe, i)=>{
             return recipe.recipe_id === recipeId;
         })
-        debugger
         let id = foundRecipe[0].recipe_id;
         let newtitle = foundRecipe[0].title;
         let newObj = {name:newtitle, id:id}
