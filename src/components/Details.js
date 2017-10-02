@@ -28,14 +28,6 @@ componentWillMount() {
 
 
         let titles = this.state.results[0].title
-        // console.log(titles);
-        // const foodtitleMap = titles.map((foodtitle,i)=>{
-        //     console.log(foodtitle);
-        //     return<div>{foodtitle.title}</div>
-        // })
-
-        // console.log(this.state.results[0].ingredients[0].Name);
-        // console.log('details state', this.state)
         return (
 
             <div className='detailsContainer'>
@@ -45,34 +37,14 @@ componentWillMount() {
                     <div className='titlebackground'>
                         <div id='foodtitle'>{titles}</div>
                     </div>
-
                     <div className="detailsson" id='seconddetailsson'>
-                        <p id='detailsingredientstitle'>🥗 Ingredients 🥗</p>
+                        <p id='detailsingredientstitle'>Ingredients</p>
                         <div id='ingredientsmap'>{ingredientsMap}</div>
                         <div className='detailquestion'> 
                         <Link to='/add'><button> Add these to your shopping list?? </button></Link>
-                            
-                              
                         </div>
                     </div>
-{/*comment field below was attempting to eliminate error from emojis*/}
-                    {/* <div className="detailsson" id='seconddetailsson'>
-                        <p id='detailsingredientstitle'><span role="img">🥗</span>  Ingredients<span role="img">🥗</span></p>
-                        <div id='ingredientsmap'>{ingredientsMap}</div>
-                        <div className='detailquestion'> 
-                            <button onClick={this.yesHandleClick}>Yes</button> 
-                            Do you want to try this recipe? 
-                            <button onClick={this.props.toggleDetailedView}>No</button>  
-                        </div>
-                    </div> */}
-
                 </div></a>
-
-                {/* <div className="detailsson" id='seconddetailsson'>
-                    <p id='detailsingredientstitle'>🥗  Ingredients🥗</p>
-                    <div id='ingredientsmap'>{ingredientsMap}</div>
-                </div> */}
-
             </div>
         );
     }

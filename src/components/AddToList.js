@@ -8,7 +8,9 @@ class AddToList extends Component {
     constructor() {
         super();
         this.state = {
-            shoppingListBackend:{},
+            shoppingListBackend:{
+                items: ""
+            },
             shoppingList:[]
         }
         this.addtoCart=this.addtoCart.bind(this)
@@ -29,12 +31,14 @@ class AddToList extends Component {
         // axios.get('/auth/me').then
 (axios.post('/api/postShoppingList', this.state.shoppingListBackend).then(_=>console.log('items added to shopping list')))
     }
-
+//items: items seperated my commas
     handleBoxChecked(e){
     let listItem = e.target.className
+    
     // let isChecked = e.target.checked
-    let list = this.state.shoppingList
+    let list = this.state.shoppingListBackend.list
     list[listItem]=!list[listItem]
+    console.log(list, 'list')
     // console.log(list);
     this.setState({
         shoppingListBackend: list
