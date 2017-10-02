@@ -8,9 +8,7 @@ class AddToList extends Component {
     constructor() {
         super();
         this.state = {
-            shoppingListBackend:{
-                items: ""
-            },
+            shoppingListBackend:{},
             shoppingList:[]
         }
         this.addtoCart=this.addtoCart.bind(this)
@@ -28,17 +26,18 @@ class AddToList extends Component {
     
     
     addtoCart(){
-        // axios.get('/auth/me').then
+        debugger
+        // true = shopping list
+        // false = add to pantry
+        console.log(this.state.shoppingListBackend);
 (axios.post('/api/postShoppingList', this.state.shoppingListBackend).then(_=>console.log('items added to shopping list')))
     }
-//items: items seperated my commas
+
     handleBoxChecked(e){
     let listItem = e.target.className
-    
     // let isChecked = e.target.checked
-    let list = this.state.shoppingListBackend.list
+    let list = this.state.shoppingList
     list[listItem]=!list[listItem]
-    console.log(list, 'list')
     // console.log(list);
     this.setState({
         shoppingListBackend: list
@@ -65,10 +64,10 @@ class AddToList extends Component {
     }
         return (
             
-            <div className='shoppinglistcontainer'>
+            <div className='addToListContainer shoppinglistcontainer'>
                 <Sidebar />
-                <div className='addtocartq'><p>Add to Shopping Cart?</p></div>
-                <div className='shoppinglistmap'>
+                <div className='addtocartq'><p>Check to add to Shopping Cart...</p></div>
+                <div className='addToListContainer shoppinglistmap'>
                     {recipeItems}
                 </div>
                 <div className='addtocartbutton'>
