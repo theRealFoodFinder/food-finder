@@ -159,7 +159,7 @@ app.get('/api/favoriteRecipe/:id', (req, res) => {
 	.then( (currentShoppingList) => {
 		app.get('db').post_shopping_list([req.body.id, shoppingList.join(', ') + ',' + currentShoppingList[0].items])
 	})
-	res.status('200').send("success????");
+	res.status('200').send("success");
 })
 
 
@@ -517,11 +517,8 @@ app.post('/api/getRecipe', (req,res) => {
             })
         })
 
-////////// =========== TO-DO ========== ////////////////
-
-
         app.get('/api/getShoppingList', (req, res) => {
-            app.get('db').get_shopping_list([req.user.id])
+            app.get('db').get_shopping_list([8])
             .then( ( response ) => {
                 res.status(200).send(response[0].items)
             })
@@ -529,17 +526,28 @@ app.post('/api/getRecipe', (req,res) => {
         
 
         app.post('/api/updateShoppingList', (req, res) => {
-            app.get('db').update_shopping_list([req.user.id, req.body.items])
+            app.get('db').update_shopping_list([8, req.body.items])
                 .then( (response) => {
                     res.status('200').send('Cart Successfully Updated')
                 })
             }
         )
 
-
-
+        app.post('/api/appendShoppingList', (req, res) => {
+            app.get('db').get_shopping_list([8])
+            .then( (response) => {
+                axios.post('http://localhost:3005/api/updateShoppingList', {
+                    items: response[0].items + req.body.items
+                  })
+                  .then( () => {
+                      res.status(200).send("Appended Cart!")
+                  })
+            })
+        })
 
         
+
+
 
 app.listen(config.port, () => {console.log(`Success!  Listening on port: ${config.port}`)});
 
