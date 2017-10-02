@@ -14,7 +14,7 @@ class ShoppingList extends Component {
         this.removeFromCart=this.removeFromCart.bind(this)
         this.handleBoxChecked=this.handleBoxChecked.bind(this)
     }
-    
+    //comma seperated string transsfer
     componentDidMount() {
     
         // axios.get('/api/getShoppingList').then((res)=>);
