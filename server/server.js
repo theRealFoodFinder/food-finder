@@ -563,9 +563,38 @@ app.post('/api/getRecipe', (req,res) => {
             })
         })
 
-        
 
+        app.post('/api/blacklist', (req, res)=>{
+            let {ingredients, type} = req.body
+            app.get('db').get_blacklist([8]).then((oldList)=>{
+                console.log("oldList", oldList)
+                oldList = oldList[0].blacklist.split(',')
+                let newList = []
+                
+                if (type === 'remove'){
+                    for (var i = 0; i < oldList.length; i++){
+                        if (!ingredients.includes(oldList[i])){
+                            newList.push(oldList[i])
+                        }
+                    }
+                } else if (type === 'add') {
+                    newList = [];
+                    newList.push(...oldList)
+                    ingredients.split(',').map((e,i,a)=>{
+                        if (!oldList.includes(e)){
+                            newList.push(e)
+                        }
+                    })
+                }
         
+                    newList = newList.join(',')
+                app.get('db').update_blacklist([newList, 8]).then((response)=>{
+                    return res.status(200).send(response)
+                })
+            })
+        })
+
+
 
 
 
