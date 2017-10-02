@@ -110,26 +110,6 @@ app.get('/api/getPreferences', (req, res) => {
     })
 })
 
-<<<<<<< HEAD
-app.get('/api/favoriteRecipe/:id', (req, res) => {
-	let {recipe_id} = req.params.id;
-
-	app.get('db').get_favorites([req.user.id]).then((response) => {
-		response = response[0].user_favorites
-		if (!response.includes(`,${recipe_id},`)){
-			response += recipe_id + ','
-			app.get('db').add_to_favorites([response, 1]).then((responseTwo) => {
-				res.status(200).send(responseTwo);
-			})
-		} else res.status(200).send(response);
-	})
-})
-
-app.get('/api/getFavorites', (req, res) => {
-	app.get('db').get_favorites([req.user.id]).then((response) => {
-		res.status(200).send(response);
-	})
-=======
 
 app.get('/api/favoriteRecipe/:id', (req, res) => {
     let {recipe_id} = req.params.id;
@@ -143,7 +123,6 @@ app.get('/api/favoriteRecipe/:id', (req, res) => {
             })
         } else res.status(200).send(response);
     })
->>>>>>> master
 })
 
  app.post('/api/postShoppingList', (req, res) => {
