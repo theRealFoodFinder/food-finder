@@ -17,7 +17,7 @@
     Client should send an object with a .ingredients property {"ingredients": ['chicken', 'carrot', 'cheese']} and a .nutrition_info object 
     (accepts \`x +\`, \`x - y\`, or \`< y\` values, where x/y are min/max numbers respectively) -- { "calories": "1000+", "carbs": "<50", "protein": "10-70" } 
 
-##- POST -
+## - POST -
 
 /api/blacklist - Accepts an object with type: add/remove, and a string of ingredients separated by a comma.  Ex: {type: add, ingredients: "list, of, ingredients")
 

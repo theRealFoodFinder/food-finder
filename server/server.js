@@ -270,13 +270,18 @@ app.post('/api/hitBigOven', (req, res)=> {
 
 
 app.post('/api/getRecipe', (req,res) => {
-    console.log('/getRecipe hit')
+	//req.user is not being defined in this instance. its stupid and needs to be fixed
+		console.log('/getRecipe hit')
+		let userInfoID = req.user
     let search = req.body
-    let searchParams = []
+		let searchParams = []
+		
+		console.log(userInfoID)
 
     function filterBlacklist(oldRecipes){
 			let myRecipeList = []
-         return app.get('db').get_blacklist([req.user.id]).then((blacklist) => {
+			console.log('user info id', userInfoID)
+         return app.get('db').get_blacklist([userInfoID]).then((blacklist) => {
 					 //does the response from database contain anything (blacklisted items)?
              if (blacklist[0]){
                 blacklist = blacklist[0].blacklist.split(', ')
@@ -397,22 +402,15 @@ app.post('/api/getRecipe', (req,res) => {
 
 												let finalList = filterBlacklist(filteredRecipes)
 												finalList.then((response) => {
-													console.log('final list:', response)
+													// console.log('final list:', response)
 													res.status(200).send(response);
 												})
 
                     })
                 } else if (ingList.length === 2) {
-                    // console.log('2 ingredient')
-                    // searchParams = ingList;
-                    // app.get('db').get_recipe_2(searchParams).then((response) => {
-                    // 	res.status(200).send(response);
-                    // })
                     searchParams = ingList;
                     console.log('2 ingredient')
                     app.get('db').get_recipe_2(searchParams).then((response) => {
-
-
 
                         let filters = {min: {}, max: {}}
                         let nutInf = search.nutrition_info;
@@ -494,16 +492,9 @@ app.post('/api/getRecipe', (req,res) => {
 												})
                     })
                 } else if (ingList.length === 3) {
-                    // console.log('3 ingredient')
-                    // searchParams = ingList;
-                    // app.get('db').get_recipe_3(searchParams).then((response) => {
-                    // 	res.status(200).send(response);
-                    // })
                     searchParams = ingList;
                     console.log('3 ingredient')
                     app.get('db').get_recipe_3(searchParams).then((response) => {
-
-
 
                         let filters = {min: {}, max: {}}
                         let nutInf = search.nutrition_info;
@@ -594,7 +585,6 @@ app.post('/api/getRecipe', (req,res) => {
         }
     }
 })
-
 
         // app.put('/api/addToBlacklist', (req, res)=> {
         //     let {items} = req.body
