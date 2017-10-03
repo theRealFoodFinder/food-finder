@@ -98,7 +98,7 @@ class ProfilePage extends Component {
 
         let favorites = this.state.favorites && this.state.favorites.length>0 ? 
             this.state.favorites.map((listItem, i)=>{
-                <div key={i}>
+               return <div key={i}>
                 <Link to='/details'><div key={i} className='imgDiv' >
                         <div onClick={(e)=> {this.handleFavIcon(listItem.recipe_id)}} className='favicon' >&#9829;</div>
                         <img alt={i}  key={listItem.recipe_id} onClick={()=>this.toggleDetailedView(listItem.recipe_id)} src={listItem.hero_photo_url}></img>
