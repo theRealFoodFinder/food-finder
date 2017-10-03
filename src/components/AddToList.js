@@ -25,7 +25,6 @@ class AddToList extends Component {
 
     
     addtoCart(){
-        debugger
         // true = shopping list
         // false = add to pantry
         console.log(this.state.shoppingListBackend);

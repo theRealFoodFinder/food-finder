@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Sidebar from './Sidebar';
 import AppBar from './AppBar'
 
 class History extends Component {

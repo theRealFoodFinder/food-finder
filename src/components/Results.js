@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 // import Details from './Details'
 import { Link } from 'react-router-dom';
-import Sidebar from './Sidebar';
 import AppBar from './AppBar'
 
 class Results extends Component {

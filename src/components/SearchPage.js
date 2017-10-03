@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import SearchModal from './SearchModal';
-import Sidebar from './Sidebar';
 import { Link } from 'react-router-dom'
 import AppBar from './AppBar'
 
