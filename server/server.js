@@ -184,6 +184,12 @@ app.get('/api/favoriteRecipe/:id', (req, res) => {
     })
 })
 
+app.get('/api/getFavorites', (req, res) => {
+	app.get('db').get_favorites([req.user.id]).then((response) => {
+		return res.status(200).send(response);
+	})
+})
+
  app.post('/api/postShoppingList', (req, res) => {
     function formatIngredients(ingArr){
         let regex = /\(.*\)|\(.*|\'|;|\*|^ | or .*| in .*| for .*| to taste .*|=/g
