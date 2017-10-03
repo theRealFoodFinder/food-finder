@@ -24,6 +24,7 @@ componentWillMount() {
     // console.log(this.state.search, 'profile');
     let profile = this.props.search
     axios.post('http://localhost:3005/api/getRecipe', profile).then((res)=>{
+        console.log('results:', res)
         this.setState({
             results: res.data
         })
@@ -55,15 +56,15 @@ componentWillMount() {
     }
     
     render() {
-        const renderResults = this.state.results.map((el, i)=> {
-            return  <div key={i}>
-            <Link to='/details'><div key={i} className='imgDiv' >
-                    <div onClick={(e)=> {this.handleFavIcon(el.recipe_id)}} className='favicon' >&#9829;</div>
-                    <img alt={i}  key={el.recipe_id} onClick={()=>this.toggleDetailedView(el.recipe_id)} src={el.hero_photo_url}></img>
-                </div></Link>
-                <h3 className='resultsTitle'>{el.title}</h3>
-            </div>
-        })
+        let renderResults = _=> {return this.state.results.map((el, i)=> {
+                return  <div key={i}>
+                <Link to='/details'><div key={i} className='imgDiv' >
+                        <div onClick={(e)=> {this.handleFavIcon(el.recipe_id)}} className='favicon' >&#9829;</div>
+                        <img alt={i}  key={el.recipe_id} onClick={()=>this.toggleDetailedView(el.recipe_id)} src={el.hero_photo_url}></img>
+                    </div></Link>
+                    <h3 className='resultsTitle'>{el.title}</h3>
+                </div>
+            })} 
         
         return (
             <div className='resultsContainer'>
@@ -73,7 +74,7 @@ componentWillMount() {
                 <div>You have {this.state.results.length} results...</div>
                 {/* <header id='resultsTitle'> Recipes</header> */}
                 <div id='resultsGrid' className='gridContainer' >
-                    {renderResults}
+                    {this.state.results.length > 0 ? renderResults() : null}
                 </div>
 
             </div>
