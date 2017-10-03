@@ -66,14 +66,6 @@ class SearchModal extends Component {
 
 
     submitAdd(){
-        // console.log(this.state.amount, "amount");
-    // let tempModalObject=this.state.modalObject;
-    // let selected = this.state.selected;
-    // let amount = this.state.amount;
-    // tempModalObject[selected] = amount;
-    // this.setState({
-    //     modalObject: tempModalObject
-    // })
     this.props.handleGetFilters(this.state.selected, this.state.amount)
     }
 
@@ -81,7 +73,6 @@ class SearchModal extends Component {
 
 
     render() {
-        // console.log(this.props.handleGetFilters, 'props modal')
         const nutritionOptionsMap = this.state.nutritionOptions.map((nutrition, i)=>{
             return(
                 <option value ={nutrition} key={i}>
