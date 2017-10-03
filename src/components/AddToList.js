@@ -22,17 +22,17 @@ class AddToList extends Component {
         })
         console.log(this.state.shoppingList, 'shopping list mounted')
     }
+
     
-   
-   addtoCart(){
-      
+    addtoCart(){
         // true = shopping list
         // false = add to pantry
         console.log(this.state.shoppingListBackend);
-// (axios.post('/api/postShoppingList', this.state.shoppingListBackend).then(_=>console.log('items added to shopping list')))
+(axios.post('/api/postShoppingList', this.state.shoppingListBackend).then(_=>console.log('items added to shopping list')))
     }
 
-   handleBoxChecked(e){
+    handleBoxChecked(e){
+
     let listItem = e.target.className
     // let isChecked = e.target.checked
     let list = this.state.shoppingList

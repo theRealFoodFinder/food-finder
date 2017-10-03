@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Sidebar from './Sidebar';
-import axios from 'axios';
+
+// import axios from 'axios';
 import AppBar from './AppBar'
 
 
