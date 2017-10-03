@@ -608,7 +608,7 @@ app.post('/api/getRecipe', (req,res) => {
 
         app.post('/api/blacklist', (req, res)=>{
             let {ingredients, type} = req.body
-            app.get('db').get_blacklist([8]).then((oldList)=>{
+            app.get('db').get_blacklist([req.user.id]).then((oldList)=>{
                 console.log("oldList", oldList)
                 oldList = oldList[0].blacklist.split(',')
                 let newList = []
@@ -630,13 +630,19 @@ app.post('/api/getRecipe', (req,res) => {
                 }
         
                     newList = newList.join(',')
-                app.get('db').update_blacklist([newList, 8]).then((response)=>{
+                app.get('db').update_blacklist([newList, req.user.id]).then((response)=>{
                     return res.status(200).send(response)
                 })
             })
         })
 
-
+        
+        app.get('/api/getBlacklist', (req, res) => {
+            app.get('db').get_blacklist([req.user.id])
+            .then( response => {
+                res.status('200').send(response[0].blacklist)
+            }), () => {res.status('500').send("Couldn't get blacklist")}
+        })
 
 
 
