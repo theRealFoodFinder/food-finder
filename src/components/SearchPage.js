@@ -106,10 +106,9 @@ export default class SearchPage extends Component {
         
          const filterRender = ()=> {
                 let filters = this.state.modalObject;
-                return (filters.map((el, i)=> {
-                 return   <h4 className={i}>{el}</h4>}))
+                for (let key in filters){
+                 return   <h4>{key}</h4>}
             }
-                // console.log(this.props, 'props on search')
         return (
             <div className='SearchPageContainer'>
                 <div className='allappbarcomponents'>
@@ -120,7 +119,7 @@ export default class SearchPage extends Component {
                 <div id='mainSearchContainer'>
                     <div className='searchParamDisplay'>
                     Search By: (Click to Remove)
-                    {ingredientRender}{filterRender}
+                    {ingredientRender}{filterRender()}
                     </div>
                     <div className='searchTitle'>
                         Main Ingredient Search

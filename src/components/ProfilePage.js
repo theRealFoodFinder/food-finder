@@ -49,11 +49,13 @@ class ProfilePage extends Component {
     }
 
     blacklistChange(value){
+        this.setState({
+            inputType:"Blacklist",
+            item:value,
+        })
         axios.get('/api/getBlacklist').then((res)=>{
             this.setState({
                 results:res,
-                inputType:"Blacklist",
-                item:value,
             })
         })
     }
