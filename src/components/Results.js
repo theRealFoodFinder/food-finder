@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 // import Details from './Details'
 import { Link } from 'react-router-dom';
-import Sidebar from './Sidebar';
 import AppBar from './AppBar'
 
 class Results extends Component {
@@ -56,15 +55,16 @@ componentWillMount() {
     }
     
     render() {
-        let renderResults = _=> {return this.state.results.map((el, i)=> {
-                return  <div key={i}>
-                <Link to='/details'><div key={i} className='imgDiv' >
-                        <div onClick={(e)=> {this.handleFavIcon(el.recipe_id)}} className='favicon' >&#9829;</div>
-                        <img alt={i}  key={el.recipe_id} onClick={()=>this.toggleDetailedView(el.recipe_id)} src={el.hero_photo_url}></img>
-                    </div></Link>
-                    <h3 className='resultsTitle'>{el.title}</h3>
-                </div>
-            })} 
+
+        const renderResults = _=> {return this.state.results.map((el, i)=> {
+            return  <div key={i}>
+            <Link to='/details'><div key={i} className='imgDiv' >
+                    <div onClick={(e)=> {this.handleFavIcon(el.recipe_id)}} className='favicon' >&#9829;</div>
+                    <img alt={i}  key={el.recipe_id} onClick={()=>this.toggleDetailedView(el.recipe_id)} src={el.hero_photo_url}></img>
+                </div></Link>
+                <h3 className='resultsTitle'>{el.title}</h3>
+            </div>
+        })}
         
         return (
             <div className='resultsContainer'>
