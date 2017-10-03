@@ -38,7 +38,6 @@ export default class SearchPage extends Component {
         this.setState({
             searchByIngredients: tempArray
         })
-
     }
 
     handleGetFilters(selected, amount){
@@ -48,6 +47,7 @@ export default class SearchPage extends Component {
             modalObject: tempModalObject,
             filterModal: false
         })
+        //this works
         console.log(this.state.modalObject)
     }
 
