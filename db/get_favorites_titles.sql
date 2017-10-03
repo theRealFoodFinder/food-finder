@@ -1,0 +1,1 @@
+SELECT title FROM recipes WHERE IN recipe_id = (123, 123,123,123,123,123) 

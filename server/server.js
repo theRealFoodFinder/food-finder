@@ -185,10 +185,17 @@ app.get('/api/favoriteRecipe/:id', (req, res) => {
 })
 
 app.get('/api/getFavorites', (req, res) => {
-	app.get('db').get_favorites([req.user.id]).then((response) => {
-		return res.status(200).send(response);
-	})
+    app.get('db').get_favorites([8])
+    .then( response => {
+      recipeID = response[0].user_favorites.split(',');
+        let queryString = `SELECT title from recipes WHERE recipe_id IN (${response[0].user_favorites});`
+        app.get('db').run(queryString)
+        .then( response => {
+            res.status('200').send(response);
+        })    
+	}) 
 })
+
 
  app.post('/api/postShoppingList', (req, res) => {
     function formatIngredients(ingArr){
