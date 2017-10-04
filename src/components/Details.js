@@ -12,7 +12,7 @@ class Details extends Component {
 
 
 componentWillMount() {
-    console.log(this.props.recipe[0], 'props on detailedpage')
+    // console.log(this.props.recipe[0], 'props on detailedpage')
     this.setState({
         results: this.props.recipe
     })
