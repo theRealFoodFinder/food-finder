@@ -1,14 +1,15 @@
 .detailsContainer{
     position: absolute;
     width: 100vw;
-    background-color: rgba(158, 165, 202, 1);
+    min-height: 100vh;
+    background-color: #920000;
     .detailsson{
         img{
             width:100vw;
         }
         .titlebackground{
             background-color: black;
-            .foodtitle{
+            #foodtitle{
                 position: absolute;
                 background-color: rgba(58, 58, 58, 0.66);
                 text-align: center;
@@ -17,12 +18,13 @@
                 // background-color: black;
                 height: 20px;
                 width: 100vw;
-                margin-top:-50px;
+                margin-top:-40px;
             }
         }
         #seconddetailsson{
             text-align: center;
             width:100vw;
+            padding-bottom: 10px;
             margin-top:10%;
             color:#E6E6E6;
             #detailsingredientstitle{
@@ -48,11 +50,11 @@
         }
     }
 }
-    @media (min-width: 680px){
+    @media (min-width: 1200px){
         .detailsContainer{
             position: absolute;
             width: 100vw;
-            background-color: rgba(158, 165, 202, 1);
+            background-color: #920000;
             #detailsMainContainer{
                 display: flex;
                 img{
@@ -62,7 +64,7 @@
                 }
                 .titlebackground{
                     background-color: black;
-                    .foodtitle{
+                    #foodtitle{
                         position: absolute;
                         background-color: rgba(58, 58, 58, 0.66);
                         text-align: center;
