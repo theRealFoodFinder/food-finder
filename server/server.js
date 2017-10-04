@@ -115,6 +115,7 @@ passport.serializeUser(function(user, done){
 })
 
 passport.deserializeUser(function(user, done){
+	app.set('user', user)
 		if (user) {
 			return done(null, user)
 		}
@@ -127,7 +128,6 @@ app.get('/auth/callback', passport.authenticate('auth0', {
     successRedirect: 'http://localhost:3005/atla40',
     failureRedirect: 'http://localhost:3000/#/failed'
 }));
-
 
 app.get('/auth/me', (req, res, next) => {
     return res.status(200).send(req.user);
@@ -277,15 +277,21 @@ app.post('/api/hitBigOven', (req, res)=> {
 
 
 app.post('/api/getRecipe', (req,res) => {
-    console.log('/getRecipe hit')
+	//req.user is not being defined in this instance. its stupid and needs to be fixed
+		console.log('/getRecipe hit')
+		let userInfoID = app.get('user')
+		userInfoID = userInfoID.id
     let search = req.body
-    let searchParams = []
+		let searchParams = []
+		
+		console.log('userInfoID', userInfoID)
 
     function filterBlacklist(oldRecipes){
 			let myRecipeList = []
-         return app.get('db').get_blacklist([1]).then((blacklist) => {
+			console.log('user info id', userInfoID)
+         return app.get('db').get_blacklist([userInfoID]).then((blacklist) => {
 					 //does the response from database contain anything (blacklisted items)?
-             if (blacklist[0]){
+             if (blacklist.length<0){
                 blacklist = blacklist[0].blacklist.split(', ')
 								let newRecipes = []
 
@@ -312,7 +318,38 @@ app.post('/api/getRecipe', (req,res) => {
              }
 						 return list
 				 })
-    }
+		}
+				
+		function ingredientPercentage(recipes){
+			let percentage = 20;
+			let pantryIngredients = undefined;
+
+			return app.get('db').get_pantry_list([userInfoID]).then((response) => {
+				pantryIngredients = response;
+				pantryIngredients = pantryIngredients[0].items.split(',')
+
+				let newRecipeList = []
+					
+					recipes.map((e,i,a) => {
+						let ingCounter = 0;
+						e.ingredients.map((ele, ind, arr) => {
+							for (var cou = 0; cou <= pantryIngredients.length; cou++){
+								if (ele.Name.includes(pantryIngredients[cou])){
+									ingCounter += 1
+								}
+							}
+						})
+						if ((ingCounter / e.ingredients.length*100) >= percentage){
+							newRecipeList.push(e)
+						}
+					})
+
+				console.log('final list:', newRecipeList.length)
+				return newRecipeList
+			})
+		}
+
+		// ========================================================================================================================================================================================
 
     if (search){
         console.log('request has body!')
@@ -404,23 +441,19 @@ app.post('/api/getRecipe', (req,res) => {
 
 												let finalList = filterBlacklist(filteredRecipes)
 												finalList.then((response) => {
-													console.log('final list:', response)
-													res.status(200).send(response);
+													// console.log('final list:', response)
+													let another = ingredientPercentage(response)
+													another.then((gogogo) => {
+														res.status(200).send(gogogo);
+													})
 												})
 
                     })
                 } else if (ingList.length === 2) {
-                    // console.log('2 ingredient')
-                    // searchParams = ingList;
-                    // app.get('db').get_recipe_2(searchParams).then((response) => {
-                    // 	res.status(200).send(response);
-                    // })
                     searchParams = ingList;
                     console.log('2 ingredient')
                     app.get('db').get_recipe_2(searchParams).then((response) => {
 
-
-
                         let filters = {min: {}, max: {}}
                         let nutInf = search.nutrition_info;
                         for (let ing in nutInf){
@@ -496,22 +529,18 @@ app.post('/api/getRecipe', (req,res) => {
 
                         let finalList = filterBlacklist(filteredRecipes)
 												finalList.then((response) => {
-													console.log('final list:', response)
-													res.status(200).send(response);
+													// console.log('final list:', response)
+													let another = ingredientPercentage(response)
+													another.then((gogogo) => {
+														res.status(200).send(gogogo);
+													})
 												})
                     })
                 } else if (ingList.length === 3) {
-                    // console.log('3 ingredient')
-                    // searchParams = ingList;
-                    // app.get('db').get_recipe_3(searchParams).then((response) => {
-                    // 	res.status(200).send(response);
-                    // })
                     searchParams = ingList;
                     console.log('3 ingredient')
                     app.get('db').get_recipe_3(searchParams).then((response) => {
 
-
-
                         let filters = {min: {}, max: {}}
                         let nutInf = search.nutrition_info;
                         for (let ing in nutInf){
@@ -587,8 +616,11 @@ app.post('/api/getRecipe', (req,res) => {
 
                         let finalList = filterBlacklist(filteredRecipes)
 												finalList.then((response) => {
-													console.log('final list:', response)
-													res.status(200).send(response);
+													// console.log('final list:', response)
+													let another = ingredientPercentage(response)
+													another.then((gogogo) => {
+														res.status(200).send(gogogo);
+													})
 												})
                     })
                 }
@@ -601,7 +633,6 @@ app.post('/api/getRecipe', (req,res) => {
         }
     }
 })
-
 
         // app.put('/api/addToBlacklist', (req, res)=> {
         //     let {items} = req.body
