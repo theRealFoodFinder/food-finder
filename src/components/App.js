@@ -76,12 +76,14 @@ this.passHistory = this.passHistory.bind(this);
 					
 					<Route component= { props => <Results historyLog={this.state.history} passHistory={this.passHistory} getRecipe={this.getRecipe} search={this.state.search} recipes={this.state.recipes} {...props} />} path='/results'/>
 					
-					<Route component= { props => <SuperDetails getRecipe={this.getRecipe} search={this.state.search} recipes={this.state.recipes} {...props} />} path='/recipe'/>
+					<Route component= { props => <SuperDetails {...props} recipe={this.state.recipe} />} path='/recipe'/>
 
 					<Route component= { props => <History historyLog={this.state.history} {...props} profile={this.state.profile}/>} path='/history'/>
 					
 					<Route component= { props => <ProfilePage {...props} profile={this.state.profile}/>} path='/profile'/>
 					<Route component= {Landing} exact path='/'/>
+
+					
 
 				</Switch>
 			</div>

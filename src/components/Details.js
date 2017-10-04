@@ -11,8 +11,6 @@ class Details extends Component {
     }
 
 
-
-
 componentWillMount() {
     console.log(this.props.recipe[0], 'props on detailedpage')
     this.setState({
@@ -47,6 +45,8 @@ componentWillMount() {
                         <div id='ingredientsmap'>{ingredientsMap}</div>
                         <div className='detailquestion'>
                         <Link to='/add'><button> Add these to your shopping list?? </button></Link>
+                        <Link to='/recipe'><button>Go to Recipe</button></Link>
+
                         </div>
                     </div>
                 </div></a>
