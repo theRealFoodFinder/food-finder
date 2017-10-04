@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import AppBar from './AppBar';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 class ProfilePage extends Component {
     constructor(props) {
@@ -21,12 +21,14 @@ class ProfilePage extends Component {
     
     componentWillMount() {
         axios.get('/api/getFavorites').then((res)=>{
-        // let fav=this.state.favorites;
-        let favArray=res.split(',')
+       console.log(res.data[0])
+        let temp = res.data[0].user_favorites;
+        let favArray=[];
+        favArray=temp.split(',');
         this.setState({
             favorites:favArray
         })
-        console.log(this.state.favorites)
+        // console.log(this.state.favorites)
     })
 }
         
@@ -100,13 +102,18 @@ class ProfilePage extends Component {
 
         let favorites = this.state.favorites && this.state.favorites.length>0 ? 
             this.state.favorites.map((listItem, i)=>{
-               return <div key={i}>
-                <Link to='/details'><div key={i} className='imgDiv' >
-                        <div onClick={(e)=> {this.handleFavIcon(listItem.recipe_id)}} className='favicon' >&#9829;</div>
-                        <img alt={i}  key={listItem.recipe_id} onClick={()=>this.toggleDetailedView(listItem.recipe_id)} src={listItem.hero_photo_url}></img>
-                    </div></Link>
-                    <h3 className='resultsTitle'>{listItem.title}</h3>
-                </div>
+                console.log(listItem)
+               return   <div>
+                            {/* <Link to='/details'><div key={i} className='imgDiv' >
+                            <div onClick={(e)=> {this.handleFavIcon(listItem.recipe_id)}} className='favicon' >
+                                &#9829;
+                            </div>
+                            <img alt={i}  key={listItem.recipe_id} onClick={()=>this.toggleDetailedView(listItem.recipe_id)} src={listItem.hero_photo_url}></img>
+                            </div></Link> */}
+                            <h3 className='resultsTitle'>
+                                {listItem}
+                            </h3>
+                         </div>
             }) : "Sorry no favorites to display";
         
         return (
@@ -115,6 +122,13 @@ class ProfilePage extends Component {
                     <AppBar />
                 </div>
                 <div className='profileMainContainer'>
+                    <div className='profileleftSide'>
+                    <span className='profilefavorites'>
+                        <span>
+                            Favorites
+                        </span>
+                        {favorites}
+                    </span>
                     <span className='inputContainer'>
                         <input value={this.state.item} onChange={(e)=>{this.blacklistChange(e.target.value)}} className='profileinput input'type="text"/>
                         <button onClick={this.blacklistClick} className='profileinput input button'>Dislikes / Allergies</button>
@@ -124,12 +138,12 @@ class ProfilePage extends Component {
                         {/* <input  className='profileinput input'type="text"/>
                         <button className='profileinput input button'></button> */}
                     </span>
+                    </div>
                     <span className='rightSide'>
                         {profileTitle}
-                        <div className='resultText'>{results}</div>
-                        <span className='profilefavorites'>
-                            {favorites}
-                        </span>
+                        <div className='resultText'>
+                            {results}
+                        </div>
                     </span>
                 </div>
             </div>
