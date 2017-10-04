@@ -314,31 +314,14 @@ app.post('/api/getRecipe', (req,res) => {
 		}
 				
 		function ingredientPercentage(recipes){
-			// define percentage, recipes, and ingredients (db)
-			// filter through each recipe
-				// get total count of ingredients that match items in their db
-				// if total count >= (recipe / 100) * percentage, push to array
-			// return array
-			console.log('percent function called')
 			let percentage = 20;
 			let pantryIngredients = undefined;
 
 			return app.get('db').get_pantry_list([userInfoID]).then((response) => {
-				console.log(`pantry has results! ${response.length} total ingredients lists found.`)
 				pantryIngredients = response;
 				pantryIngredients = pantryIngredients[0].items.split(',')
-				console.log(pantryIngredients)
-
-				console.log(recipes[15].ingredients)
 
 				let newRecipeList = []
-
-				//loop through recipe
-					//set counter to track how many ingredients match
-					//loop through each ingredient of that recipe
-						//loop through each pantry item
-							//if ingredient[x].Name includes current pantry item, add to counter^
-					//if counter fits in correct percentage, push recipe to newRecipeList 
 					
 					recipes.map((e,i,a) => {
 						let ingCounter = 0;
@@ -349,10 +332,6 @@ app.post('/api/getRecipe', (req,res) => {
 								}
 							}
 						})
-						console.log('total ingredints:', ingCounter)
-						// if (e.ingredients.length*(percentage/100) >= ingCounter){
-						// 	newRecipeList.push(e)
-						// }
 						if ((ingCounter / e.ingredients.length*100) >= percentage){
 							newRecipeList.push(e)
 						}
@@ -543,8 +522,11 @@ app.post('/api/getRecipe', (req,res) => {
 
                         let finalList = filterBlacklist(filteredRecipes)
 												finalList.then((response) => {
-													console.log('final list:', response)
-													res.status(200).send(response);
+													// console.log('final list:', response)
+													let another = ingredientPercentage(response)
+													another.then((gogogo) => {
+														res.status(200).send(gogogo);
+													})
 												})
                     })
                 } else if (ingList.length === 3) {
@@ -627,8 +609,11 @@ app.post('/api/getRecipe', (req,res) => {
 
                         let finalList = filterBlacklist(filteredRecipes)
 												finalList.then((response) => {
-													console.log('final list:', response)
-													res.status(200).send(response);
+													// console.log('final list:', response)
+													let another = ingredientPercentage(response)
+													another.then((gogogo) => {
+														res.status(200).send(gogogo);
+													})
 												})
                     })
                 }
