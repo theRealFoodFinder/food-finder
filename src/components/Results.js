@@ -22,7 +22,9 @@ class Results extends Component {
 componentWillMount() {
     // console.log(this.state.search, 'profile');
     let profile = this.props.search
-    axios.post('/api/getRecipe', profile).then((res)=>{
+
+
+    axios.post('http://localhost:3005/api/getRecipe', profile).then((res)=>{
         this.setState({
             results: res.data
         })
@@ -54,6 +56,7 @@ componentWillMount() {
     }
     
     render() {
+
         const renderResults = _=> {return this.state.results.map((el, i)=> {
             return  <div key={i}>
             <Link to='/details'><div key={i} className='imgDiv' >
