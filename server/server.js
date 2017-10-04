@@ -115,6 +115,7 @@ passport.serializeUser(function(user, done){
 })
 
 passport.deserializeUser(function(user, done){
+	app.set('user', user)
 		if (user) {
 			return done(null, user)
 		}
@@ -127,7 +128,6 @@ app.get('/auth/callback', passport.authenticate('auth0', {
     successRedirect: 'http://localhost:3005/atla40',
     failureRedirect: 'http://localhost:3000/#/failed'
 }));
-
 
 app.get('/auth/me', (req, res, next) => {
     return res.status(200).send(req.user);
@@ -272,18 +272,19 @@ app.post('/api/hitBigOven', (req, res)=> {
 app.post('/api/getRecipe', (req,res) => {
 	//req.user is not being defined in this instance. its stupid and needs to be fixed
 		console.log('/getRecipe hit')
-		let userInfoID = req.user
+		let userInfoID = app.get('user')
+		userInfoID = userInfoID.id
     let search = req.body
 		let searchParams = []
 		
-		console.log(userInfoID)
+		console.log('userInfoID', userInfoID)
 
     function filterBlacklist(oldRecipes){
 			let myRecipeList = []
 			console.log('user info id', userInfoID)
          return app.get('db').get_blacklist([userInfoID]).then((blacklist) => {
 					 //does the response from database contain anything (blacklisted items)?
-             if (blacklist[0]){
+             if (blacklist.length<0){
                 blacklist = blacklist[0].blacklist.split(', ')
 								let newRecipes = []
 
@@ -310,7 +311,18 @@ app.post('/api/getRecipe', (req,res) => {
              }
 						 return list
 				 })
-    }
+		}
+				
+		function ingredientPercentage(recipes){
+			// define percentage, recipes, and ingredients (db)
+			// filter through each recipe
+				// get total count of ingredients that match items in their db
+				// if total count >= (recipe / 100) * percentage, push to array
+			// return array
+			
+
+
+		}
 
     if (search){
         console.log('request has body!')
