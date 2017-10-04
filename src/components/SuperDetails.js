@@ -9,15 +9,23 @@ class SuperDetails extends Component {
         this.state={
             results: []
       }
+      this.prettify=this.prettify.bind(this)
     }
 
 
 componentWillMount() {
-    console.log(this.props.recipe[0], 'props on detailedpage')
+    // console.log(this.props.recipe[0], 'props on detailedpage')
     this.setState({
         results: this.props.recipe
     })
 }
+
+    prettify(str){
+        return str.split(' split ').map(x=>{
+            x === '' && (x='<br>')
+            || x !== '' && (x=`<p>${x}</p>`)
+        })
+       }
     render() {
         let ingredients = this.state.results[0].ingredients
 
@@ -27,59 +35,27 @@ componentWillMount() {
         })
 
 
-        // let nutritioninfo = this.state.results[0].nutrition_info;
+        let nutritioninfo = this.state.results[0].nutrition_info;
 
+        let nutritionrender = Object.entries(nutritioninfo).map((c,i)=>{
+            return <li key={i}>{`${c[0]} : ${Math.ceil(c[1])}`} </li>
+        })
         
-        //  for(let key in nutritioninfo) {
-        //         if (nutritioninfo.hasOwnProperty(key)) { 
-        //             let value = nutritioninfo[key];
-        //     }
-        //     }
-
-
-        //use underscore
-        // let nutritioninfoMap = _.each(nutritioninfo, (value, key)=>{
-        //     return(key + ':' + value)
-        // })
-
-
-        //lodash
-        // let nutritioninfoMap = _.forOwn(nutritioninfo, (value, key)=>{
-        //         value, key
-        // })
-
-
-        // for (let nutriitem in nutritioninfo){
-        //         return <div>{nutriitem}: {nutritioninfo[nutriitem]}</div>
-         //     }
-        
-                                
-
-        // const nutritioninfoMap = nutritioninfo.map((nutrition, i) => {
-        //     return <div key={i} className='nutriinfo'>
-        //     {nutrition.CaloriesFromFat} 
-        //     {nutrition.Cholesterol}
-        //     {nutrition.CholesterolPct}
-        //     {nutrition.DietaryFiber}
-        //     {nutrition.DietaryFiberPct}
-        //     {nutrition.MonoFat}
-        //     {nutrition.PolyFat}
-        //     {nutrition.Potassium}
-        //     {nutrition.PotassiumPct}
-        //     {nutrition.Protein}
-
-        //     </div>
-        // })
-
-
+   
 
        let titles = this.state.results[0].title
-       console.log(this.state.results);
+    //    console.log(this.state.results);
+    let instruction = this.prettify(this.state.results[0].instructions.replace(/(\n+)/g, ' split '))
+        console.log(instruction);
 
 
-       let instruction = this.state.results[0].instructions
+
+
+
+
+
        let category = this.state.results[0].category
-       let cuisine = this.state.results[0].cuisine
+    //    let cuisine = this.state.results[0].cuisine
     //    let description = this.state.results[0].description
     //some description data is null
        let totalminutes = this.state.results[0].total_minutes
@@ -111,30 +87,26 @@ componentWillMount() {
 
 
                         <div id='ingredientsmap'>
-                            Ingredients:{ingredientsMap}
+                            <div className='ingredientTitle'>Ingredients:</div>
+                            <div>{ingredientsMap}</div>
                         </div>
 
                         <div id='instruction'>
-                            <div>
-                            Instruction:<div>{instruction}</div>
-                            </div>
+                            <div className='instructionTitle'>Instruction:</div>
+                            <div>{instruction}</div>
                         </div>
 
-                        <div className='cuisine'>
-                            Cuisine:{cuisine}
-                        </div>
-
-                        {/* <div className='description'>
-                            Description:{description}
-                        </div> */}
 
                         <div className='totalminutes'>
                             Total minutes: {totalminutes}
                         </div>
 
-                        {/* <div className='nutritioninfo'>
-                        {nutritioninfo}
-                        </div> */}
+                        <div className='nutritioninfo'>
+                            <div className='nutritionInfoTitle'>Nutrition Information (g):</div>
+                            <ol>
+                                {nutritionrender}
+                            </ol>
+                        </div>
 
 
                         <div className='superdetailquestion'>
