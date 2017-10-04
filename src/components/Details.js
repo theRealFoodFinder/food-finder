@@ -35,7 +35,7 @@ componentWillMount() {
                     <AppBar />
                 </div>
 
-           <a href='#/results'><div className="detailsson">
+           <a href='#/results'><div id='detailsMainContainer'className="detailsson">
                     <img src={this.state.results[0].hero_photo_url} alt="photourl"/>
                     <div className='titlebackground'>
                         <div id='foodtitle'>{titles}</div>
@@ -46,7 +46,6 @@ componentWillMount() {
                         <div className='detailquestion'>
                         <Link to='/add'><button> Add these to your shopping list?? </button></Link>
                         <Link to='/recipe'><button>Go to Recipe</button></Link>
-
                         </div>
                     </div>
                 </div></a>

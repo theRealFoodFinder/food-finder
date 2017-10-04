@@ -48,7 +48,7 @@ export default class SearchPage extends Component {
             filterModal: false
         })
         //this works
-        console.log(this.state.modalObject)
+        // console.log(this.state.modalObject)
     }
 
     handleAdd(){
@@ -104,12 +104,15 @@ export default class SearchPage extends Component {
                 // console.log(el, i)
             return  <h4 key={el}><span key={i}onClick={(e)=>{this.removeIngredient(e.target.className)}} className={i}>{el}</span></h4>}) : <h4>No ingredients found</h4>
         
-         const filterRender = ()=> {
-                let filters = this.state.modalObject;
-                return (filters.map((el, i)=> {
-                 return   <h4 className={i}>{el}</h4>}))
-            }
-                // console.log(this.props, 'props on search')
+            var filterRender =  (obj)=> {
+                let array = [];
+                for (let key in obj)
+                  if(obj[key]){array.push(key)}
+                  else 
+                  return array.map((item, i)=>{
+                      return <h4 onClick={(e)=>{this.removeIngredient(e.target.className)}} className={i}>{item}</h4>
+                  })
+                  }
         return (
             <div className='SearchPageContainer'>
                 <div className='allappbarcomponents'>
@@ -120,7 +123,7 @@ export default class SearchPage extends Component {
                 <div id='mainSearchContainer'>
                     <div className='searchParamDisplay'>
                     Search By: (Click to Remove)
-                    {ingredientRender}{filterRender}
+                    {ingredientRender}{filterRender(this.state.modalObject)}
                     </div>
                     <div className='searchTitle'>
                         Main Ingredient Search

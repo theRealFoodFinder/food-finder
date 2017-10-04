@@ -72,7 +72,7 @@ class AddToList extends Component {
                     {recipeItems}
                 </div>
                 <div className='addtocartbutton'>
-                    <button onClick={this.addtoCart}>Add to Cart</button>
+                    <a href='/recipe'><button onClick={this.addtoCart}>Add to Cart</button></a>
                 </div>
             </div>
         );
