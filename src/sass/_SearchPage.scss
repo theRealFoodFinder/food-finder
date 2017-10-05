@@ -4,18 +4,133 @@
     background-repeat: no-repeat;
     min-width: 100%; }
 
-    button{
-        background-color: pink;
+button{
+        background-color: rgb(255, 255, 255);
         border-radius: 5px;
         height: 35px;
         margin: 8px;
     }
-    .searchParamDisplay{
-        border: 2px solid white;
+
+.dothattest{
+    background-color: lime;
+}
+
+.addingredienteffect{
+    -webkit-animation: addingredienteffect 0.5s both;
+            animation: addingredienteffect 0.5s both;
+
+
+@-webkit-keyframes addingredienteffect {
+    0% {
+      -webkit-transform: scale3d(1, 1, 1);
+              transform: scale3d(1, 1, 1);
+    }
+    30% {
+      -webkit-transform: scale3d(1.25, 0.75, 1);
+              transform: scale3d(1.25, 0.75, 1);
+    }
+    40% {
+      -webkit-transform: scale3d(0.75, 1.25, 1);
+              transform: scale3d(0.75, 1.25, 1);
+    }
+    50% {
+      -webkit-transform: scale3d(1.15, 0.85, 1);
+              transform: scale3d(1.15, 0.85, 1);
+    }
+    65% {
+      -webkit-transform: scale3d(0.95, 1.05, 1);
+              transform: scale3d(0.95, 1.05, 1);
+    }
+    75% {
+      -webkit-transform: scale3d(1.05, 0.95, 1);
+              transform: scale3d(1.05, 0.95, 1);
+    }
+    100% {
+      -webkit-transform: scale3d(1, 1, 1);
+              transform: scale3d(1, 1, 1);
+    }
+  }
+  @keyframes addingredienteffect {
+    0% {
+      -webkit-transform: scale3d(1, 1, 1);
+              transform: scale3d(1, 1, 1);
+    }
+    30% {
+      -webkit-transform: scale3d(1.25, 0.75, 1);
+              transform: scale3d(1.25, 0.75, 1);
+    }
+    40% {
+      -webkit-transform: scale3d(0.75, 1.25, 1);
+              transform: scale3d(0.75, 1.25, 1);
+    }
+    50% {
+      -webkit-transform: scale3d(1.15, 0.85, 1);
+              transform: scale3d(1.15, 0.85, 1);
+    }
+    65% {
+      -webkit-transform: scale3d(0.95, 1.05, 1);
+              transform: scale3d(0.95, 1.05, 1);
+    }
+    75% {
+      -webkit-transform: scale3d(1.05, 0.95, 1);
+              transform: scale3d(1.05, 0.95, 1);
+    }
+    100% {
+      -webkit-transform: scale3d(1, 1, 1);
+              transform: scale3d(1, 1, 1);
+    }
+  }
+  
+}
+
+
+
+.dothateffect{
+    -webkit-animation: button 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+    animation: button 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+
+    @-webkit-keyframes button {
+        0% {
+          -webkit-transform: scaleX(1);
+                  transform: scaleX(1);
+          -webkit-transform-origin: 100% 100%;
+                  transform-origin: 100% 100%;
+          opacity: 1;
+        }
+        100% {
+          -webkit-transform: scaleX(0);
+                  transform: scaleX(0);
+          -webkit-transform-origin: 100% 100%;
+                  transform-origin: 100% 100%;
+          opacity: 1;
+        }
+      }
+      @keyframes button {
+        0% {
+          -webkit-transform: scaleX(1);
+                  transform: scaleX(1);
+          -webkit-transform-origin: 100% 100%;
+                  transform-origin: 100% 100%;
+          opacity: 1;
+        }
+        100% {
+          -webkit-transform: scaleX(0);
+                  transform: scaleX(0);
+          -webkit-transform-origin: 100% 100%;
+                  transform-origin: 100% 100%;
+          opacity: 1;
+        }
+      }
+      
+}
+
+.searchParamDisplay{
+        border: 2px solid rgba(255, 255, 255, 0.88);
         padding: 10px;
         margin: 10px;
     }
-    .menubutton {
+
+.menubutton {
         width: 100px;
         height: 50px;
         position: absolute;
@@ -26,7 +141,9 @@
         background-size: cover;
 
     }
-    .searchPageButton{
+
+
+.searchPageButton{
         position: relative;
     }
 

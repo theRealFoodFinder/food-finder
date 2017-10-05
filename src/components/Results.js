@@ -20,8 +20,10 @@ class Results extends Component {
 
 
 componentWillMount() {
+
     let search = this.props.search;
     axios.post('http://localhost:3005/api/getRecipe', search).then((res)=>{
+
         this.setState({
             results: res.data
         })

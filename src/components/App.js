@@ -75,7 +75,7 @@ this.passHistory = this.passHistory.bind(this);
 					
 					<Route component= { props => <AddToList {...props} recipe={this.state.recipe}/>} path='/add'/>
 					
-					<Route component= { props => <SearchPage {...props} passSearchParams={this.passSearchParams}passRecipes={this.passRecipes} setUserInfo={this.setUserInfo}/>} path='/search'/>
+					<Route render= { props => <SearchPage {...props} passSearchParams={this.passSearchParams}passRecipes={this.passRecipes} setUserInfo={this.setUserInfo}/>} path='/search'/>
 					
 					<Route component= { props => <Details {...props} recipe={this.state.recipe}/>} path='/details'/>
 					
@@ -91,7 +91,6 @@ this.passHistory = this.passHistory.bind(this);
 					
 					<Route component= {Landing} exact path='/'/>
 
-					
 
 				</Switch>
 			</div>
