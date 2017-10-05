@@ -265,11 +265,11 @@ app.post('/api/getRecipe', (req,res) => {
 										if (newRecipes.length >= 25) return newRecipes
 
 											let insideList = recipe.ingredients.map((ingr, i, a) => {
-												// for (var bli = 0; bli < blacklist.length; bli++){
-												// 	if (ingr.Name && ingr.Name.includes(blacklist[bli])){
-												// 		willPush = false
-												// 	}
-												// }
+												for (var bli = 0; bli < blacklist.length; bli++){
+													if (ingr.Name && ingr.Name.includes(blacklist[bli])){
+														willPush = false
+													}
+												}
 										})
 
 										if (willPush){
