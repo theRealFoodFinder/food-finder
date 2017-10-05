@@ -22,6 +22,7 @@ class Results extends Component {
 componentWillMount() {
     // console.log(this.state.search, 'profile');
     let profile = this.props.search
+    console.log(profile);
 
 
     axios.post('http://localhost:3005/api/getRecipe', profile).then((res)=>{

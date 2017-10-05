@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SearchModal from './SearchModal';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import AppBar from './AppBar';
 import axios from 'axios';
 
@@ -8,6 +8,8 @@ export default class SearchPage extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            csseffect: false,
+            addingreeffect: false,
             profile:"",
             cuisine: "",
             blacklist: [],
@@ -52,6 +54,7 @@ export default class SearchPage extends Component {
     }
 
     handleAdd(){
+        this.setState({addingreeffect: true});
         let tempIngredient = this.state.searchInput;
         let tempArray = this.state.searchByIngredients;
         if (tempIngredient){tempArray.push(tempIngredient);
@@ -61,14 +64,24 @@ export default class SearchPage extends Component {
         })}
         else 
         alert('Please input an ingredient!')
+       
+        setTimeout(_=> {this.setState({addingreeffect: false})
+        }, 500);
     }
 
-    handleSearch() {
+    handleSearch(e) {
         let profile ={};
+        this.setState({csseffect: true});
         profile.nutrition_info = this.state.modalObject;
         profile.ingredients = this.state.searchByIngredients;
         profile.cuisine = this.state.cuisine;
         this.props.passSearchParams(profile)
+
+        console.log(e.target)        
+        setTimeout(_=> {
+            console.log(this)
+            this.props.history.push('/results')
+        }, 1000);
     }
 
     handleFilter() {
@@ -94,6 +107,8 @@ export default class SearchPage extends Component {
             })
         })
     }
+
+
 
     
     render() {
@@ -131,14 +146,16 @@ export default class SearchPage extends Component {
                     <div id='searchButtonContainer' >
                         <input value = {this.state.searchInput} onChange={(e => { this.handleChange(e.target.value) })} className='searchPage input' type='search' placeholder='ex:  chicken' />
                          {/* onclick action to open a new search box when value changes*/}
-                        <button onClick={this.handleAdd} className='SearchPage button'>Add Ingredient
+                        <button onClick={this.handleAdd} className={this.state.addingreeffect && 'addingredienteffect'} >Add Ingredient
                         </button>
                     </div>
                     { this.state.filterModal===true ? <SearchModal handleFilter={this.handleFilter} handleGetFilters={this.handleGetFilters
-                    } /> : <button onClick={this.handleFilter} className='SearchPage button'>Filter
+                    } /> : <button onClick={this.handleFilter} className='SearchPageButton' id='noAniButton'>Filter
                     </button> } 
-                    < Link to='/results'><button onClick={this.handleSearch} className='getRecipes button'>Get Recipes
-                    </button></Link>
+
+                    <button onClick={e => this.handleSearch(e)} className={this.state.csseffect && 'dothateffect'}>Get Recipes
+                    </button>
+
                 </div>
             </div>
         )

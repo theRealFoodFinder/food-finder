@@ -280,7 +280,7 @@ app.post('/api/getRecipe', (req,res) => {
 	//req.user is not being defined in this instance. its stupid and needs to be fixed
 		console.log('/getRecipe hit')
 		let userInfoID = app.get('user')
-		userInfoID = userInfoID.id
+		userInfoID = userInfoID.id // replace to this one userInfoID.id matt
     let search = req.body
 		let searchParams = []
 		

@@ -4,6 +4,7 @@
     background-size: cover;
     height:50px !important;
     width:70px;
+    border-radius: 10px;
     // z-index: 1 !important;
     top: 0 !important;
   }
@@ -43,15 +44,19 @@
 } 
 
 .bm-menu {
-    background-image: url('../img/sidebarbg.jpg');
-    width: 90%;
+    // background-image: url('../img/sidebarbg.jpg');
+    background-color: #A0131C;
+    width: 85%;
     padding: 2.5em 1.5em 0;
     font-size: 1.15em;
+    // border-radius: 2px;
   }
 
 .bm-cross-button {
     height: 24px;
     width: 24px;
+    margin-top: 10px;
+    margin-right: 20px;
     background-image: url('../img/Close.png');
     background-repeat: no-repeat;
     // color: white;
@@ -59,13 +64,15 @@
 
 
 .bm-item-list {
-    color: #474747;
-    padding: 0.2em;
+    color: #FDFDFD;
+    width:85%;
+    padding: 0.5em;
     font-size: 20px;
+    text-shadow: 1.5px 1.5px rgba(20, 20, 20, 0.48);
   }
 
 .menu-item{
-      padding: 10px;
+      padding-bottom: 50px;
   }
 
 .bm-overlay {
@@ -73,3 +80,12 @@
     height:50px !important;
     width:50px;
   }
+
+
+.bm-morph-shape{
+  // background-image: url('../img/sidebarbg.jpg') !important;
+  // background-color: rgb(255, 0, 0);
+  right: 46px !important;
+  fill: #A0131C;
+}
+

@@ -6,8 +6,11 @@ class Details extends Component {
     constructor(){
         super();
         this.state={
+            csseffect: false,
+            csseffect2: false,
             results: []
       }
+      this.handleClick=this.handleClick.bind(this)
     }
 
 
@@ -16,7 +19,33 @@ componentWillMount() {
     this.setState({
         results: this.props.recipe
     })
+    
 }
+
+
+handleClick(e){
+    this.setState({csseffect: true});
+    
+    console.log(e.target)        
+    setTimeout(_=> {
+        console.log(this)
+        this.props.history.push('/recipe')
+    }, 1000);
+}
+
+
+handleClick2(e){
+    this.setState({csseffect2: true});
+    
+    console.log(e.target)        
+    setTimeout(_=> {
+        console.log(this)
+        this.props.history.push('/add')
+    }, 1000);
+}
+
+
+
     render() {
         let ingredients = this.state.results[0].ingredients
 
@@ -35,7 +64,7 @@ componentWillMount() {
                     <AppBar />
                 </div>
 
-           <a href='#/results'><div id='detailsMainContainer'className="detailsson">
+           <div id='detailsMainContainer'className="detailsson">
                     <img src={this.state.results[0].hero_photo_url} alt="photourl"/>
                     <div className='titlebackground'>
                         <div id='foodtitle'>{titles}</div>
@@ -44,11 +73,12 @@ componentWillMount() {
                         <p id='detailsingredientstitle'>Ingredients</p>
                         <div id='ingredientsmap'>{ingredientsMap}</div>
                         <div className='detailquestion'>
-                        <Link to='/add'><button> Add these to your shopping list?? </button></Link>
-                        <Link to='/recipe'><button>Go to Recipe</button></Link>
+                        <button onClick={e => this.handleClick2(e)} className={this.state.csseffect2 && 'dothateffect'}> Add these to your shopping list?? </button>
+
+                        <button onClick={e => this.handleClick(e)} className={this.state.csseffect && 'dothateffect'}>Go to Recipe</button>
                         </div>
                     </div>
-                </div></a>
+                </div>
             </div>
         );
     }
