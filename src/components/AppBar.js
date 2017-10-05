@@ -4,7 +4,6 @@ import {withRouter} from 'react-router-dom'
 
 class AppBar extends Component {
     render() {
-        // console.log(this.props);
         return (
             <div className='appbarcontainer'>
                 <Sidebar />
@@ -23,7 +22,7 @@ class AppBar extends Component {
                     {this.props.location.pathname==='/details' &&
                     <span>Title of Recipe</span>}
 
-
+                    <a href='/auth/logout'><span className='logoutButton'>Log Out</span></a>
                 </div>
             </div>
         );

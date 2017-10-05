@@ -20,16 +20,22 @@ class Results extends Component {
 
 
 componentWillMount() {
-    // console.log(this.state.search, 'profile');
-    let profile = this.props.search
-
-
-    axios.post('http://localhost:3005/api/getRecipe', profile).then((res)=>{
+    let search = this.props.search;
+    axios.post('http://localhost:3005/api/getRecipe', search).then((res)=>{
         this.setState({
             results: res.data
         })
-    })
+        console.log(res.data)
+    }
+    ).then((res)=>{
+    axios.get('/api/getProfile').then((res=>{
+        // this.setState({
+        // })
+        console.log(res.data)
+    }))
+})
 }
+
 
     handleFavIcon(id){
         axios.get('http://localhost/3005/api/favoriteRecipe/' + id).then(console.log('Recipe added to favorites'));

@@ -283,18 +283,8 @@ app.post('/api/getRecipe', (req,res) => {
 						 return list
 				 }).catch(err=> {console.log('Error!', err)})
 		}
-				
-		function ingredientPercentage(recipes){
-			let percentage = 20;
-			let pantryIngredients = undefined;
 
-			return app.get('db').get_pantry_list([userInfoID]).then((response) => {
-				pantryIngredients = response;
-				pantryIngredients = pantryIngredients[0].items.split(',')
 
-				let newRecipeList = []
-					
-					recipes.map((e,i,a) => {
 						let ingCounter = 0;
 						e.ingredients.map((ele, ind, arr) => {
 							for (var cou = 0; cou <= pantryIngredients.length; cou++){
@@ -311,7 +301,7 @@ app.post('/api/getRecipe', (req,res) => {
 				console.log('final list:', newRecipeList.length)
 				return newRecipeList
 			})
-		}
+
 
 		// ========================================================================================================================================================================================
 
