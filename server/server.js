@@ -185,7 +185,7 @@ app.get('/api/favoriteRecipe/:id', (req, res) => {
 })
 
 app.get('/api/getFavorites', (req, res) => {
-    app.get('db').get_favorites([8])
+    app.get('db').get_favorites([req.user.id])
     .then( response => {
       recipeID = response[0].user_favorites.split(',');
         let queryString = `SELECT recipe_id, title, image_url from recipes WHERE recipe_id IN (${response[0].user_favorites});`
