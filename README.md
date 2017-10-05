@@ -26,3 +26,5 @@
 /api/updateShoppingList - Accepts an object. 'items' as the key, and a string of comma separated items to replace the current shopping list in shopping_lists.  Ex: {items: "chicken, cheese"}
 
 /api/appendShoppingList - Accepts an object. 'items' as the key, and a string of comma separated items to append to the current shopping list
+
+/api/pantrySetup - Accepts an object. 'items' as key, and an array of items to add to the pantry
