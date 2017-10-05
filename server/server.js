@@ -694,7 +694,6 @@ app.post('/api/getRecipe', (req,res) => {
         })
 
         app.post('/api/pantrySetup', (req, res) => {
-            console.log(req.body)
             var pantryItems = req.body.items.join(', ')
             app.get('db').pantry_setup([req.user.id, pantryItems])
             .then( () => {
