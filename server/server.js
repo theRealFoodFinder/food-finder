@@ -253,7 +253,7 @@ app.post('/api/getRecipe', (req,res) => {
     function filterBlacklist(oldRecipes){
 			let myRecipeList = []
 			console.log('user info id', userInfoID)
-         return app.get('db').get_blacklist([18]).then( (blacklist) => {
+         return app.get('db').get_blacklist([userInfoID]).then( (blacklist) => {
 					 //does the response from database contain anything (blacklisted items)?
              if (blacklist.length<0){
                 blacklist = blacklist[0].blacklist.split(', ')
