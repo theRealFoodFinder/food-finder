@@ -28,19 +28,19 @@ class Initialize extends Component {
     }// /api/pantrysetup
 
     addtoCupboard(){
-        axios.post('/api/pantrysetup', this.state.userCupboard).then(console.log('pantry setup'))
+        axios.post('/api/pantrySetup', this.state.userCupboard).then(console.log('pantry setup'))
     }
 
     handleBoxChecked(e){
-            let listItem = e.target.className
-            let list = this.state.initCupboard
-            list[listItem]=!list[listItem]
-            console.log(listItem)
-            // console.log(list);
-            this.setState({
-                initCupboard: list
-            })
-            console.log(this.state.initCupboard, 'ingredients added') 
+            // let listItem = e.target.className
+            // let list = this.state.initCupboard
+            // list[listItem]=!list[listItem]
+            // console.log(listItem)
+            // // console.log(list);
+            // this.setState({
+            //     initCupboard: list
+            // })
+            // console.log(this.state.initCupboard, 'ingredients added') 
         }
          
     render() {
