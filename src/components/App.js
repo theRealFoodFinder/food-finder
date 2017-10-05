@@ -10,6 +10,7 @@ import Details from './Details';
 import SuperDetails from './SuperDetails';
 import History from './History';
 import AddToList from './AddToList';
+import Initialize from './Initialize';
 
 
 
@@ -29,6 +30,7 @@ this.passSearchParams = this.passSearchParams.bind(this);
 this.getRecipe = this.getRecipe.bind(this);
 this.passHistory = this.passHistory.bind(this);
 	}
+//function passing history for routing
 	passHistory(historyObj){
 		this.setState({
 			history: historyObj
@@ -41,16 +43,19 @@ this.passHistory = this.passHistory.bind(this);
 		  profile: info
 		})
 		}
+//function passing search results to props on App
 	passRecipes(searchedRecipes){
 		this.setState({
 			recipes: searchedRecipes
 		})
 	}	
+	//search info passed from search 
 	passSearchParams(info){
 		this.setState({
 			search: info
 		})
 	}
+//function putting searched recipe to props
 	getRecipe(recipe){
 		this.setState({
 			recipe: recipe
@@ -78,9 +83,12 @@ this.passHistory = this.passHistory.bind(this);
 					
 					<Route component= { props => <SuperDetails {...props} recipe={this.state.recipe} />} path='/recipe'/>
 
+					<Route component= { props => <Initialize {...props} recipe={this.state.recipe} />} path='/initialsetup'/>
+
 					<Route component= { props => <History historyLog={this.state.history} {...props} profile={this.state.profile}/>} path='/history'/>
 					
 					<Route component= { props => <ProfilePage {...props} profile={this.state.profile}/>} path='/profile'/>
+					
 					<Route component= {Landing} exact path='/'/>
 
 

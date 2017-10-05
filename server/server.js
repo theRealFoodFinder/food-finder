@@ -1,124 +1,83 @@
-//Hello Front End Peeps
-/* 
-
-- GET - 
-/auth - Redirects to a login page
-
-/auth/logout - Logs the user out
-
-/api/getprofile - Returns all user data on session
-
-/api/getPreferences - Returns user preferences from the user table
-
-/api/favoriteRecipe/:id' - add a specific recipe id to your favorites list
-
-/api/getShoppingList - Returns the list from the shopping_lists table
-
-/api/getRecipe -  /api/getRecipe - POST - Returns a list of recipes based on the ingredients the user has entered, and the items that have been blacklisted. 
-    Client should send an object with a .ingredients property {"ingredients": ['chicken', 'carrot', 'cheese']} and a .nutrition_info object 
-    (accepts `x +`, `x - y`, or `< y` values, where x/y are min/max numbers respectively) -- { "calories": "1000+", "carbs": "<50", "protein": "10-70" } 
-
-
-
-
-- POST -
-
-/api/blacklist - Accepts an object with type: add/remove, and a string of ingredients separated by a comma.  Ex: {type: add, ingredients: "list, of, ingredients")
-
-/api/postShoppingList - Accepts an object with key value pair, ingredient: true/false.  True values get put on shopping list.  False go to the pantry in the users table.  Ex: {chicken: true, cheese: false}
-
-/api/updateShoppingList - Accepts an object. 'items' as the key, and a string of comma separated items to replace the current shopping list in shopping_lists.  Ex: {items: "chicken, cheese"}
-
-/api/appendShoppingList - Accepts an object. 'items' as the key, and a string of comma separated items to append to the current shopping list
-
-
-
-
-
-*/
-
-
-
 const express = require('express'),
-			session = require('express-session'),
-			bodyParser = require('body-parser'),
-			cors = require('cors'),
-			passport = require('passport'),
-			Auth0Strategy = require('passport-auth0'),
-			massive = require('massive'),
-			axios = require('axios'),
-			config = require('./config.js');
+    session = require('express-session'),
+    bodyParser = require('body-parser'),
+    cors = require('cors'),
+    passport = require('passport'),
+    Auth0Strategy = require('passport-auth0'),
+    massive = require('massive'),
+    axios = require('axios'),
+    config = require('./config.js');
 
 const app = express();
 
 //pull in the database
 massive({
-  host: config.DB_HOST,
-  port: config.DB_PORT,
-  database: config.DB_DATABASE,
-  user: config.DB_USER,
-  password: config.DB_PASSWORD,
-  ssl: true
-}).then( db => {
-  app.set('db', db);
+    host: config.DB_HOST,
+    port: config.DB_PORT,
+    database: config.DB_DATABASE,
+    user: config.DB_USER,
+    password: config.DB_PASSWORD,
+    ssl: true
+}).then(db => {
+    app.set('db', db);
 })
 
 app.use(bodyParser.json());
 app.use(cors());
 app.use(session({
-	secret: config.sessionSecret,
-	resave: false,
-	saveUninitialized: false
+    secret: config.sessionSecret,
+    resave: false,
+    saveUninitialized: false
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(new Auth0Strategy({
-  domain: config.AUTH_DOMAIN,
-  clientID: config.AUTH_CLIENT_ID,
-  clientSecret: config.AUTH_CLIENT_SECRET,
-  callbackURL: config.AUTH_CALLBACK
-}, function(accessToken, refreshToken, extraParams, profile, done) {
+    domain: config.AUTH_DOMAIN,
+    clientID: config.AUTH_CLIENT_ID,
+    clientSecret: config.AUTH_CLIENT_SECRET,
+    callbackURL: config.AUTH_CALLBACK
+}, function (accessToken, refreshToken, extraParams, profile, done) {
 
-	const db = app.get('db');
-	db.find_session_user([ profile._json.email ])
-  .then( user => {
-   if ( user[0] ) {
-		 
-     return done( null, user[0]);
-   }
-    else {
+    const db = app.get('db');
+    db.find_session_user([profile._json.email])
+        .then(user => {
+            if (user[0]) {
 
-        if (profile.provider === 'auth0') {
-            db.create_user([ profile._json.user_metadata.first_name, profile._json.user_metadata.last_name, profile._json.email, profile.identities[0].user_id, true])
-            .then( user => {
-                return done( null, user[0]);
-            })
-        } else {
+                return done(null, user[0]);
+            }
+            else {
 
-            db.create_user([ profile._json.given_name, profile._json.family_name, profile._json.email, profile.identities[0].user_id, true])
-            .then( user => {
+                if (profile.provider === 'auth0') {
+                    db.create_user([profile._json.user_metadata.first_name, profile._json.user_metadata.last_name, profile._json.email, profile.identities[0].user_id, true])
+                        .then(user => {
+                            return done(null, user[0]);
+                        })
+                } else {
 
-                return done( null, user[0]);
-            })
-        }
-    }
-  })
+                    db.create_user([profile._json.given_name, profile._json.family_name, profile._json.email, profile.identities[0].user_id, true])
+                        .then(user => {
+
+                            return done(null, user[0]);
+                        })
+                }
+            }
+        })
 
 }));
 
-passport.serializeUser(function(user, done){
+passport.serializeUser(function (user, done) {
 
-    let sessionUser = {id: user.user_id, first: user.first_name, last: user.last_name, email: user.user_email, initLogin: user.init_login}
+    let sessionUser = { id: user.user_id, first: user.first_name, last: user.last_name, email: user.user_email, initLogin: user.init_login }
     done(null, sessionUser);
 })
 
-passport.deserializeUser(function(user, done){
-	app.set('user', user)
-		if (user) {
-			return done(null, user)
-		}
+passport.deserializeUser(function (user, done) {
+    app.set('user', user)
+    if (user) {
+        return done(null, user)
+    }
 })
 
 app.get('/auth', passport.authenticate('auth0'));
@@ -135,23 +94,24 @@ app.get('/auth/me', (req, res, next) => {
 
 app.get('/atla40', (req, res) => {
     app.get('db').user_lookup([req.user.id])
-    .then( response => {
-         if (response[0].init_login){
-             app.get('db').update_init_login([req.user.id])
-             .then(() => {
-                 res.redirect('http://localhost:3000/#/initialSetup')
-             }), 
-             () => {console.log("Couldnt update init setup.  Passing to search page")
-            res.status('500').redirect('http://localhost:3000/#/search')
+        .then(response => {
+            if (response[0].init_login) {
+                app.get('db').update_init_login([req.user.id])
+                    .then(() => {
+                        res.redirect('http://localhost:3000/#/initialSetup')
+                    }),
+                    () => {
+                        console.log("Couldnt update init setup.  Passing to search page")
+                        res.status('500').redirect('http://localhost:3000/#/search')
+                    }
+            } else {
+                res.status('200').redirect('http://localhost:3000/#/search')
             }
-         } else {
-            res.status('200').redirect('http://localhost:3000/#/search')
-         }
-    })
+        })
 })
 
 
-app.get('/auth/logout', (req,res) => {
+app.get('/auth/logout', (req, res) => {
     console.log(`user ${req.user.id} has logged out`)
     req.logOut();
     return res.redirect(302, '/#/')
@@ -159,7 +119,7 @@ app.get('/auth/logout', (req,res) => {
 
 
 app.get('/api/getProfile', (req, res) => {
-	res.status(200).send(req.user)
+    res.status(200).send(req.user)
 })
 
 
@@ -171,11 +131,11 @@ app.get('/api/getPreferences', (req, res) => {
 
 
 app.get('/api/favoriteRecipe/:id', (req, res) => {
-    let {recipe_id} = req.params.id;
+    let { recipe_id } = req.params.id;
 
     app.get('db').get_favorites([req.user.id]).then((response) => {
         response = response[0].user_favorites
-        if (!response.includes(`,${recipe_id},`)){
+        if (!response.includes(`,${recipe_id},`)) {
             response += recipe_id + ','
             app.get('db').add_to_favorites([response, 1]).then((responseTwo) => {
                 res.status(200).send(responseTwo);
@@ -185,557 +145,569 @@ app.get('/api/favoriteRecipe/:id', (req, res) => {
 })
 
 app.get('/api/getFavorites', (req, res) => {
-    app.get('db').get_favorites([8])
-    .then( response => {
-      recipeID = response[0].user_favorites.split(',');
-        let queryString = `SELECT title from recipes WHERE recipe_id IN (${response[0].user_favorites});`
-        app.get('db').run(queryString)
-        .then( response => {
-            res.status('200').send(response);
-        })    
-	}) 
+    userID = app.get('user')
+    if (userID) {
+        userID = userID.id
+    }
+    app.get('db').get_favorites([userID])
+        .then(response => {
+            let favorites = response[0].user_favorites
+            favorites = favorites.slice(0, favorites.length - 1)
+            let queryString = `SELECT recipe_id, title, image_url from recipes WHERE recipe_id IN (${favorites});`
+            app.get('db').run(queryString)
+                .then(response => {
+                    res.status('200').send(response);
+                })
+        })
 })
 
 
- app.post('/api/postShoppingList', (req, res) => {
-    function formatIngredients(ingArr){
+app.post('/api/postShoppingList', (req, res) => {
+    function formatIngredients(ingArr) {
         let regex = /\(.*\)|\(.*|\'|;|\*|^ | or .*| in .*| for .*| to taste .*|=/g
-        for (var x=ingArr.length-1; x >= 0; x--){
-          ingArr[x] = ingArr[x].toLowerCase();
-          ingArr[x] = ingArr[x].replace(regex, '');
-          ingArr[x] = ingArr[x].replace(/^ |\s$/g, '');
-          if(/ and |[0-9]|[-!$%^&*()_+|~=`{}\[\]:<>?,.\/]/.test(ingArr[x])){
-            ingArr.splice(x, 1);
-          }
+        for (var x = ingArr.length - 1; x >= 0; x--) {
+            ingArr[x] = ingArr[x].toLowerCase();
+            ingArr[x] = ingArr[x].replace(regex, '');
+            ingArr[x] = ingArr[x].replace(/^ |\s$/g, '');
+            if (/ and |[0-9]|[-!$%^&*()_+|~=`{}\[\]:<>?,.\/]/.test(ingArr[x])) {
+                ingArr.splice(x, 1);
+            }
         } return ingArr;
-      }
+    }
 
-	var ingredients = [];
-	var shoppingList = [];
-	for (let i in req.body){
+    var ingredients = [];
+    var shoppingList = [];
+    for (let i in req.body) {
 
-		if (req.body[i]){
-			shoppingList.push(i);
-		}
-		else {
-			ingredients.push(i)
-		}
-	}
+        if (req.body[i]) {
+            shoppingList.push(i);
+        }
+        else {
+            ingredients.push(i)
+        }
+    }
 
-	app.get('db').get_pantry_list([req.body.id])
-	.then( (currentIngredients) => {
-		app.get('db').post_ingredient_list([req.body.id, formatIngredients(ingredients).join(', ') + ',' + currentIngredients[0].items])
+    app.get('db').get_pantry_list([req.body.id])
+        .then((currentIngredients) => {
+            app.get('db').post_ingredient_list([req.body.id, formatIngredients(ingredients).join(', ') + ',' + currentIngredients[0].items])
+        })
+
+    app.get('db').get_shopping_list([req.body.id])
+        .then((currentShoppingList) => {
+            app.get('db').post_shopping_list([req.body.id, shoppingList.join(', ') + ',' + currentShoppingList[0].items])
+        })
+    res.status('200').send("success");
 })
 
-	app.get('db').get_shopping_list([req.body.id])
-	.then( (currentShoppingList) => {
-		app.get('db').post_shopping_list([req.body.id, shoppingList.join(', ') + ',' + currentShoppingList[0].items])
-	})
-	res.status('200').send("success");
-})
 
-
-app.post('/api/hitBigOven', (req, res)=> {
+app.post('/api/hitBigOven', (req, res) => {
     let search = req.body;
     console.log('endpoint hit')
     let url = `http://api2.bigoven.com/recipes/random?api_key=${config.bigOvenKey}`
 
-        for (let i = 0; i < 500; i++){
-            let randy = (Math.random() * (8 - 3) + 3)
-            setTimeout(() => {
+    for (let i = 0; i < 500; i++) {
+        let randy = (Math.random() * (8 - 3) + 3)
+        setTimeout(() => {
             console.log(~~randy + ' seconds')
-                axios.get(url).then((respond) => {
-                    let {Title, Description, Cuisine, Category, Subcategory, PrimaryIngredient, WebURL, ImageURL, Ingredients, Instructions, YieldNumber, TotalMinutes, ActiveMinutes, NutritionInfo, AllCategoriesText, HeroPhotoUrl} = respond.data
-                    
-                    Ingredients = JSON.stringify(Ingredients)
-                    NutritionInfo = JSON.stringify(NutritionInfo)
+            axios.get(url).then((respond) => {
+                let { Title, Description, Cuisine, Category, Subcategory, PrimaryIngredient, WebURL, ImageURL, Ingredients, Instructions, YieldNumber, TotalMinutes, ActiveMinutes, NutritionInfo, AllCategoriesText, HeroPhotoUrl } = respond.data
 
-                    app.get('db').big_oven_is_noob([
-                        Title, 
-                        Description, 
-                        Cuisine, 
-                        Category, 
-                        Subcategory, 
-                        PrimaryIngredient, 
-                        WebURL, 
-                        ImageURL, 
-                        Ingredients, 
-                        Instructions, 
-                        YieldNumber, 
-                        TotalMinutes, 
-                        ActiveMinutes, 
-                        NutritionInfo, 
-                        AllCategoriesText, 
-                        HeroPhotoUrl
-                    ]).then((response) => {
-                        console.log('recipe added')
-                    })
+                Ingredients = JSON.stringify(Ingredients)
+                NutritionInfo = JSON.stringify(NutritionInfo)
+
+                app.get('db').big_oven_is_noob([
+                    Title,
+                    Description,
+                    Cuisine,
+                    Category,
+                    Subcategory,
+                    PrimaryIngredient,
+                    WebURL,
+                    ImageURL,
+                    Ingredients,
+                    Instructions,
+                    YieldNumber,
+                    TotalMinutes,
+                    ActiveMinutes,
+                    NutritionInfo,
+                    AllCategoriesText,
+                    HeroPhotoUrl
+                ]).then((response) => {
+                    console.log('recipe added')
                 })
-            }, (~~randy * 1000) * i)
-        }
+            })
+        }, (~~randy * 1000) * i)
+    }
 })
+app.post('/api/getRecipe', (req, res) => {
+    //req.user is not being defined in this instance. its stupid and needs to be fixed
+    console.log('/getRecipe hit')
+    let userInfoID = app.get('user')
+    userInfoID = userInfoID.id
 
-
-app.post('/api/getRecipe', (req,res) => {
-	//req.user is not being defined in this instance. its stupid and needs to be fixed
-		console.log('/getRecipe hit')
-		let userInfoID = app.get('user')
-		userInfoID = userInfoID.id // replace to this one userInfoID.id matt
     let search = req.body
-		let searchParams = []
-		
-		console.log('userInfoID', userInfoID)
+    let searchParams = []
 
-    function filterBlacklist(oldRecipes){
-			let myRecipeList = []
-			console.log('user info id', userInfoID)
-         return app.get('db').get_blacklist([userInfoID]).then((blacklist) => {
-					 //does the response from database contain anything (blacklisted items)?
-             if (blacklist.length<0){
+    console.log('userInfoID', userInfoID)
+
+    function filterBlacklist(oldRecipes) {
+        let myRecipeList = []
+        console.log('user info id', userInfoID)
+        return app.get('db').get_blacklist([userInfoID]).then((blacklist) => {
+            //does the response from database contain anything (blacklisted items)?
+            if (blacklist.length < 0) {
                 blacklist = blacklist[0].blacklist.split(', ')
-								let newRecipes = []
+                let newRecipes = []
 
-                let list = oldRecipes.map((recipe,i,a) => {
-										let willPush = true
+                let list = oldRecipes.map((recipe, i, a) => {
+                    let willPush = true
 
-										if (newRecipes.length >= 25) return newRecipes
+                    if (newRecipes.length >= 25) return newRecipes
 
-											let insideList = recipe.ingredients.map((ingr, i, a) => {
-												for (var bli = 0; bli < blacklist.length; bli++){
-													if (ingr.Name && ingr.Name.includes(blacklist[bli])){
-														willPush = false
-													}
-												}
-										})
+                    let insideList = recipe.ingredients.map((ingr, i, a) => {
+                        for (var bli = 0; bli < blacklist.length; bli++) {
+                            if (ingr.Name && ingr.Name.includes(blacklist[bli])) {
+                                willPush = false
+                            }
+                        }
+                    })
 
-										if (willPush){
-												newRecipes.push(recipe)
-										}
-								})
+                    if (willPush) {
+                        newRecipes.push(recipe)
+                    }
+                })
                 return newRecipes
-             } else {
-              	return  oldRecipes
-             }
-						 return list
-				 })
-		}
-				
-		function ingredientPercentage(recipes){
-			let percentage = 20;
-			let pantryIngredients = undefined;
+            } else {
+                return oldRecipes
+            }
+            return list
+        }).catch(err => { console.log('Error!', err) })
+    }
 
-			return app.get('db').get_pantry_list([userInfoID]).then((response) => {
-				pantryIngredients = response;
-				pantryIngredients = pantryIngredients[0].items.split(',')
+    function ingredientPercentage(recipes) {
+        let percentage = 20;
+        let pantryIngredients = undefined;
 
-				let newRecipeList = []
-					
-					recipes.map((e,i,a) => {
-						let ingCounter = 0;
-						e.ingredients.map((ele, ind, arr) => {
-							for (var cou = 0; cou <= pantryIngredients.length; cou++){
-								if (ele.Name.includes(pantryIngredients[cou])){
-									ingCounter += 1
-								}
-							}
-						})
-						if ((ingCounter / e.ingredients.length*100) >= percentage){
-							newRecipeList.push(e)
-						}
-					})
+        return app.get('db').get_pantry_list([userInfoID]).then((response) => {
+            pantryIngredients = response;
+            // console.log(pantry)
+            pantryIngredients = pantryIngredients[0].items.split(',')
 
-				console.log('final list:', newRecipeList.length)
-				return newRecipeList
-			})
-		}
+            let newRecipeList = []
 
-		// ========================================================================================================================================================================================
+            recipes.map((e, i, a) => {
+                let ingCounter = 0;
+                e.ingredients.map((ele, ind, arr) => {
+                    for (var cou = 0; cou <= pantryIngredients.length; cou++) {
+                        if (ele.Name && ele.Name.includes(pantryIngredients[cou])) {
+                            ingCounter += 1
+                        }
+                    }
+                })
+                if ((ingCounter / e.ingredients.length * 100) >= percentage) {
+                    newRecipeList.push(e)
+                }
+            })
 
-    if (search){
+            console.log('final list:', newRecipeList.length)
+            return newRecipeList
+        })
+    }
+
+    // ========================================================================================================================================================================================
+
+    if (search) {
         console.log('request has body!')
-        if (search.cuisine){
+        if (search.cuisine) {
             console.log('cuisine searching')
         }
-        if (search.ingredients){
-                let ingList = search.ingredients
-                console.log('ingr', ingList)
-                if (ingList.length === 1) {
-                    searchParams = ingList;
-                    console.log('1 ingredient')
-                    app.get('db').get_recipe_1(searchParams).then((response) => {
+        if (search.ingredients) {
+            let ingList = search.ingredients
+            console.log('ingr', ingList)
+            if (ingList.length === 1) {
+                searchParams = ingList;
+                console.log('1 ingredient')
+                app.get('db').get_recipe_1(searchParams).then((response) => {
 
 
 
-                        let filters = {min: {}, max: {}}
-                        let nutInf = search.nutrition_info;
-                        for (let ing in nutInf){
-                            
-                            switch (ing){
-                                case 'calories':
-                                    nutInf.TotalCalories = nutInf[ing];
-                                    delete nutInf.calories
-                                    break;
-                                case 'total_fat':
-                                    nutInf.TotalFat = nutInf[ing];
-                                    delete nutInf.total_fat
-                                    break;
-                                case 'sodium':
-                                    nutInf.Sodium = nutInf[ing];
-                                    delete nutInf.sodium;
-                                    break;
-                                case 'carbs':
-                                    nutInf.TotalCarbs = nutInf[ing];
-                                    delete nutInf.carbs;
-                                    break;
-                                case 'sugar':
-                                    nutInf.Sugar = nutInf[ing];
-                                    delete nutInf.sugar;
-                                    break;
-                                case 'protein':
-                                    nutInf.Protein = nutInf[ing];
-                                    delete nutInf.protein;
-                                    break;
-                                default:
-                                    break;
+                    let filters = { min: {}, max: {} }
+                    let nutInf = search.nutrition_info;
+                    for (let ing in nutInf) {
+
+                        switch (ing) {
+                            case 'calories':
+                                nutInf.TotalCalories = nutInf[ing];
+                                delete nutInf.calories
+                                break;
+                            case 'total_fat':
+                                nutInf.TotalFat = nutInf[ing];
+                                delete nutInf.total_fat
+                                break;
+                            case 'sodium':
+                                nutInf.Sodium = nutInf[ing];
+                                delete nutInf.sodium;
+                                break;
+                            case 'carbs':
+                                nutInf.TotalCarbs = nutInf[ing];
+                                delete nutInf.carbs;
+                                break;
+                            case 'sugar':
+                                nutInf.Sugar = nutInf[ing];
+                                delete nutInf.sugar;
+                                break;
+                            case 'protein':
+                                nutInf.Protein = nutInf[ing];
+                                delete nutInf.protein;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
+                    for (var prop in nutInf) {
+                        if (nutInf[prop]) {
+                            if (nutInf[prop].includes('-')) {
+                                let item = nutInf[prop].replace(/[a-z]/gi, '')
+                                item = item.split('-')
+                                filters.min[prop] = +item[0]
+                                filters.max[prop] = +item[1]
+                            }
+                            if (nutInf[prop].includes('<')) {
+                                let item = nutInf[prop].split(' ')
+                                filters.min[prop] = 0
+                                filters.max[prop] = +item[1]
+                            }
+                            if (nutInf[prop].includes('+')) {
+                                let item = nutInf[prop].replace(/\+/g, '')
+                                filters.min[prop] = +item
+                                filters.max[prop] = 9999
                             }
                         }
+                    }
 
-                        for (var prop in nutInf){
-                            if (nutInf[prop]){
-                                if (nutInf[prop].includes('-')) {
-                                    let item = nutInf[prop].replace(/[a-z]/gi, '')
-                                    item = item.split('-')
-                                    filters.min[prop] = +item[0]
-                                    filters.max[prop] = +item[1]
-                                }
-                                if (nutInf[prop].includes('<')) {
-                                    let item = nutInf[prop].split(' ')
-                                    filters.min[prop] = 0
-                                    filters.max[prop] = +item[1]
-                                }
-                                if (nutInf[prop].includes('+')) {
-                                    let item = nutInf[prop].replace(/\+/g, '')
-                                    filters.min[prop] = +item
-                                    filters.max[prop] = 9999
-                                }
-                            }
-                        }
-
-                        let recipeList = [];
-                        for (var go = 0; go < response.length; go++){
+                    let recipeList = [];
+                    for (var go = 0; go < response.length; go++) {
 
                         response[go].ingredients = JSON.parse(response[go].ingredients)
                         response[go].nutrition_info = JSON.parse(response[go].nutrition_info)
                         recipeList.push(response[go])
-                        }
-                            
-                        let filteredRecipes = response.filter((recipe,i,a)=>{
-                            let result = true
-                            for (var type in filters.min){
-                                if (recipe.nutrition_info[type] <= filters.min[type] || recipe.nutrition_info[type] >= filters.max[type]){
-                                    result = false
-                                }
+                    }
+
+                    let filteredRecipes = response.filter((recipe, i, a) => {
+                        let result = true
+                        for (var type in filters.min) {
+                            if (recipe.nutrition_info[type] <= filters.min[type] || recipe.nutrition_info[type] >= filters.max[type]) {
+                                result = false
                             }
-                            if (result) return recipe
-                        })
-
-												let finalList = filterBlacklist(filteredRecipes)
-												finalList.then((response) => {
-													// console.log('final list:', response)
-													let another = ingredientPercentage(response)
-													another.then((gogogo) => {
-														res.status(200).send(gogogo);
-													})
-												})
-
+                        }
+                        if (result) return recipe
                     })
-                } else if (ingList.length === 2) {
-                    searchParams = ingList;
-                    console.log('2 ingredient')
-                    app.get('db').get_recipe_2(searchParams).then((response) => {
 
-                        let filters = {min: {}, max: {}}
-                        let nutInf = search.nutrition_info;
-                        for (let ing in nutInf){
-                            
-                            switch (ing){
-                                case 'calories':
-                                    nutInf.TotalCalories = nutInf[ing];
-                                    delete nutInf.calories
-                                    break;
-                                case 'total_fat':
-                                    nutInf.TotalFat = nutInf[ing];
-                                    delete nutInf.total_fat
-                                    break;
-                                case 'sodium':
-                                    nutInf.Sodium = nutInf[ing];
-                                    delete nutInf.sodium;
-                                    break;
-                                case 'carbs':
-                                    nutInf.TotalCarbs = nutInf[ing];
-                                    delete nutInf.carbs;
-                                    break;
-                                case 'sugar':
-                                    nutInf.Sugar = nutInf[ing];
-                                    delete nutInf.sugar;
-                                    break;
-                                case 'protein':
-                                    nutInf.Protein = nutInf[ing];
-                                    delete nutInf.protein;
-                                    break;
-                                default:
-                                    break;
+                    let finalList = filterBlacklist(filteredRecipes)
+                    finalList.then((response) => {
+                        // console.log('final list:', response)
+                        let another = ingredientPercentage(response)
+                        another.then((gogogo) => {
+                            res.status(200).send(gogogo);
+                        })
+                    })
+
+                })
+            } else if (ingList.length === 2) {
+                searchParams = ingList;
+                console.log('2 ingredient')
+                app.get('db').get_recipe_2(searchParams).then((response) => {
+
+                    let filters = { min: {}, max: {} }
+                    let nutInf = search.nutrition_info;
+                    for (let ing in nutInf) {
+
+                        switch (ing) {
+                            case 'calories':
+                                nutInf.TotalCalories = nutInf[ing];
+                                delete nutInf.calories
+                                break;
+                            case 'total_fat':
+                                nutInf.TotalFat = nutInf[ing];
+                                delete nutInf.total_fat
+                                break;
+                            case 'sodium':
+                                nutInf.Sodium = nutInf[ing];
+                                delete nutInf.sodium;
+                                break;
+                            case 'carbs':
+                                nutInf.TotalCarbs = nutInf[ing];
+                                delete nutInf.carbs;
+                                break;
+                            case 'sugar':
+                                nutInf.Sugar = nutInf[ing];
+                                delete nutInf.sugar;
+                                break;
+                            case 'protein':
+                                nutInf.Protein = nutInf[ing];
+                                delete nutInf.protein;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
+                    for (var prop in nutInf) {
+                        if (nutInf[prop]) {
+                            if (nutInf[prop].includes('-')) {
+                                let item = nutInf[prop].replace(/[a-z]/gi, '')
+                                item = item.split('-')
+                                filters.min[prop] = +item[0]
+                                filters.max[prop] = +item[1]
+                            }
+                            if (nutInf[prop].includes('<')) {
+                                let item = nutInf[prop].split(' ')
+                                filters.min[prop] = 0
+                                filters.max[prop] = +item[1]
+                            }
+                            if (nutInf[prop].includes('+')) {
+                                let item = nutInf[prop].replace(/\+/g, '')
+                                filters.min[prop] = +item
+                                filters.max[prop] = 9999
                             }
                         }
+                    }
 
-                        for (var prop in nutInf){
-                            if (nutInf[prop]){
-                                if (nutInf[prop].includes('-')) {
-                                    let item = nutInf[prop].replace(/[a-z]/gi, '')
-                                    item = item.split('-')
-                                    filters.min[prop] = +item[0]
-                                    filters.max[prop] = +item[1]
-                                }
-                                if (nutInf[prop].includes('<')) {
-                                    let item = nutInf[prop].split(' ')
-                                    filters.min[prop] = 0
-                                    filters.max[prop] = +item[1]
-                                }
-                                if (nutInf[prop].includes('+')) {
-                                    let item = nutInf[prop].replace(/\+/g, '')
-                                    filters.min[prop] = +item
-                                    filters.max[prop] = 9999
-                                }
-                            }
-                        }
-
-                        let recipeList = [];
-                        for (var go = 0; go < response.length; go++){
+                    let recipeList = [];
+                    for (var go = 0; go < response.length; go++) {
 
                         response[go].ingredients = JSON.parse(response[go].ingredients)
                         response[go].nutrition_info = JSON.parse(response[go].nutrition_info)
                         recipeList.push(response[go])
-                        }
-                            
-                        let filteredRecipes = response.filter((recipe,i,a)=>{
-                            let result = true
-                            for (var type in filters.min){
-                                if (recipe.nutrition_info[type] <= filters.min[type] || recipe.nutrition_info[type] >= filters.max[type]){
-                                    result = false
-                                }
-                            }
-                            if (result) return recipe
-                        })
+                    }
 
-                        let finalList = filterBlacklist(filteredRecipes)
-												finalList.then((response) => {
-													// console.log('final list:', response)
-													let another = ingredientPercentage(response)
-													another.then((gogogo) => {
-														res.status(200).send(gogogo);
-													})
-												})
+                    let filteredRecipes = response.filter((recipe, i, a) => {
+                        let result = true
+                        for (var type in filters.min) {
+                            if (recipe.nutrition_info[type] <= filters.min[type] || recipe.nutrition_info[type] >= filters.max[type]) {
+                                result = false
+                            }
+                        }
+                        if (result) return recipe
                     })
-                } else if (ingList.length === 3) {
-                    searchParams = ingList;
-                    console.log('3 ingredient')
-                    app.get('db').get_recipe_3(searchParams).then((response) => {
 
-                        let filters = {min: {}, max: {}}
-                        let nutInf = search.nutrition_info;
-                        for (let ing in nutInf){
-                            
-                            switch (ing){
-                                case 'calories':
-                                    nutInf.TotalCalories = nutInf[ing];
-                                    delete nutInf.calories
-                                    break;
-                                case 'total_fat':
-                                    nutInf.TotalFat = nutInf[ing];
-                                    delete nutInf.total_fat
-                                    break;
-                                case 'sodium':
-                                    nutInf.Sodium = nutInf[ing];
-                                    delete nutInf.sodium;
-                                    break;
-                                case 'carbs':
-                                    nutInf.TotalCarbs = nutInf[ing];
-                                    delete nutInf.carbs;
-                                    break;
-                                case 'sugar':
-                                    nutInf.Sugar = nutInf[ing];
-                                    delete nutInf.sugar;
-                                    break;
-                                case 'protein':
-                                    nutInf.Protein = nutInf[ing];
-                                    delete nutInf.protein;
-                                    break;
-                                default:
-                                    break;
+                    let finalList = filterBlacklist(filteredRecipes)
+                    finalList.then((response) => {
+                        // console.log('final list:', response)
+                        let another = ingredientPercentage(response)
+                        another.then((gogogo) => {
+                            res.status(200).send(gogogo);
+                        })
+                    })
+                })
+            } else if (ingList.length === 3) {
+                searchParams = ingList;
+                console.log('3 ingredient')
+                app.get('db').get_recipe_3(searchParams).then((response) => {
+
+                    let filters = { min: {}, max: {} }
+                    let nutInf = search.nutrition_info;
+                    for (let ing in nutInf) {
+
+                        switch (ing) {
+                            case 'calories':
+                                nutInf.TotalCalories = nutInf[ing];
+                                delete nutInf.calories
+                                break;
+                            case 'total_fat':
+                                nutInf.TotalFat = nutInf[ing];
+                                delete nutInf.total_fat
+                                break;
+                            case 'sodium':
+                                nutInf.Sodium = nutInf[ing];
+                                delete nutInf.sodium;
+                                break;
+                            case 'carbs':
+                                nutInf.TotalCarbs = nutInf[ing];
+                                delete nutInf.carbs;
+                                break;
+                            case 'sugar':
+                                nutInf.Sugar = nutInf[ing];
+                                delete nutInf.sugar;
+                                break;
+                            case 'protein':
+                                nutInf.Protein = nutInf[ing];
+                                delete nutInf.protein;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
+                    for (var prop in nutInf) {
+                        if (nutInf[prop]) {
+                            if (nutInf[prop].includes('-')) {
+                                let item = nutInf[prop].replace(/[a-z]/gi, '')
+                                item = item.split('-')
+                                filters.min[prop] = +item[0]
+                                filters.max[prop] = +item[1]
+                            }
+                            if (nutInf[prop].includes('<')) {
+                                let item = nutInf[prop].split(' ')
+                                filters.min[prop] = 0
+                                filters.max[prop] = +item[1]
+                            }
+                            if (nutInf[prop].includes('+')) {
+                                let item = nutInf[prop].replace(/\+/g, '')
+                                filters.min[prop] = +item
+                                filters.max[prop] = 9999
                             }
                         }
+                    }
 
-                        for (var prop in nutInf){
-                            if (nutInf[prop]){
-                                if (nutInf[prop].includes('-')) {
-                                    let item = nutInf[prop].replace(/[a-z]/gi, '')
-                                    item = item.split('-')
-                                    filters.min[prop] = +item[0]
-                                    filters.max[prop] = +item[1]
-                                }
-                                if (nutInf[prop].includes('<')) {
-                                    let item = nutInf[prop].split(' ')
-                                    filters.min[prop] = 0
-                                    filters.max[prop] = +item[1]
-                                }
-                                if (nutInf[prop].includes('+')) {
-                                    let item = nutInf[prop].replace(/\+/g, '')
-                                    filters.min[prop] = +item
-                                    filters.max[prop] = 9999
-                                }
-                            }
-                        }
-
-                        let recipeList = [];
-                        for (var go = 0; go < response.length; go++){
+                    let recipeList = [];
+                    for (var go = 0; go < response.length; go++) {
 
                         response[go].ingredients = JSON.parse(response[go].ingredients)
                         response[go].nutrition_info = JSON.parse(response[go].nutrition_info)
                         recipeList.push(response[go])
-                        }
-                            
-                        let filteredRecipes = response.filter((recipe,i,a)=>{
-                            let result = true
-                            for (var type in filters.min){
-                                if (recipe.nutrition_info[type] <= filters.min[type] || recipe.nutrition_info[type] >= filters.max[type]){
-                                    result = false
-                                }
-                            }
-                            if (result) return recipe
-                        })
+                    }
 
-                        let finalList = filterBlacklist(filteredRecipes)
-												finalList.then((response) => {
-													// console.log('final list:', response)
-													let another = ingredientPercentage(response)
-													another.then((gogogo) => {
-														res.status(200).send(gogogo);
-													})
-												})
+                    let filteredRecipes = response.filter((recipe, i, a) => {
+                        let result = true
+                        for (var type in filters.min) {
+                            if (recipe.nutrition_info[type] <= filters.min[type] || recipe.nutrition_info[type] >= filters.max[type]) {
+                                result = false
+                            }
+                        }
+                        if (result) return recipe
                     })
-                }
+
+                    let finalList = filterBlacklist(filteredRecipes)
+                    finalList.then((response) => {
+                        // console.log('final list:', response)
+                        let another = ingredientPercentage(response)
+                        another.then((gogogo) => {
+                            res.status(200).send(gogogo);
+                        })
+                    })
+                })
+            }
         }
-        if (search.category){
+        if (search.category) {
             console.log('category searching')
         }
-        if (search.title){
+        if (search.title) {
             console.log('title searching')
         }
     }
 })
 
-        // app.put('/api/addToBlacklist', (req, res)=> {
-        //     let {items} = req.body
-        //     app.get('db').get_blacklist([req.user.id]).then((response)=>{
-        //          response = response[0]
-        //         if (response){
-        //             response += ',' + items
-        //             app.get('db').update_blacklist([response]).then((response)=>{
-        //                 res.status(200).send(response)
-        //             })
-        //         }
-        //     })
-        // })
-        
-        // app.put('/api/removeFromBlacklist', (req, res)=>{
-        //     let {items} = req.body
-        //     app.get('db').get_blacklist([req.user.id]).then((response)=>{
-        //          response = response[0]
-        //         if (response){
-        //             let newList = response.split(',').map((e,i,a)=>{
-        //                 if (!items.includes(e)) return e
-        //             })
-        //             newList = newList.filter((e,i,a)=>{
-        //             return e !== undefined
-        //             })
-        //             newList = newList.join(',')
-        //             app.get('db').update_blacklist([newList]).then((response)=>{
-        //                 res.status(200).send(response)
-        //             })
-        //         }
-        //     })
-        // })
+// app.put('/api/addToBlacklist', (req, res)=> {
+//     let {items} = req.body
+//     app.get('db').get_blacklist([req.user.id]).then((response)=>{
+//          response = response[0]
+//         if (response){
+//             response += ',' + items
+//             app.get('db').update_blacklist([response]).then((response)=>{
+//                 res.status(200).send(response)
+//             })
+//         }
+//     })
+// })
+
+// app.put('/api/removeFromBlacklist', (req, res)=>{
+//     let {items} = req.body
+//     app.get('db').get_blacklist([req.user.id]).then((response)=>{
+//          response = response[0]
+//         if (response){
+//             let newList = response.split(',').map((e,i,a)=>{
+//                 if (!items.includes(e)) return e
+//             })
+//             newList = newList.filter((e,i,a)=>{
+//             return e !== undefined
+//             })
+//             newList = newList.join(',')
+//             app.get('db').update_blacklist([newList]).then((response)=>{
+//                 res.status(200).send(response)
+//             })
+//         }
+//     })
+// })
 
 
-        app.get('/api/getShoppingList', (req, res) => {
-            app.get('db').get_shopping_list([req.user.id])
-            .then( ( response ) => {
-                res.status(200).send(response[0].items)
-            })
+app.get('/api/getShoppingList', (req, res) => {
+    app.get('db').get_shopping_list([req.user.id])
+        .then((response) => {
+            res.status(200).send(response[0].items)
         })
-        
+})
 
-        app.post('/api/updateShoppingList', (req, res) => {
-            app.get('db').update_shopping_list([req.user.id, req.body.items])
-                .then( (response) => {
-                    res.status('200').send('Cart Successfully Updated')
+
+app.post('/api/updateShoppingList', (req, res) => {
+    app.get('db').update_shopping_list([req.user.id, req.body.items])
+        .then((response) => {
+            res.status('200').send('Cart Successfully Updated')
+        })
+}
+)
+
+app.post('/api/appendShoppingList', (req, res) => {
+    app.get('db').get_shopping_list([req.user.id])
+        .then((response) => {
+            axios.post('http://localhost:3005/api/updateShoppingList', {
+                items: response[0].items + req.body.items
+            })
+                .then(() => {
+                    res.status(200).send("Appended Cart!")
                 })
-            }
-        )
-
-        app.post('/api/appendShoppingList', (req, res) => {
-            app.get('db').get_shopping_list([req.user.id])
-            .then( (response) => {
-                axios.post('http://localhost:3005/api/updateShoppingList', {
-                    items: response[0].items + req.body.items
-                  })
-                  .then( () => {
-                      res.status(200).send("Appended Cart!")
-                  })
-            })
         })
+})
 
 
-        app.post('/api/blacklist', (req, res)=>{
-            let {ingredients, type} = req.body
-            app.get('db').get_blacklist([req.user.id]).then((oldList)=>{
-                console.log("oldList", oldList)
-                oldList = oldList[0].blacklist.split(',')
-                let newList = []
-                
-                if (type === 'remove'){
-                    for (var i = 0; i < oldList.length; i++){
-                        if (!ingredients.includes(oldList[i])){
-                            newList.push(oldList[i])
-                        }
-                    }
-                } else if (type === 'add') {
-                    newList = [];
-                    newList.push(...oldList)
-                    ingredients.split(',').map((e,i,a)=>{
-                        if (!oldList.includes(e)){
-                            newList.push(e)
-                        }
-                    })
+app.post('/api/blacklist', (req, res) => {
+    let { ingredients, type } = req.body
+    app.get('db').get_blacklist([req.user.id]).then((oldList) => {
+        console.log("oldList", oldList)
+        oldList = oldList[0].blacklist.split(',')
+        let newList = []
+
+        if (type === 'remove') {
+            for (var i = 0; i < oldList.length; i++) {
+                if (!ingredients.includes(oldList[i])) {
+                    newList.push(oldList[i])
                 }
-        
-                    newList = newList.join(',')
-                app.get('db').update_blacklist([newList, req.user.id]).then((response)=>{
-                    return res.status(200).send(response)
-                })
+            }
+        } else if (type === 'add') {
+            newList = [];
+            newList.push(...oldList)
+            ingredients.split(',').map((e, i, a) => {
+                if (!oldList.includes(e)) {
+                    newList.push(e)
+                }
             })
+        }
+
+        newList = newList.join(',')
+        app.get('db').update_blacklist([newList, req.user.id]).then((response) => {
+            return res.status(200).send(response)
         })
-
-        
-        app.get('/api/getBlacklist', (req, res) => {
-            app.get('db').get_blacklist([req.user.id])
-            .then( response => {
-                res.status('200').send(response[0].blacklist)
-            }), () => {res.status('500').send("Couldn't get blacklist")}
-        })
+    })
+})
 
 
+app.get('/api/getBlacklist', (req, res) => {
+    app.get('db').get_blacklist([req.user.id])
+        .then(response => {
+            res.status('200').send(response[0].blacklist)
+        }), () => { res.status('500').send("Couldn't get blacklist") }
+})
 
-app.listen(config.port, () => {console.log(`Success!  Listening on port: ${config.port}`)});
-
-
+app.post('/api/pantrySetup', (req, res) => {
+    console.log(req.body)
+    var pantryItems = req.body.join(',')
+    console.log("pantry", pantryItems)
+    app.get('db').pantry_setup([req.user.id, pantryItems])
+        .then(() => {
+            res.status('200').send('Successfully added pantry items!')
+        }), error => {
+            res.status('500').send(`Encountered errors! ${error}`)
+        }
+})
+app.listen(config.port, () => { console.log(`Success!  Listening on port: ${config.port}`) });

@@ -3,7 +3,13 @@ import axios from 'axios';
 import AppBar from './AppBar'
 
 class AddToList extends Component {
-    
+    componentWillMount() {
+        axios.get('/auth/me').then((res)=>{
+            if (!res.data.first || !res.data.last || !res.data.id || !res.data.email){
+                this.props.history.push('/login')
+            }
+        })
+    }
    constructor() {
         super();
         this.state = {
@@ -36,7 +42,7 @@ class AddToList extends Component {
     let listItem = e.target.className
     // let isChecked = e.target.checked
     let list = this.state.shoppingList
-    list[listItem]=!list[listItem]
+    list[listItem]=list[listItem]
     // console.log(list);
     this.setState({
         shoppingListBackend: list
@@ -55,7 +61,7 @@ class AddToList extends Component {
            recipeItems = recipe.ingredients.map((list, i) => {
                 // console.log(list)
                 return(
-                    <div className={list.Name}>{list.Name}<input onChange={this.handleBoxChecked} className={list.Name} type="checkbox" key={i} />
+                    <div key={i} className={list.Name}>{list.Name}<input onChange={this.handleBoxChecked} className={list.Name} type="checkbox" key={i} />
                         </div>
                     )
                 })
@@ -67,7 +73,7 @@ class AddToList extends Component {
                 <div className='allappbarcomponents'>
                     <AppBar />
                 </div>
-                <div className='addtocartq'><p>Check to add to Shopping Cart...</p></div>
+                <div className='addtocart'><p>Check to add to Shopping Cart...</p></div>
                 <div className='addToListContainer shoppinglistmap'>
                     {recipeItems}
                 </div>

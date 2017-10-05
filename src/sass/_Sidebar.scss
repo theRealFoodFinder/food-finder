@@ -81,11 +81,17 @@
     width:50px;
   }
 
-
 .bm-morph-shape{
   // background-image: url('../img/sidebarbg.jpg') !important;
   // background-color: rgb(255, 0, 0);
   right: 46px !important;
   fill: #A0131C;
+}
+
+
+#logoutButton{
+  position: relative;
+  left: 9px;
+  top: 2px;
 }
 

@@ -5,6 +5,14 @@ import AppBar from './AppBar';
 import axios from 'axios';
 
 export default class SearchPage extends Component {
+
+    componentWillMount() {
+        axios.get('/api/getProfile').then((res) => {
+            if (!res.data.first || !res.data.last){
+                this.props.history.push('/')
+            }
+        }
+    )}     
     constructor(props) {
         super(props)
         this.state = {
@@ -100,13 +108,6 @@ export default class SearchPage extends Component {
         })
     }
 
-    componentWillMount(res) {
-        axios.get('/api/getProfile').then((res) => {
-            this.setState({
-                profile: res
-            })
-        })
-    }
 
 
 

@@ -3,14 +3,20 @@ import AppBar from './AppBar';
 import axios from 'axios';
 // import { Link } from 'react-router-dom';
 
+
 class ProfilePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            //inputtype spacifies blacklist or preferred
             inputType:"",
+            //results changes from preferred to blacklist and is displayed in 'results'
             results:[],
+            //item is inputted through input box
             item:"",
-            favorites:[]
+            //favorites array comes in through backend and displayed
+            favorites:[],
+            favoritesID: []
         }
         this.blacklistChange = this.blacklistChange.bind(this);
         this.blacklistClick = this.blacklistClick.bind(this);
@@ -18,21 +24,23 @@ class ProfilePage extends Component {
         this.preferredClick = this.preferredClick.bind(this);
         this.removeItem = this.removeItem.bind(this);
     }
-    
+    //on mount get favs list, set to state
     componentWillMount() {
-        axios.get('/api/getFavorites').then((res)=>{
-       console.log(res.data[0])
-        let temp = res.data[0].user_favorites;
-        let favArray=[];
-        favArray=temp.split(',');
+        axios.get('http://localhost:3005/api/getfavorites').then((res)=>{
+        let favArray = [];
+        let favIDArray = []
+       for (let i=0; i < res.data.length; i++){
+           favArray.push(res.data[i].title)
+           favIDArray.push(res.data[i].recipe_id)
+       }
         this.setState({
-            favorites:favArray
+            favorites:favArray,
+            favoritesID:favIDArray
         })
-        // console.log(this.state.favorites)
     })
 }
         
-
+//onClick 
     removeItem(index){
         let items = this.state.results;
         items.splice(index, 1)
@@ -94,12 +102,14 @@ class ProfilePage extends Component {
     }
     
     render() {
+        //header right side of page
         let profileTitle = !this.state.inputType ? "Welcome" : this.state.inputType + "  Items";
+        //results underneath the header that states welcome, blacklist items, or preferred items
         let results = !this.state.results ? "No Results" :
         this.state.results.map((item, i)=>{
             return <div key={i} className="results">{item}<button key={i} onClick={(e)=>this.removeItem(e.target.key)}className='resultsbutton'>X</button></div>
         })
-
+        //favorites list retrieved from backend then displayed on left side of screen with recipe name and thumbnail, onclick you will be redirected to recipe, if no results, display an empty message...
         let favorites = this.state.favorites && this.state.favorites.length>0 ? 
             this.state.favorites.map((listItem, i)=>{
                 console.log(listItem)
@@ -110,11 +120,13 @@ class ProfilePage extends Component {
                             </div>
                             <img alt={i}  key={listItem.recipe_id} onClick={()=>this.toggleDetailedView(listItem.recipe_id)} src={listItem.hero_photo_url}></img>
                             </div></Link> */}
-                            <h3 className='resultsTitle'>
-                                {listItem}
-                            </h3>
+                            <a href="http://localhost:3000/#/recipe">
+                                <h3 key={this.state.favoritesID[i]} className='resultsTitle'>
+                                    {listItem}
+                                </h3>
+                            </a>
                          </div>
-            }) : "Sorry no favorites to display";
+            }) : <p>Sorry no favorites to display</p>
         
         return (
             <div className='profilePageContainer'>
