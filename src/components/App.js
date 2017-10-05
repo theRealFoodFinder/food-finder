@@ -11,6 +11,7 @@ import SuperDetails from './SuperDetails';
 import History from './History';
 import AddToList from './AddToList';
 import Initialize from './Initialize';
+import EasterEgg from './EasterEgg';
 
 
 
@@ -86,7 +87,7 @@ this.passHistory = this.passHistory.bind(this);
 					<Route component= { props => <ProfilePage {...props} profile={this.state.profile}/>} path='/profile'/>
 					<Route component= {Landing} exact path='/'/>
 
-					
+					<Route component={EasterEgg} path='/secret'/>
 
 				</Switch>
 			</div>

@@ -144,10 +144,15 @@ app.get('/api/favoriteRecipe/:id', (req, res) => {
 })
 
 app.get('/api/getFavorites', (req, res) => {
-    app.get('db').get_favorites([req.user.id])
+    userID = app.get('user')
+    if (userID) {
+         userID = userID.id
+    }
+    app.get('db').get_favorites([userID])
     .then( response => {
-      recipeID = response[0].user_favorites.split(',');
-        let queryString = `SELECT recipe_id, title, image_url from recipes WHERE recipe_id IN (${response[0].user_favorites});`
+        let favorites = response[0].user_favorites
+        favorites = favorites.slice(0, favorites.length - 1)        
+        let queryString = `SELECT recipe_id, title, image_url from recipes WHERE recipe_id IN (${favorites});`
         app.get('db').run(queryString)
         .then( response => {
             res.status('200').send(response);
@@ -243,7 +248,9 @@ app.post('/api/getRecipe', (req,res) => {
 
     function filterBlacklist(oldRecipes){
 			let myRecipeList = []
-         return app.get('db').get_blacklist([userInfoID]).then((blacklist) => {
+			console.log('user info id', userInfoID)
+         return app.get('db').get_blacklist([userInfoID]).then( (blacklist) => {
+					 //does the response from database contain anything (blacklisted items)?
              if (blacklist.length<0){
                 blacklist = blacklist[0].blacklist.split(', ')
 								let newRecipes = []
@@ -270,7 +277,7 @@ app.post('/api/getRecipe', (req,res) => {
               	return  oldRecipes
              }
 						 return list
-				 })
+				 }).catch(err=> {console.log('Error!', err)})
 		}
 				
 		function ingredientPercentage(recipes){
@@ -287,7 +294,7 @@ app.post('/api/getRecipe', (req,res) => {
 						let ingCounter = 0;
 						e.ingredients.map((ele, ind, arr) => {
 							for (var cou = 0; cou <= pantryIngredients.length; cou++){
-								if (ele.Name.includes(pantryIngredients[cou])){
+								if (ele.Name && ele.Name.includes(pantryIngredients[cou])){
 									ingCounter += 1
 								}
 							}
