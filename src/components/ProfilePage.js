@@ -15,7 +15,8 @@ class ProfilePage extends Component {
             //item is inputted through input box
             item:"",
             //favorites array comes in through backend and displayed
-            favorites:[]
+            favorites:[],
+            favoritesID: []
         }
         this.blacklistChange = this.blacklistChange.bind(this);
         this.blacklistClick = this.blacklistClick.bind(this);
@@ -25,15 +26,17 @@ class ProfilePage extends Component {
     }
     //on mount get favs list, set to state
     componentWillMount() {
-        axios.get('/api/getfavorites').then((res)=>{
-       console.log(res.data[0])
-        let temp = res.data[0].user_favorites;
-        let favArray=[];
-        favArray=temp.split(',');
+        axios.get('http://localhost:3005/api/getfavorites').then((res)=>{
+        let favArray = [];
+        let favIDArray = []
+       for (let i=0; i < res.data.length; i++){
+           favArray.push(res.data[i].title)
+           favIDArray.push(res.data[i].recipe_id)
+       }
         this.setState({
-            favorites:favArray
+            favorites:favArray,
+            favoritesID:favIDArray
         })
-        // console.log(this.state.favorites)
     })
 }
         
@@ -117,9 +120,11 @@ class ProfilePage extends Component {
                             </div>
                             <img alt={i}  key={listItem.recipe_id} onClick={()=>this.toggleDetailedView(listItem.recipe_id)} src={listItem.hero_photo_url}></img>
                             </div></Link> */}
-                            <h3 className='resultsTitle'>
-                                {listItem}
-                            </h3>
+                            <a href="http://localhost:3000/#/recipe">
+                                <h3 key={this.state.favoritesID[i]} className='resultsTitle'>
+                                    {listItem}
+                                </h3>
+                            </a>
                          </div>
             }) : <p>Sorry no favorites to display</p>
         
