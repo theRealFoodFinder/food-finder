@@ -236,20 +236,14 @@ app.post('/api/hitBigOven', (req, res)=> {
 
 
 app.post('/api/getRecipe', (req,res) => {
-	//req.user is not being defined in this instance. its stupid and needs to be fixed
-		console.log('/getRecipe hit')
 		let userInfoID = app.get('user')
 		userInfoID = userInfoID.id
     let search = req.body
 		let searchParams = []
-		
-		console.log('userInfoID', userInfoID)
 
     function filterBlacklist(oldRecipes){
 			let myRecipeList = []
-			console.log('user info id', userInfoID)
          return app.get('db').get_blacklist([userInfoID]).then((blacklist) => {
-					 //does the response from database contain anything (blacklisted items)?
              if (blacklist.length<0){
                 blacklist = blacklist[0].blacklist.split(', ')
 								let newRecipes = []
@@ -303,7 +297,6 @@ app.post('/api/getRecipe', (req,res) => {
 						}
 					})
 
-				console.log('final list:', newRecipeList.length)
 				return newRecipeList
 			})
 		}
@@ -322,8 +315,6 @@ app.post('/api/getRecipe', (req,res) => {
                     searchParams = ingList;
                     console.log('1 ingredient')
                     app.get('db').get_recipe_1(searchParams).then((response) => {
-
-
 
                         let filters = {min: {}, max: {}}
                         let nutInf = search.nutrition_info;
@@ -400,7 +391,6 @@ app.post('/api/getRecipe', (req,res) => {
 
 												let finalList = filterBlacklist(filteredRecipes)
 												finalList.then((response) => {
-													// console.log('final list:', response)
 													let another = ingredientPercentage(response)
 													another.then((gogogo) => {
 														res.status(200).send(gogogo);
@@ -488,7 +478,6 @@ app.post('/api/getRecipe', (req,res) => {
 
                         let finalList = filterBlacklist(filteredRecipes)
 												finalList.then((response) => {
-													// console.log('final list:', response)
 													let another = ingredientPercentage(response)
 													another.then((gogogo) => {
 														res.status(200).send(gogogo);
@@ -575,7 +564,6 @@ app.post('/api/getRecipe', (req,res) => {
 
                         let finalList = filterBlacklist(filteredRecipes)
 												finalList.then((response) => {
-													// console.log('final list:', response)
 													let another = ingredientPercentage(response)
 													another.then((gogogo) => {
 														res.status(200).send(gogogo);
@@ -654,11 +642,9 @@ app.post('/api/getRecipe', (req,res) => {
             })
         })
 
-
         app.post('/api/blacklist', (req, res)=>{
             let {ingredients, type} = req.body
             app.get('db').get_blacklist([req.user.id]).then((oldList)=>{
-                console.log("oldList", oldList)
                 oldList = oldList[0].blacklist.split(',')
                 let newList = []
                 
@@ -694,7 +680,6 @@ app.post('/api/getRecipe', (req,res) => {
         })
 
         app.post('/api/pantrySetup', (req, res) => {
-            console.log(req.body)
             var pantryItems = req.body.items.join(', ')
             app.get('db').pantry_setup([req.user.id, pantryItems])
             .then( () => {
