@@ -36,7 +36,7 @@ class AddToList extends Component {
     let listItem = e.target.className
     // let isChecked = e.target.checked
     let list = this.state.shoppingList
-    list[listItem]=!list[listItem]
+    list[listItem]=list[listItem]
     // console.log(list);
     this.setState({
         shoppingListBackend: list
@@ -67,7 +67,7 @@ class AddToList extends Component {
                 <div className='allappbarcomponents'>
                     <AppBar />
                 </div>
-                <div className='addtocartq'><p>Check to add to Shopping Cart...</p></div>
+                <div className='addtocart'><p>Check to add to Shopping Cart...</p></div>
                 <div className='addToListContainer shoppinglistmap'>
                     {recipeItems}
                 </div>

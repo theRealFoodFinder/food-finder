@@ -10,6 +10,7 @@ import Details from './Details';
 import SuperDetails from './SuperDetails';
 import History from './History';
 import AddToList from './AddToList';
+import Initialize from './Initialize';
 
 
 
@@ -77,6 +78,8 @@ this.passHistory = this.passHistory.bind(this);
 					<Route component= { props => <Results historyLog={this.state.history} passHistory={this.passHistory} getRecipe={this.getRecipe} search={this.state.search} recipes={this.state.recipes} {...props} />} path='/results'/>
 					
 					<Route component= { props => <SuperDetails {...props} recipe={this.state.recipe} />} path='/recipe'/>
+
+					<Route component= { props => <Initialize {...props} recipe={this.state.recipe} />} path='/initialSetup'/>
 
 					<Route component= { props => <History historyLog={this.state.history} {...props} profile={this.state.profile}/>} path='/history'/>
 					
