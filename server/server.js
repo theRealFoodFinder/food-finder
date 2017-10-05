@@ -245,68 +245,68 @@ app.post('/api/getRecipe', (req,res) => {
 		
 		console.log('userInfoID', userInfoID)
 
-    function filterBlacklist(oldRecipes){
-			let myRecipeList = []
-			console.log('user info id', userInfoID)
-         return app.get('db').get_blacklist([userInfoID]).then((blacklist) => {
-					 //does the response from database contain anything (blacklisted items)?
-             if (blacklist.length<0){
-                blacklist = blacklist[0].blacklist.split(', ')
-								let newRecipes = []
+    // function filterBlacklist(oldRecipes){
+	// 		let myRecipeList = []
+	// 		console.log('user info id', userInfoID)
+    //      return app.get('db').get_blacklist([userInfoID]).then((blacklist) => {
+	// 				 //does the response from database contain anything (blacklisted items)?
+    //          if (blacklist.length<0){
+    //             blacklist = blacklist[0].blacklist.split(', ')
+	// 							let newRecipes = []
 
-                let list = oldRecipes.map((recipe,i,a) => {
-										let willPush = true
+    //             let list = oldRecipes.map((recipe,i,a) => {
+	// 									let willPush = true
 
-										if (newRecipes.length >= 25) return newRecipes
+	// 									if (newRecipes.length >= 25) return newRecipes
 
-											let insideList = recipe.ingredients.map((ingr, i, a) => {
-												for (var bli = 0; bli < blacklist.length; bli++){
-													if (ingr.Name && ingr.Name.includes(blacklist[bli])){
-														willPush = false
-													}
-												}
-										})
+	// 										let insideList = recipe.ingredients.map((ingr, i, a) => {
+	// 											for (var bli = 0; bli < blacklist.length; bli++){
+	// 												if (ingr.Name && ingr.Name.includes(blacklist[bli])){
+	// 													willPush = false
+	// 												}
+	// 											}
+	// 									})
 
-										if (willPush){
-												newRecipes.push(recipe)
-										}
-								})
-                return newRecipes
-             } else {
-              	return  oldRecipes
-             }
-						 return list
-				 })
-		}
+	// 									if (willPush){
+	// 											newRecipes.push(recipe)
+	// 									}
+	// 							})
+    //             return newRecipes
+    //          } else {
+    //           	return  oldRecipes
+    //          }
+	// 					 return list
+	// 			 })
+	// 	}
 				
-		function ingredientPercentage(recipes){
-			let percentage = 20;
-			let pantryIngredients = undefined;
+		// function ingredientPercentage(recipes){
+		// 	let percentage = 20;
+		// 	let pantryIngredients = undefined;
 
-			return app.get('db').get_pantry_list([userInfoID]).then((response) => {
-				pantryIngredients = response;
-				pantryIngredients = pantryIngredients[0].items.split(',')
+		// 	return app.get('db').get_pantry_list([userInfoID]).then((response) => {
+		// 		pantryIngredients = response;
+		// 		pantryIngredients = pantryIngredients[0].items.split(',')
 
-				let newRecipeList = []
+		// 		let newRecipeList = []
 					
-					recipes.map((e,i,a) => {
-						let ingCounter = 0;
-						e.ingredients.map((ele, ind, arr) => {
-							for (var cou = 0; cou <= pantryIngredients.length; cou++){
-								if (ele.Name.includes(pantryIngredients[cou])){
-									ingCounter += 1
-								}
-							}
-						})
-						if ((ingCounter / e.ingredients.length*100) >= percentage){
-							newRecipeList.push(e)
-						}
-					})
+		// 			recipes.map((e,i,a) => {
+		// 				let ingCounter = 0;
+		// 				e.ingredients.map((ele, ind, arr) => {
+		// 					for (var cou = 0; cou <= pantryIngredients.length; cou++){
+		// 						if (ele.Name.includes(pantryIngredients[cou])){
+		// 							ingCounter += 1
+		// 						}
+		// 					}
+		// 				})
+		// 				if ((ingCounter / e.ingredients.length*100) >= percentage){
+		// 					newRecipeList.push(e)
+		// 				}
+		// 			})
 
-				console.log('final list:', newRecipeList.length)
-				return newRecipeList
-			})
-		}
+		// 		console.log('final list:', newRecipeList.length)
+		// 		return newRecipeList
+		// 	})
+		// }
 
 		// ========================================================================================================================================================================================
 
