@@ -1,6 +1,15 @@
 .profilePageContainer{
     padding: 0 25px;
     // background-color: #F8FFD3;
+    #profileHeader{
+        height: 25px;
+        font-size: 20px;
+        position: relative;
+        top: 55px;
+        text-align: center;
+        background: yellow;
+        padding: 10px;
+    }
     .profileMainContainer{
         padding-top: 65px;
         span {
