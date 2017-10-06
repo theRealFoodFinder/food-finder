@@ -21,6 +21,9 @@ class AppBar extends Component {
                     <span>Recipes</span>}
                     {this.props.location.pathname==='/details' &&
                     <span>Title of Recipe</span>}
+                    {this.props.location.pathname==='/profile' &&
+                    <span>Profile</span>}
+
 
                     <a href='/auth/logout'><span className='logoutButton'>Log Out</span></a>
                 </div>
