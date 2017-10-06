@@ -20,21 +20,12 @@ class Details extends Component {
             if (!res.data.first || !res.data.last) {
                 this.props.history.push('/')
             }
+        })
+        if (this.props.recipe) {
+                    this.setState({
+                        results: this.props.recipe,
+                    })
         }
-        )
-console.log(this.props)
-        // if (!this.props.recipe) { this.props.history.push('/search') }
-        // if (this.props.recipe) {
-        //     // console.log(this.props);
-        //     let recipe = this.props.recipe
-        //     axios.post('http://localhost:3005/api/getRecipe', search)
-        //         .then((res) => {
-        //             this.setState({
-        //                 results: res.data,
-        //                 search: search
-        //             })
-        //         })
-        // }
     }
 
     handleClick(e) {
@@ -51,7 +42,7 @@ console.log(this.props)
     handleClick2(e) {
         this.setState({ csseffect2: true });
 
-        console.log(e.target)
+        // console.log(e.target)
         setTimeout(_ => {
             console.log(this)
             this.props.history.push('/add')
@@ -87,7 +78,7 @@ console.log(this.props)
                         <p id='detailsingredientstitle'>Ingredients</p>
                         <div id='ingredientsmap'>{ingredientsMap}</div>
                         <div className='detailquestion'>
-                            <button onClick={e => this.handleClick2(e)} className={this.state.csseffect2 && 'dothateffect'}> Add these to your shopping list?? </button>
+                            <button onClick={e => this.handleClick2(e)} className={this.state.csseffect2 && 'dothateffect'}> Add to shopping list?? </button>
 
                             <button onClick={e => this.handleClick(e)} className={this.state.csseffect && 'dothateffect'}>Go to Recipe</button>
                         </div>
