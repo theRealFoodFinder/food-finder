@@ -1,43 +1,88 @@
 .profilePageContainer{
-    padding: 0 25px;
-    // background-color: #F8FFD3;
-    #profileHeader{
-        height: 25px;
-        font-size: 20px;
-        position: relative;
-        top: 55px;
-        text-align: center;
-        background: yellow;
-        padding: 10px;
-    }
-    .profileMainContainer{
-        padding-top: 65px;
-        span {
-            width: 40vw;
-            display: inline-block;
-        
-        .profileinput{
-            margin-top: 5px;
-            width: 40vw;
-        }
-        }
-        .rightSide{
-            width: calc(40vw-100px);
-            height: 85vh;
-            float: right;
-            border: 2px solid black;
-            border-top-left-radius: 25px;
-            border-top-right-radius: 25px;
-            text-align: center;
-            background-color: yellow;
-            border: 7px inset gray; 
-            margin:5px;
-            .resultText{
-                height:85vh;
-                width:100%;
-                background-color: #FFFFE1;
-            }
-        }
+ background-image: url("../img/profileBackground.jpg");
+ min-height:100vh;
+ background-size: cover;
+ background-repeat: no-repeat;
+}
 
-    }
+
+#welcome{
+    position: relative;
+    top: 85px;
+    height: 25px;
+    font-size: 20px;
+    padding: 10px;
+    text-align: center;
+    color:#F3F3F3;
+    background: rgba(10, 10, 10, 0.47);
+   
+    
+}
+
+.welcomebacktitle{
+    font-size: 20px;
+    padding-top: 2px;
+}
+
+.profilefavorites{
+    // position: relative;
+    margin-top:8%;
+    padding: 4%;
+    background: rgba(10, 10, 10, 0.47);
+}
+
+.favoriteTitle{
+    padding-top:5px;;
+    text-shadow: 1.3px 1.3px #050505;
+    text-decoration: underline;
+}
+
+.favoriteBody{
+    margin-top:3%;
+    text-shadow: 1.3px 1.3px #050505;
+    color:#D1D1D1 !important;
+}
+
+li{
+    padding:2.5px;
+    list-style-type: none;
+}
+
+//why it doesn't work?
+// .favoriteBody>li{
+//     padding:2px;
+// }
+
+.blacklist{
+    margin-top:20px;
+    
+}
+
+.blacklistinput{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dislikebutton{
+    display: flex;
+    justify-content: center;
+}
+
+
+.dislikeAllergyButton{
+    width:180px;
+    font-size: 13px;
+}
+
+input{
+    font-size: 15px;
+}
+
+.resultText{
+    width: 300px;
+    // height: 140px;
+    background-color: rgba(255, 192, 204, 0.31);
+    margin: 0 auto;
+    border-radius: 10px;
 }
