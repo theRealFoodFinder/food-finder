@@ -49,22 +49,15 @@ class ProfilePage extends Component {
                 favoritesID: favIDArray
             })
         })
-<<<<<<< HEAD
+        axios.get('http://localhost:3005/api/getBlacklist').then((res) => {
+            console.log(res)
+        })
     }
+
 
 
     //onClick 
     removeItem(index) {
-=======
-    })
-    axios.get('http://localhost:3005/api/getBlacklist').then((res)=>{
-        console.log(res)
-    })
-}
-        
-//onClick 
-    removeItem(index){
->>>>>>> master
         let items = this.state.results;
         items.splice(index, 1)
         this.setState({
@@ -125,9 +118,9 @@ class ProfilePage extends Component {
 
     render() {
         //header right side of page
-        let profileTitle = this.state.inputType==="Blacklist" ? "Blacklist" : this.state.inputType + "  Items";
+        let profileTitle = this.state.inputType === "Blacklist" ? "Blacklist" : this.state.inputType + "  Items";
         //results underneath the header that display blacklist items, or preferred items
-        let results = !this.state.results ? <p>No Results</p>:
+        let results = !this.state.results ? <p>No Results</p> :
             this.state.results.map((item, i) => {
                 return <div key={i} className="results">{item}<button key={i} onClick={(e) => this.removeItem(e.target.key)} className='resultsbutton'>X</button></div>
             })
@@ -142,56 +135,47 @@ class ProfilePage extends Component {
                             </div>
                             <img alt={i}  key={listItem.recipe_id} onClick={()=>this.toggleDetailedView(listItem.recipe_id)} src={listItem.hero_photo_url}></img>
                             </div></Link> */}
-<<<<<<< HEAD
-                    <a href="/recipe">
-                        <h3 key={listItem[i]} className='resultsTitle'>
-                            {listItem}
-                        </h3>
-                    </a>
-                </div>
-=======
                             <a href="/recipe">
                                 <h3 key={this.state.favoritesID[i]} className='resultsTitle'>
                                     {listItem}
                                 </h3>
                             </a>
                          </div>
->>>>>>> master
             }) : <p>Sorry no favorites to display</p>
 
-        return (
-            <div className='profilePageContainer'>
-                <div className='allappbarcomponents'>
-                    <AppBar />
-                </div>
-                <header id='profileHeader'>Welcome back {this.state.profile.first}!</header>
-                <div className='profileMainContainer'>
-                    <div className='profileleftSide'>
-                        <span className='profilefavorites'>
-                            <span>
-                                Your Favorites
+return (
+    <div className='profilePageContainer'>
+        <div className='allappbarcomponents'>
+            <AppBar />
+        </div>
+        <header id='profileHeader'>Welcome back {this.state.profile.first}!</header>
+        <div className='profileMainContainer'>
+            <div className='profileleftSide'>
+                <span className='profilefavorites'>
+                    <span>
+                        Your Favorites
                             </span>
-                                {favorites}
-                        </span>
-                    </div>
-                    <span className='rightSide'>
-                    {profileTitle}
-                        <span className='inputContainer'>
-                            <input value={this.state.item} onChange={(e) => { this.blacklistChange(e.target.value) }} className='profileinput input' type="text" />
-                            <button onClick={this.blacklistClick} className='profileinput input button'>Dislikes / Allergies</button>
-                            {/*These are optional features not incorporated, like blacklist but 2nd tier search for ingredients*/}
-                            {/* <input  onChange={(e)=>{this.preferredChange(e.target.value)}} className='profileinput input'type="text"/>
-                        <button onClick={this.preferredClick} className='profileinput input button'>Add Preferred Ingredient</button> */}
-                            {/* <input  className='profileinput input'type="text"/>
-                        <button className='profileinput input button'></button> */}
-                        </span>
-                        <div className='resultText'>
-                            {results}
-                        </div>
-                    </span>
-                </div>
+                    {favorites}
+                </span>
             </div>
-        );
+            <span className='rightSide'>
+                {profileTitle}
+                <span className='inputContainer'>
+                    <input value={this.state.item} onChange={(e) => { this.blacklistChange(e.target.value) }} className='profileinput input' type="text" />
+                    <button onClick={this.blacklistClick} className='profileinput input button'>Dislikes / Allergies</button>
+                    {/*These are optional features not incorporated, like blacklist but 2nd tier search for ingredients*/}
+                    {/* <input  onChange={(e)=>{this.preferredChange(e.target.value)}} className='profileinput input'type="text"/>
+                        <button onClick={this.preferredClick} className='profileinput input button'>Add Preferred Ingredient</button> */}
+                    {/* <input  className='profileinput input'type="text"/>
+                        <button className='profileinput input button'></button> */}
+                </span>
+                <div className='resultText'>
+                    {results}
+                </div>
+            </span>
+        </div>
+    </div>
+);
     }
 }
 
