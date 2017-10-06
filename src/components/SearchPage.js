@@ -85,7 +85,7 @@ export default class SearchPage extends Component {
         profile.cuisine = this.state.cuisine;
         this.props.passSearchParams(profile)
 
-        console.log(e.target)        
+        // console.log(e.target)        
         setTimeout(_=> {
             console.log(this)
             this.props.history.push('/results')

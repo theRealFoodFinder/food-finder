@@ -38,6 +38,9 @@ class ProfilePage extends Component {
             favoritesID:favIDArray
         })
     })
+    axios.get('http://localhost:3005/api/getBlacklist').then((res)=>{
+        console.log(res)
+    })
 }
         
 //onClick 
@@ -120,7 +123,7 @@ class ProfilePage extends Component {
                             </div>
                             <img alt={i}  key={listItem.recipe_id} onClick={()=>this.toggleDetailedView(listItem.recipe_id)} src={listItem.hero_photo_url}></img>
                             </div></Link> */}
-                            <a href="http://localhost:3000/#/recipe">
+                            <a href="/recipe">
                                 <h3 key={this.state.favoritesID[i]} className='resultsTitle'>
                                     {listItem}
                                 </h3>

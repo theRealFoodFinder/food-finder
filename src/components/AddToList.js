@@ -8,6 +8,12 @@ class AddToList extends Component {
             if (!res.data.first || !res.data.last || !res.data.id || !res.data.email){
                 this.props.history.push('/login')
             }
+            console.log('shopping list will mounted')
+            let recipe = this.props.recipe;
+            this.setState({
+                shoppingList: recipe
+            })
+            console.log(this.state.shoppingList, 'shopping list mounted')
         })
     }
    constructor() {
@@ -19,22 +25,14 @@ class AddToList extends Component {
         this.addtoCart=this.addtoCart.bind(this)
         this.handleBoxChecked=this.handleBoxChecked.bind(this)
     }
-    
-   componentDidMount() {
-        console.log('shopping list will mounted')
-        let recipe = this.props.recipe;
-        this.setState({
-            shoppingList: recipe
-        })
-        console.log(this.state.shoppingList, 'shopping list mounted')
-    }
-
-    
+       
     addtoCart(){
         // true = shopping list
         // false = add to pantry
         console.log(this.state.shoppingListBackend);
-(axios.post('/api/postShoppingList', this.state.shoppingListBackend).then(_=>console.log('items added to shopping list')))
+(axios.post('/api/postShoppingList', this.state.shoppingListBackend).then(_=>console.log('items added to shopping list'))).then(()=>{
+    this.props.history.push('/shoppinglist')
+})
     }
 
     handleBoxChecked(e){
