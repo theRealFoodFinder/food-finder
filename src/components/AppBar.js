@@ -4,6 +4,7 @@ import {withRouter} from 'react-router-dom'
 
 class AppBar extends Component {
     render() {
+        let firstName = this.props.firstName 
         return (
             <div className='appbarcontainer'>
                 <Sidebar />
@@ -12,7 +13,7 @@ class AppBar extends Component {
                     {this.props.location.pathname==='/add' &&
                     <span>Add</span>}
                     {this.props.location.pathname==='/shoppinglist' &&
-                    <span>Shopping Lists</span>}
+                    <span>{firstName}'s Shopping List</span>}
                     {this.props.location.pathname==='/recipe' &&
                     <span>Recipe</span>}
                     {this.props.location.pathname==='/history' &&

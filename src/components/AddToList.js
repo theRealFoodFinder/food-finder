@@ -6,21 +6,23 @@ class AddToList extends Component {
     componentWillMount() {
         axios.get('/auth/me').then((res)=>{
             if (!res.data.first || !res.data.last || !res.data.id || !res.data.email){
-                this.props.history.push('/login')
+                this.props.history.push('/')
             }
-            console.log('shopping list will mounted')
+            // console.log('shopping list will mounted')
             let recipe = this.props.recipe;
             this.setState({
-                shoppingList: recipe
+                recipe: recipe
             })
-            console.log(this.state.shoppingList, 'shopping list mounted')
+            // console.log(this.props.recipets, 'shopping list mounted')
+            console.log(this.props.recipe, 'shopping list mounted')
         })
     }
    constructor() {
         super();
         this.state = {
             shoppingListBackend:{},
-            shoppingList:[]
+            shoppingList:[],
+            recipe: {}
         }
         this.addtoCart=this.addtoCart.bind(this)
         this.handleBoxChecked=this.handleBoxChecked.bind(this)
@@ -40,7 +42,7 @@ class AddToList extends Component {
     let listItem = e.target.className
     // let isChecked = e.target.checked
     let list = this.state.shoppingList
-    list[listItem]=list[listItem]
+    list[listItem]=!list[listItem]
     // console.log(list);
     this.setState({
         shoppingListBackend: list
@@ -76,7 +78,7 @@ class AddToList extends Component {
                     {recipeItems}
                 </div>
                 <div className='addtocartbutton'>
-                    <a href='/recipe'><button onClick={this.addtoCart}>Add to Cart</button></a>
+                    <a href='/recipe'><button onClick={this.addtoCart}>Add to List</button></a>
                 </div>
             </div>
         );
