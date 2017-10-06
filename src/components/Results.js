@@ -20,16 +20,16 @@ class Results extends Component {
 
 
     componentWillMount() {
-        // axios.get('/api/getProfile').then((res) => {
-        //     if (!res.data.first || !res.data.last) {
-        //         this.props.history.push('/')
-        //     }
-        // }
-        // )
+        axios.get('/api/getProfile').then((res) => {
+            if (!res.data.first || !res.data.last) {
+                this.props.history.push('/')
+            }
+        }
+        )
     
     if (!this.props.search) {this.props.history.push('/search') }
     if (this.props.search) {
-        console.log(this.props);
+        // console.log(this.props);
         let search = this.props.search
         axios.post('http://localhost:3005/api/getRecipe', search)
             .then((res) => {
