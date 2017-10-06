@@ -49,11 +49,22 @@ class ProfilePage extends Component {
                 favoritesID: favIDArray
             })
         })
+<<<<<<< HEAD
     }
 
 
     //onClick 
     removeItem(index) {
+=======
+    })
+    axios.get('http://localhost:3005/api/getBlacklist').then((res)=>{
+        console.log(res)
+    })
+}
+        
+//onClick 
+    removeItem(index){
+>>>>>>> master
         let items = this.state.results;
         items.splice(index, 1)
         this.setState({
@@ -131,12 +142,21 @@ class ProfilePage extends Component {
                             </div>
                             <img alt={i}  key={listItem.recipe_id} onClick={()=>this.toggleDetailedView(listItem.recipe_id)} src={listItem.hero_photo_url}></img>
                             </div></Link> */}
+<<<<<<< HEAD
                     <a href="/recipe">
                         <h3 key={listItem[i]} className='resultsTitle'>
                             {listItem}
                         </h3>
                     </a>
                 </div>
+=======
+                            <a href="/recipe">
+                                <h3 key={this.state.favoritesID[i]} className='resultsTitle'>
+                                    {listItem}
+                                </h3>
+                            </a>
+                         </div>
+>>>>>>> master
             }) : <p>Sorry no favorites to display</p>
 
         return (
