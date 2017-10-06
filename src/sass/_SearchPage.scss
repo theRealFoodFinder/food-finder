@@ -4,18 +4,152 @@
     background-repeat: no-repeat;
     min-width: 100%; }
 
-    button{
-        background-color: pink;
+button{
+        // left: 25%;
+        border: none; display: block;
+        background-color: #E5E5E5;
+        color: #333333;
+        font-size: 0.8em;
         border-radius: 5px;
         height: 35px;
+        width: 100px;
         margin: 8px;
+        position: relative;
+        text-align: center;
+
+        text-shadow: 0.2px 0.2px 0 rgba(102, 102, 102, 0.5), 0 2px 1px rgba(255, 255, 255, 0.6);
+
+        background-image: -webkit-repeating-linear-gradient(left, hsla(0,0%,100%,0) 0%, hsla(0,0%,100%,0)   6%, hsla(0,0%,100%, .1) 7.5%),
+         -webkit-repeating-linear-gradient(left, hsla(0,0%,  0%,0) 0%, hsla(0,0%,  0%,0)   4%, hsla(0,0%,  0%,.03) 4.5%),
+          -webkit-repeating-linear-gradient(left, hsla(0,0%,100%,0) 0%, hsla(0,0%,100%,0) 1.2%, hsla(0,0%,100%,.15) 2.2%),
+          
+          linear-gradient(180deg, hsl(0,0%,78%)  0%, 
+          hsl(0,0%,90%) 47%, 
+          hsl(0,0%,78%) 53%,
+          hsl(0,0%,70%)100%);
+
     }
-    .searchParamDisplay{
-        border: 2px solid white;
+
+.dothattest{
+    background-color: lime;
+}
+
+.addingredienteffect{
+    -webkit-animation: addingredienteffect 0.5s both;
+            animation: addingredienteffect 0.5s both;
+
+
+@-webkit-keyframes addingredienteffect {
+    0% {
+      -webkit-transform: scale3d(1, 1, 1);
+              transform: scale3d(1, 1, 1);
+    }
+    30% {
+      -webkit-transform: scale3d(1.25, 0.75, 1);
+              transform: scale3d(1.25, 0.75, 1);
+    }
+    40% {
+      -webkit-transform: scale3d(0.75, 1.25, 1);
+              transform: scale3d(0.75, 1.25, 1);
+    }
+    50% {
+      -webkit-transform: scale3d(1.15, 0.85, 1);
+              transform: scale3d(1.15, 0.85, 1);
+    }
+    65% {
+      -webkit-transform: scale3d(0.95, 1.05, 1);
+              transform: scale3d(0.95, 1.05, 1);
+    }
+    75% {
+      -webkit-transform: scale3d(1.05, 0.95, 1);
+              transform: scale3d(1.05, 0.95, 1);
+    }
+    100% {
+      -webkit-transform: scale3d(1, 1, 1);
+              transform: scale3d(1, 1, 1);
+    }
+  }
+  @keyframes addingredienteffect {
+    0% {
+      -webkit-transform: scale3d(1, 1, 1);
+              transform: scale3d(1, 1, 1);
+    }
+    30% {
+      -webkit-transform: scale3d(1.25, 0.75, 1);
+              transform: scale3d(1.25, 0.75, 1);
+    }
+    40% {
+      -webkit-transform: scale3d(0.75, 1.25, 1);
+              transform: scale3d(0.75, 1.25, 1);
+    }
+    50% {
+      -webkit-transform: scale3d(1.15, 0.85, 1);
+              transform: scale3d(1.15, 0.85, 1);
+    }
+    65% {
+      -webkit-transform: scale3d(0.95, 1.05, 1);
+              transform: scale3d(0.95, 1.05, 1);
+    }
+    75% {
+      -webkit-transform: scale3d(1.05, 0.95, 1);
+              transform: scale3d(1.05, 0.95, 1);
+    }
+    100% {
+      -webkit-transform: scale3d(1, 1, 1);
+              transform: scale3d(1, 1, 1);
+    }
+  }
+  
+}
+
+
+
+.dothateffect{
+    -webkit-animation: button 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+    animation: button 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+
+    @-webkit-keyframes button {
+        0% {
+          -webkit-transform: scaleX(1);
+                  transform: scaleX(1);
+          -webkit-transform-origin: 100% 100%;
+                  transform-origin: 100% 100%;
+          opacity: 1;
+        }
+        100% {
+          -webkit-transform: scaleX(0);
+                  transform: scaleX(0);
+          -webkit-transform-origin: 100% 100%;
+                  transform-origin: 100% 100%;
+          opacity: 1;
+        }
+      }
+      @keyframes button {
+        0% {
+          -webkit-transform: scaleX(1);
+                  transform: scaleX(1);
+          -webkit-transform-origin: 100% 100%;
+                  transform-origin: 100% 100%;
+          opacity: 1;
+        }
+        100% {
+          -webkit-transform: scaleX(0);
+                  transform: scaleX(0);
+          -webkit-transform-origin: 100% 100%;
+                  transform-origin: 100% 100%;
+          opacity: 1;
+        }
+      }
+      
+}
+
+.searchParamDisplay{
+        border: 2px solid rgba(255, 255, 255, 0.88);
         padding: 10px;
         margin: 10px;
     }
-    .menubutton {
+
+.menubutton {
         width: 100px;
         height: 50px;
         position: absolute;
@@ -26,7 +160,9 @@
         background-size: cover;
 
     }
-    .searchPageButton{
+
+
+.searchPageButton{
         position: relative;
     }
 

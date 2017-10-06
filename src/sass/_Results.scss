@@ -8,7 +8,10 @@
     
     .gridContainer{
         // padding: 10px;
-        background-color: rgb(185, 185, 6);
+        background-color: rgb(255, 255, 255);
+        background-image: url('../img/whitebackgroundsuperduperloooong.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
         width: 100vw;
         min-height: 100vh;
         display: flex;
@@ -19,6 +22,7 @@
         // grid-gap: 10px;
         // justify-items: center;
         .imgDiv{
+            margin-top: 21%;
             position: relative;
             .favicon{
                 font-size: 1.5em;

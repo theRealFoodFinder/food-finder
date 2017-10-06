@@ -46,6 +46,8 @@
             .detailquestion{
                 font-style: italic;
                 color:#C7E7C5;
+                display: flex;
+                justify-content: center;
             }
         }
     }
@@ -80,12 +82,9 @@
                     width:100vw;
                     margin-top:10%;
                     color:#E6E6E6;
-                    #detailsingredientstitle{
-                        font-size:18px;
-                    }
+               
                     #ingredientsmap{
-                        margin-top:12px;
-                        
+                  
                         .oneingredient{
                             margin:5px;
                             display: flex;
@@ -106,3 +105,52 @@
     }
 
 
+
+
+
+#detailsingredientstitle{
+    font-size: 25px !important;
+    text-shadow: 1.2px 1.2px #3B3B3B;
+}
+
+#ingredientsmap , .instructionBody, .nutritionRenderBody{
+    margin-top:12px;
+    
+    -webkit-animation: ingredientsmap 0.45s ease-out both;
+    animation: ingredientsmap 0.45s ease-out both;
+}
+
+@-webkit-keyframes ingredientsmap {
+    0% {
+      -webkit-transform: translateZ(-800px) rotateX(90deg);
+              transform: translateZ(-800px) rotateX(90deg);
+      opacity: 0;
+    }
+    54% {
+      -webkit-transform: translateZ(-160px) rotateX(87deg);
+              transform: translateZ(-160px) rotateX(87deg);
+      opacity: 1;
+    }
+    100% {
+      -webkit-transform: translateZ(0) rotateX(0);
+              transform: translateZ(0) rotateX(0);
+    }
+  }
+
+@keyframes ingredientsmap {
+    0% {
+      -webkit-transform: translateZ(-800px) rotateX(90deg);
+              transform: translateZ(-800px) rotateX(90deg);
+      opacity: 0;
+    }
+    54% {
+      -webkit-transform: translateZ(-160px) rotateX(87deg);
+              transform: translateZ(-160px) rotateX(87deg);
+      opacity: 1;
+    }
+    100% {
+      -webkit-transform: translateZ(0) rotateX(0);
+              transform: translateZ(0) rotateX(0);
+    }
+  }
+  

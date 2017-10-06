@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import AppBar from './AppBar'
 import NewLineFunc from './NewLineFunc'
 
@@ -15,13 +15,24 @@ class SuperDetails extends Component {
 componentWillMount() {
     // console.log(this.props.recipe[0], 'props on detailedpage')
     this.setState({
+        csseffect: false,
         results: this.props.recipe
     })
+    this.handleSearch=this.handleSearch.bind(this)
 }
 
-    // prettify(str){
-    //     console.log(str.split('split').map(x=>{console.log(x===/(\n+)/g)}).join(''))
-    //    }
+
+handleSearch(e) {
+    
+    this.setState({csseffect: true});
+
+    console.log(e.target)        
+    setTimeout(_=> {
+        console.log(this)
+        this.props.history.push('/search')
+    }, 1000);
+}
+
 
 
     render() {
@@ -50,7 +61,6 @@ componentWillMount() {
                     <AppBar />
                 </div>
 
-           <a href='#/results'>
                 <div className="detailsson">
                     <img src={this.state.results[0].hero_photo_url} alt="photourl"/>
                     
@@ -75,7 +85,7 @@ componentWillMount() {
                         <div id='instruction'>
                             <div className='instructionTitle'>Instruction:</div>
                             
-                            <div><NewLineFunc string={instruction} /></div>
+                            <div className='instructionBody'><NewLineFunc string={instruction} /></div>
                         </div>
 
 
@@ -86,17 +96,18 @@ componentWillMount() {
                         <div className='nutritioninfo'>
                             <div className='nutritionInfoTitle'>Nutrition Information (g):</div>
                             <ol>
-                                {nutritionrender}
+                               <div className='nutritionRenderBody'> {nutritionrender} </div>
                             </ol>
                         </div>
 
 
                         <div className='superdetailquestion'>
-                        <Link to='/search'><button> Back to Search </button></Link>
+
+                       <button onClick={e => this.handleSearch(e)} className={this.state.csseffect && 'dothateffect'}> Back to Search </button>
                         </div>
                     </div>
                 </div>
-            </a>
+            
             </div>
         );
     }

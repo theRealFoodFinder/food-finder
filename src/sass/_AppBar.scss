@@ -12,13 +12,14 @@
 .logoutButton{
     border: 2px outset #CCC9C9;
     font-size: 12px;
-    color: #A7A4A4;
+    text-shadow: 0.5px 0.4px #000000;
+    color: #888686;
     height: 12px;
     border-radius: 10px;
     padding: 3px;
     position: absolute;
-    top:13px;
-    right: 10px;
+    top:30%;
+    right: 6%;
 }
 .logoutButton:hover{
     border: 5px outset #CCC9C9;
