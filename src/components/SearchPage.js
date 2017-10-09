@@ -112,6 +112,10 @@ export default class SearchPage extends Component {
         this.setState({
             searchInput: e
         })
+        console.log(e)
+        if (e === 'brenny' || e === 'easter egg'){
+            this.props.history.push('/secret')
+        }
     }
 
 
