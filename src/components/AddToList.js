@@ -18,7 +18,7 @@ class AddToList extends Component {
                     recipe: recipe,
                     addIngredients: ingredients
                 })
-                console.log(this.state.addIngredientsBackend)
+                // console.log(this.state.addIngredientsBackend)
             }
         })
 
@@ -38,12 +38,13 @@ class AddToList extends Component {
         // true = shopping list
         // false = add to pantry
         console.log(this.state.addIngredientsBackend);
-        (axios.post('/api/postShoppingList', this.state.addIngredientsBackend)
+        axios.post('/api/postShoppingList', this.state.addIngredientsBackend)
             .then((res) => {
                 this.props.history.push('/shoppinglist')
-                console.log(res)
-            }))
-            // .catch((err)=>console.log(err))
+                // console.log(res)
+            })
+            .catch((err)=>console.log(err))
+            
     }
 
     handleBoxChecked(e) {
@@ -87,7 +88,7 @@ class AddToList extends Component {
                     {recipeItems}
                 </div>
                 <div className='addtocartbutton'>
-                    <a href='/recipe'><button onClick={this.addToList}>Add to List</button></a>
+                    <button onClick={this.addToList}>Add to List</button>
                 </div>
             </div>
         );

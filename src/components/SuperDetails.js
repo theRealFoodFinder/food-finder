@@ -29,7 +29,7 @@ handleSearch(e) {
     console.log(e.target)        
     setTimeout(_=> {
         console.log(this)
-        this.props.history.push('/search')
+        this.props.history.push('/results')
     }, 1000);
 }
 
