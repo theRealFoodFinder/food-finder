@@ -83,8 +83,14 @@ export default class SearchPage extends Component {
         profile.nutrition_info = this.state.modalObject;
         profile.ingredients = this.state.searchByIngredients;
         profile.cuisine = this.state.cuisine;
+        if (this.state.searchInput){
+            this.setState({
+                searchByIngredients: this.state.searchByIngredients.push(this.state.searchInput)
+            })
+        }
         this.props.passSearchParams(profile)
 
+        
         // console.log(e.target)        
         setTimeout(_=> {
             // console.log(this)
@@ -106,6 +112,10 @@ export default class SearchPage extends Component {
         this.setState({
             searchInput: e
         })
+        console.log(e)
+        if (e === 'brenny' || e === 'easter egg'){
+            this.props.history.push('/secret')
+        }
     }
 
 

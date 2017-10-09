@@ -136,43 +136,62 @@ class ProfilePage extends Component {
                             <img alt={i}  key={listItem.recipe_id} onClick={()=>this.toggleDetailedView(listItem.recipe_id)} src={listItem.hero_photo_url}></img>
                             </div></Link> */}
                             <a href="/recipe">
-                                <h3 key={this.state.favoritesID[i]} className='resultsTitle'>
-                                    {listItem}
-                                </h3>
+                                <li key={this.state.favoritesID[i]} className='resultsTitle'>
+                                ◦ {listItem}
+                                </li>
                             </a>
                          </div>
             }) : <p>Sorry no favorites to display</p>
 
 return (
+    
     <div className='profilePageContainer'>
+
         <div className='allappbarcomponents'>
             <AppBar />
         </div>
-        <header id='profileHeader'>Welcome back {this.state.profile.first}!</header>
-        <div className='profileMainContainer'>
-            <div className='profileleftSide'>
-                <span className='profilefavorites'>
-                    <span>
-                        Your Favorites
-                            </span>
-                    {favorites}
-                </span>
-            </div>
-            <span className='rightSide'>
-                {profileTitle}
-                <span className='inputContainer'>
-                    <input value={this.state.item} onChange={(e) => { this.blacklistChange(e.target.value) }} className='profileinput input' type="text" />
-                    <button onClick={this.blacklistClick} className='profileinput input button'>Dislikes / Allergies</button>
+
+        <div className='MainProfilePageContainer'>
+
+            <div id='welcome'>
+                <div className='welcomebacktitle'>
+                Welcome back {this.state.profile.first}!
+                </div>
+
+                    <div className='profilefavorites'>
+                        <div className='favoriteTitle'>
+                            Your Favorites
+                        </div>
+                        <div className='favoriteBody'>
+                        {favorites}
+                        </div>
+                    </div>
+
+                    <div className='blacklist'>
+
+                        <div className='blacklistinput'>
+                        {profileTitle} :
+                        <input placeholder=' ex: gluten' value={this.state.item} onChange={(e) => { this.blacklistChange(e.target.value) }} className='profileinput input' type="text" />
+                        </div>
+
+                        <div className='dislikebutton'>
+                        <button onClick={this.blacklistClick} className='dislikeAllergyButton'>Dislikes / Allergies</button>
+                        </div>
                     {/*These are optional features not incorporated, like blacklist but 2nd tier search for ingredients*/}
                     {/* <input  onChange={(e)=>{this.preferredChange(e.target.value)}} className='profileinput input'type="text"/>
                         <button onClick={this.preferredClick} className='profileinput input button'>Add Preferred Ingredient</button> */}
                     {/* <input  className='profileinput input'type="text"/>
                         <button className='profileinput input button'></button> */}
-                </span>
-                <div className='resultText'>
-                    {results}
+                    </div>
+
+                    <div className='resultText'>
+                        <div>
+                        {results}
+                        </div>
+                    </div>
+
                 </div>
-            </span>
+
         </div>
     </div>
 );

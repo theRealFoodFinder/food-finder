@@ -285,7 +285,7 @@ app.post('/api/getRecipe', (req, res) => {
     }
 
     function ingredientPercentage(recipes) {
-        let percentage = 20;
+        let percentage = 0;
         let pantryIngredients = undefined;
 
         return app.get('db').get_pantry_list([userInfoID]).then((response) => {
