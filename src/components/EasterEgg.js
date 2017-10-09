@@ -10,6 +10,7 @@ class EasterEgg extends Component {
             <div className="EasterEgg">
                 <AppBar />
                 <h1>Hello World!</h1>
+                <img src="https://www.fillmurray.com/320/560" alt="background" className="shrine-image"/>
             </div>
         )
     }

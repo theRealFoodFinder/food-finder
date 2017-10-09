@@ -92,10 +92,7 @@ this.passHistory = this.passHistory.bind(this);
 					
 					<Route component= {Landing} exact path='/'/>
 
-<<<<<<< HEAD
 					<Route component={EasterEgg} path='/secret'/>
-=======
->>>>>>> master
 
 				</Switch>
 			</div>
