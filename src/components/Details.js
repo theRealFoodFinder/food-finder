@@ -44,7 +44,7 @@ class Details extends Component {
 
         // console.log(e.target)
         setTimeout(_ => {
-            console.log(this)
+            // console.log(this)
             this.props.history.push('/add')
         }, 1000);
     }
@@ -66,7 +66,7 @@ class Details extends Component {
 
             <div className='detailsContainer'>
                 <div className='allappbarcomponents'>
-                    <AppBar />
+                    <AppBar/>
                 </div>
 
                 <div id='detailsMainContainer' className="detailsson">
