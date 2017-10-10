@@ -4,8 +4,8 @@ import AppBar from './AppBar'
 
 class ShoppingList extends Component {
     
-   constructor() {
-        super();
+   constructor(props) {
+        super(props);
         this.state = {
             shoppingListBackend:{},
             shoppingList:[]
@@ -14,13 +14,15 @@ class ShoppingList extends Component {
         this.handleBoxChecked=this.handleBoxChecked.bind(this)
     }
     
-   componentDidMount() {
-        console.log('shopping list will mounted')
-        let recipe = this.props.recipe;
+   componentWillMount() {
+    axios.get('/api/getShoppingList')
+    .then((res)=>{
+        console.log(res)
         this.setState({
-            shoppingList: recipe
+            shoppingListBackend: res
         })
-        console.log(this.state.shoppingList, 'shopping list mounted')
+    })
+        // console.log(this.state.shoppingListBackend, 'shopping list mounted')
     }
 
     
@@ -28,14 +30,17 @@ class ShoppingList extends Component {
         // true = shopping list
         // false = add to pantry
         console.log(this.state.shoppingListBackend);
-(axios.post('/api/postShoppingList', this.state.shoppingListBackend).then(_=>console.log('items added to shopping list')))
+        axios.post('/api/postShoppingList', this.state.shoppingListBackend)
+            .then((res)=>{
+                console.log(res)
+            })
     }
 
     handleBoxChecked(e){
 
     let listItem = e.target.className
     // let isChecked = e.target.checked
-    let list = this.state.shoppingList
+    let list = this.state.shoppingListBackend
     list[listItem]=!list[listItem]
     // console.log(list);
     this.setState({
@@ -48,8 +53,8 @@ class ShoppingList extends Component {
    render() {
 
        let recipeItems;
-    if (this.state && this.state.shoppingList && this.state.shoppingList.length>0){
-        let recipe = this.state.shoppingList[0];
+    if (this.state && this.state.shoppingListBackend && this.state.shoppingListBackend.length>0){
+        let recipe = this.state.shoppingListBackend[0];
         if(recipe.ingredients && recipe.ingredients.length>0){
 
            recipeItems = recipe.ingredients.map((list, i) => {

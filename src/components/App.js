@@ -90,7 +90,7 @@ this.passHistory = this.passHistory.bind(this);
 					
 					<Route component= { props => <ProfilePage {...props} profile={this.state.profile}/>} path='/profile'/>
 					
-					<Route component= {Landing} exact path='/'/>
+					<Route component= {Landing} path='/'/>
 
 					<Route component={EasterEgg} path='/secret'/>
 

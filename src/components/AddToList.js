@@ -4,72 +4,82 @@ import AppBar from './AppBar'
 
 class AddToList extends Component {
     componentWillMount() {
-        axios.get('/auth/me').then((res)=>{
-            if (!res.data.first || !res.data.last || !res.data.id || !res.data.email){
+        axios.get('api/getprofile').then((res) => {
+            if (!res.data.first || !res.data.last || !res.data.id || !res.data.email) {
                 this.props.history.push('/')
+                // console.log('successful redirect...')
             }
-            // console.log('shopping list will mounted')
-            let recipe = this.props.recipe;
-            this.setState({
-                recipe: recipe
-            })
-            // console.log(this.props.recipets, 'shopping list mounted')
-            console.log(this.props.recipe, 'shopping list mounted')
+            // console.log(this.props.recipe[0].ingredients.length)
+            // console.log(this.props.recipe[0])
+            if (this.props.recipe && this.props.recipe.length > 0 && this.props.recipe[0].ingredients && this.props.recipe[0].ingredients.length > 0) {
+                let ingredients = this.props.recipe[0].ingredients;
+                let recipe = this.props.recipe[0];
+                this.setState({
+                    recipe: recipe,
+                    addIngredients: ingredients
+                })
+                // console.log(this.state.addIngredientsBackend)
+            }
         })
+
     }
-   constructor() {
+    constructor() {
         super();
         this.state = {
-            shoppingListBackend:{},
-            shoppingList:[],
+            addIngredients: [],
+            addIngredientsBackend: {},
             recipe: {}
         }
-        this.addtoCart=this.addtoCart.bind(this)
-        this.handleBoxChecked=this.handleBoxChecked.bind(this)
+        this.addToList = this.addToList.bind(this)
+        this.handleBoxChecked = this.handleBoxChecked.bind(this)
     }
-       
-    addtoCart(){
+
+    addToList() {
         // true = shopping list
         // false = add to pantry
-        console.log(this.state.shoppingListBackend);
-(axios.post('/api/postShoppingList', this.state.shoppingListBackend).then(_=>console.log('items added to shopping list'))).then(()=>{
-    this.props.history.push('/shoppinglist')
-})
-    }
-
-    handleBoxChecked(e){
-
-    let listItem = e.target.className
-    // let isChecked = e.target.checked
-    let list = this.state.shoppingList
-    list[listItem]=!list[listItem]
-    // console.log(list);
-    this.setState({
-        shoppingListBackend: list
-    })
-    console.log(this.state.shoppingListBackend, 'ingredients added')
-    
-}
-
-   render() {
-
-       let recipeItems;
-    if (this.state && this.state.shoppingList && this.state.shoppingList.length>0){
-        let recipe = this.state.shoppingList[0];
-        if(recipe.ingredients && recipe.ingredients.length>0){
-
-           recipeItems = recipe.ingredients.map((list, i) => {
-                // console.log(list)
-                return(
-                    <div key={i} className={list.Name}>{list.Name}<input onChange={this.handleBoxChecked} className={list.Name} type="checkbox" key={i} />
-                        </div>
-                    )
-                })
-            }
-    }
-        return (
+        console.log(this.state.addIngredientsBackend);
+        axios.post('/api/postShoppingList', this.state.addIngredientsBackend)
+            .then((res) => {
+                this.props.history.push('/shoppinglist')
+                // console.log(res)
+            })
+            .catch((err)=>console.log(err))
             
-           <div className='addToListContainer shoppinglistcontainer'>
+    }
+
+    handleBoxChecked(e) {
+
+        let listItem = e.target.className
+        // let isChecked = e.target.checked
+        let list = this.state.addIngredientsBackend
+        list[listItem] = !list[listItem]
+        // console.log(list);
+        this.setState({
+            addIngredientsBackend: list
+        })
+        console.log(this.state.addIngredientsBackend, 'ingredients added')
+
+    }
+
+    render() {
+
+        let recipeItems = "No Ingredients";
+        if (this.state && this.state.recipe && this.state.recipe.ingredients && this.state.recipe.ingredients.length > 0) {
+
+            let ingredients = this.state.recipe.ingredients
+
+            recipeItems = ingredients.map((list, i) => {
+                // console.log(list)
+                return (
+                    <div key={i} className={list.Name}>{list.Name}<input onChange={this.handleBoxChecked} className={list.Name} type="checkbox" key={i} />
+                    </div>
+                )
+            })
+        }
+
+        return (
+
+            <div className='addToListContainer shoppinglistcontainer'>
                 <div className='allappbarcomponents'>
                     <AppBar />
                 </div>
@@ -78,7 +88,7 @@ class AddToList extends Component {
                     {recipeItems}
                 </div>
                 <div className='addtocartbutton'>
-                    <a href='/recipe'><button onClick={this.addtoCart}>Add to List</button></a>
+                    <button onClick={this.addToList}>Add to List</button>
                 </div>
             </div>
         );
