@@ -642,20 +642,22 @@ app.get('/api/getShoppingList', (req, res) => {
 
 app.post('/api/updateShoppingList', (req, res) => {
     // let user = app.get('user');
-    app.get('db').update_shopping_list([req.user.id, req.body.items])
-        .then((response) => {
-            res.status('200').send('Cart Successfully Updated')
-        })
+    let id = req.body.user.id;
+    console.log(id)
+    app.get('db').update_shopping_list([id, req.body.items])
+        // .then((res) => {
+        //     res.status('200').send('Cart Successfully Updated')
+        // })
 })
 
 app.post('/api/appendShoppingList', (req, res) => {
-    // let user = app.get('user');
     app.get('db').get_shopping_list([req.user.id])
         .then((response) => {
             axios.post('http://localhost:3005/api/updateShoppingList', {
-                    items: response[0].items + req.body.items
+                    items: response[0].items + req.body.items,
+                    user: req.user
                 })
-                .then(() => {
+                .then((res) => {
                     res.status(200).send("Appended Cart!")
                 })
         })
