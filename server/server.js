@@ -38,7 +38,7 @@ passport.use(new Auth0Strategy({
     clientID: config.AUTH_CLIENT_ID,
     clientSecret: config.AUTH_CLIENT_SECRET,
     callbackURL: config.AUTH_CALLBACK
-}, function (accessToken, refreshToken, extraParams, profile, done) {
+}, function(accessToken, refreshToken, extraParams, profile, done) {
 
     const db = app.get('db');
     db.find_session_user([profile._json.email])
@@ -46,8 +46,7 @@ passport.use(new Auth0Strategy({
             if (user[0]) {
 
                 return done(null, user[0]);
-            }
-            else {
+            } else {
 
                 if (profile.provider === 'auth0') {
                     db.create_user([profile._json.user_metadata.first_name, profile._json.user_metadata.last_name, profile._json.email, profile.identities[0].user_id, true])
@@ -67,13 +66,13 @@ passport.use(new Auth0Strategy({
 
 }));
 
-passport.serializeUser(function (user, done) {
+passport.serializeUser(function(user, done) {
 
     let sessionUser = { id: user.user_id, first: user.first_name, last: user.last_name, email: user.user_email, initLogin: user.init_login }
     done(null, sessionUser);
 })
 
-passport.deserializeUser(function (user, done) {
+passport.deserializeUser(function(user, done) {
     app.set('user', user)
     if (user) {
         return done(null, user)
@@ -172,7 +171,8 @@ app.post('/api/postShoppingList', (req, res) => {
             if (/ and |[0-9]|[-!$%^&*()_+|~=`{}\[\]:<>?,.\/]/.test(ingArr[x])) {
                 ingArr.splice(x, 1);
             }
-        } return ingArr;
+        }
+        return ingArr;
     }
 
     var ingredients = [];
@@ -181,8 +181,7 @@ app.post('/api/postShoppingList', (req, res) => {
 
         if (req.body[i]) {
             shoppingList.push(i);
-        }
-        else {
+        } else {
             ingredients.push(i)
         }
     }
@@ -633,7 +632,8 @@ app.post('/api/getRecipe', (req, res) => {
 
 
 app.get('/api/getShoppingList', (req, res) => {
-    app.get('db').get_shopping_list([req.user.id])
+    let user = app.get('user')
+    app.get('db').get_shopping_list(user.id)
         .then((response) => {
             res.status(200).send(response[0].items)
         })
@@ -641,19 +641,20 @@ app.get('/api/getShoppingList', (req, res) => {
 
 
 app.post('/api/updateShoppingList', (req, res) => {
+    // let user = app.get('user');
     app.get('db').update_shopping_list([req.user.id, req.body.items])
         .then((response) => {
             res.status('200').send('Cart Successfully Updated')
         })
-}
-)
+})
 
 app.post('/api/appendShoppingList', (req, res) => {
+    // let user = app.get('user');
     app.get('db').get_shopping_list([req.user.id])
         .then((response) => {
             axios.post('http://localhost:3005/api/updateShoppingList', {
-                items: response[0].items + req.body.items
-            })
+                    items: response[0].items + req.body.items
+                })
                 .then(() => {
                     res.status(200).send("Appended Cart!")
                 })

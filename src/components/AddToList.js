@@ -6,49 +6,63 @@ class AddToList extends Component {
     componentWillMount() {
         axios.get('api/getprofile').then((res) => {
             if (!res.data.first || !res.data.last || !res.data.id || !res.data.email) {
-                this.props.history.push('/')
-                // console.log('successful redirect...')
-            }
-            // console.log(this.props.recipe[0].ingredients.length)
-            // console.log(this.props.recipe[0])
-            if (this.props.recipe && this.props.recipe.length > 0 && this.props.recipe[0].ingredients && this.props.recipe[0].ingredients.length > 0) {
+                this.props.history.push('/');
+            } else if (
+                this.props.recipe &&
+                this.props.recipe.length > 0 &&
+                this.props.recipe[0].ingredients &&
+                this.props.recipe[0].ingredients.length > 0) {
                 let ingredients = this.props.recipe[0].ingredients;
                 let recipe = this.props.recipe[0];
                 this.setState({
                     recipe: recipe,
                     addIngredients: ingredients
                 })
-                // console.log(this.state.addIngredientsBackend)
+                
             }
         })
-
     }
-    constructor() {
-        super();
+
+
+
+
+
+    constructor(props) {
+        super(props);
         this.state = {
             addIngredients: [],
             addIngredientsBackend: {},
             recipe: {}
         }
-        this.addToList = this.addToList.bind(this)
-        this.handleBoxChecked = this.handleBoxChecked.bind(this)
+        this.addToList = this.addToList.bind(this);
+        this.handleBoxChecked = this.handleBoxChecked.bind(this);
     }
 
     addToList() {
         // true = shopping list
         // false = add to pantry
-        console.log(this.state.addIngredientsBackend);
-        axios.post('/api/postShoppingList', this.state.addIngredientsBackend)
+        let tempObj = this.state.addIngredientsBackend;
+        let tempObj2 = {};
+        let str = "";
+        for(let key in tempObj){
+            if(tempObj[key]===true){
+                str +="," + key
+            }
+        }
+        console.log(str);
+        tempObj2.items = str;
+        axios.post('/api/appendShoppingList', tempObj2)
             .then((res) => {
                 this.props.history.push('/shoppinglist')
                 // console.log(res)
             })
-            .catch((err)=>console.log(err))
-            
+            .catch((err) => console.log(err))
+
     }
 
     handleBoxChecked(e) {
-
+        
+        console.log(this.state.addIngredientsBackend, 'backend')
         let listItem = e.target.className
         // let isChecked = e.target.checked
         let list = this.state.addIngredientsBackend
