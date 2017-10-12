@@ -114,6 +114,7 @@ export default class SearchPage extends Component {
         })
         // console.log(e)
         if (e === 'brenny' || e === 'easter egg'){
+            console.log(this.props)
             this.props.history.push('/secret')
         }
     }

@@ -81,7 +81,7 @@ componentWillUnmount() {
             //needs type add or remove and string seperated by commas
             if (this.state.inputType === "Blacklist") {
                 let tempArray = {items:"remove",ingredients:removed};
-                axios.put('/api/blacklist', tempArray).then(console.log('blacklist item removed')).catch((err)=>{console.log(err)})
+                axios.put('http://localhost:3005/api/blacklist', tempArray).then(console.log('blacklist item removed')).catch((err)=>{console.log(err)})
             } else { console.log("Unknown inputType on state", this.state) }
     }
 
@@ -92,7 +92,7 @@ componentWillUnmount() {
                 item: value,
             })
         }
-        axios.get('/api/getBlacklist').then((res) => {
+        axios.get('http://localhost:3005/api/getBlacklist').then((res) => {
             if (res.data) {
                 this.setState({
                     results: res.data,
@@ -112,13 +112,13 @@ componentWillUnmount() {
                 results: tempArray,
                 item: ""
             })
-            axios.put('/api/addToBlacklist').then(console.log('Item Added')).catch((err)=>{console.log(err)});
+            axios.put('http://localhost:3005/api/addToBlacklist').then(console.log('Item Added')).catch((err)=>{console.log(err)});
         }
     }
 
     preferredChange(value) {
         if (typeof value === 'string') {
-            axios.put('/api/addToBlacklist').catch((err)=>{console.log(err)});
+            axios.put('http://localhost:3005/api/addToBlacklist').catch((err)=>{console.log(err)});
             this.setState({
                 inputType: "Preferred",
                 item: value
@@ -136,7 +136,7 @@ componentWillUnmount() {
                 results: tempArray,
                 item: ""
             })
-            axios.put('/api/preferredlist').then(alert('Item Added')).catch((err)=>{console.log(err)})
+            axios.put('http://localhost:3005/api/preferredlist').then(alert('Item Added')).catch((err)=>{console.log(err)})
         }
     }
 

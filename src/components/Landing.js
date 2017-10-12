@@ -5,13 +5,13 @@ import bgfullscreenvid from '../videos/landingvideo - fullscreen.mp4'
 import axios from 'axios';
 class Landing extends Component {
     
-    componentWillMount() {
-        axios.get('/auth/me').then((res)=>{
-            if (res && res.data && res.data.first && res.data.last && res.data.id && res.data.email){
-                this.props.history.push('/search')
-            }
-        })
-    }
+    // componentWillMount() {
+    //     axios.get('/api/getProfile').then((res)=>{
+    //         if (res && res.data && res.data.first && res.data.last && res.data.id && res.data.email){
+    //             this.props.history.push('/search')
+    //         }
+    //     })
+    // }
     
     constructor(){
         super();

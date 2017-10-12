@@ -111,9 +111,11 @@ app.get('/atla40', (req, res) => {
 
 
 app.get('/auth/logout', (req, res) => {
-    console.log(`user ${req.user.id} has logged out`)
-    req.logOut();
-    return res.redirect(302, '/#/')
+    // console.log(`user ${req.user.id} has logged out`)
+    app.set('user', '')
+    req.logOut()
+    console.log('user logged out')
+    res.status(200).send('logged out');
 })
 
 
