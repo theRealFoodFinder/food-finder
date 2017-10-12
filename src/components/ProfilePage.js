@@ -121,7 +121,6 @@ class ProfilePage extends Component {
         let profileTitle = this.state.inputType === "Blacklist" ? "Blacklist" : this.state.inputType + "  Items";
         //results underneath the header that display blacklist items, or preferred items
         let results = !this.state.results ? <p>No Results</p> :
-        console.log("this.state.results", this.state.results)
             this.state.results.map((item, i) => {
                 return <div key={i} className="results">{item}<button key={i} onClick={(e) => this.removeItem(e.target.key)} className='resultsbutton'>X</button></div>
             })
