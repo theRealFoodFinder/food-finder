@@ -28,7 +28,10 @@ class Initialize extends Component {
     }// /api/pantrysetup
 
     addtoCupboard(){
-        axios.post('/api/pantrySetup', this.state.userCupboard).then(console.log('pantry setup'))
+        axios.post('/api/pantrySetup', this.state.userCupboard).then(()=>{
+            console.log('pantry setup')
+            this.props.history.push('/search')
+        })
     }
 
     handleBoxChecked(e){
@@ -62,7 +65,7 @@ class Initialize extends Component {
                     {recipeItems}
                 </div>
                 <div className='addtocartbutton'>
-                    <a href='/recipe'><button onClick={this.addtoCupboard}>add to Cupboard and search</button></a>
+                    <button onClick={this.addtoCupboard}>add to Cupboard and search</button>
                 </div>
             </div>
         );
