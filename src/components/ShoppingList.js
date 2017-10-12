@@ -117,7 +117,7 @@ class ShoppingList extends Component {
                     {recipeItems}
                 </div>
                 <div className='sendListbutton'>
-                    <button onClick={this.sendList}>remove from cart</button>
+                    <button id='removefromcartbutton'onClick={this.sendList}>remove from cart</button>
                 </div>
             </div>
         );
