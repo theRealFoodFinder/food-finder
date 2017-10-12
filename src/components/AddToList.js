@@ -18,9 +18,9 @@ class AddToList extends Component {
                     recipe: recipe,
                     addIngredients: ingredients
                 })
-                
             }
         })
+        .catch((err)=>console.log(err))
     }
 
 
@@ -53,8 +53,9 @@ class AddToList extends Component {
         tempObj2.items = str;
         axios.post('/api/appendShoppingList', tempObj2)
             .then((res) => {
+                console.log('before the push in addtolist')
                 this.props.history.push('/shoppinglist')
-                // console.log(res)
+                console.log(res)
             })
             .catch((err) => console.log(err))
 
@@ -62,7 +63,7 @@ class AddToList extends Component {
 
     handleBoxChecked(e) {
         
-        console.log(this.state.addIngredientsBackend, 'backend')
+        // console.log(this.state.addIngredientsBackend, 'backend')
         let listItem = e.target.className
         // let isChecked = e.target.checked
         let list = this.state.addIngredientsBackend
@@ -71,7 +72,7 @@ class AddToList extends Component {
         this.setState({
             addIngredientsBackend: list
         })
-        console.log(this.state.addIngredientsBackend, 'ingredients added')
+        // console.log(this.state.addIngredientsBackend, 'ingredients added')
 
     }
 

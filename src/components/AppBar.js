@@ -13,7 +13,7 @@ class AppBar extends Component {
                     {this.props.location.pathname==='/add' &&
                     <span>Add</span>}
                     {this.props.location.pathname==='/shoppinglist' &&
-                    <span>'s Shopping List</span>}
+                    <span>Shopping List</span>}
                     {this.props.location.pathname==='/recipe' &&
                     <span>Recipe</span>}
                     {this.props.location.pathname==='/history' &&

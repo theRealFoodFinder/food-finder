@@ -53,14 +53,17 @@ class ShoppingList extends Component {
         let newObj = { items: [] }
         let str = ""
         for (let key in food) {
-            if (food[key] === true) {
-                str += ',' + key;
+            if (food[key] === false) {
+                str = str + ',' + key;
             }
         }
         newObj.items = str;
-        axios.post('/api/updateShoppingList', newObj).then(
+        axios.post('http://localhost:3005/api/updateShoppingList', newObj).then(
             axios.get('/api/getShoppingList')
                 .then((res) => {
+                    //res.data comes back as string ex: ",sdfsdf,sdfsd,sdfsd,sdf,sdfgsdg,ssdfg"
+                    console.log(res.data, 'res.data shoppinglist')
+                    if(res && res.data){
                     let newObj = {};
                     res = res.data.split(',')
                     this.setState({
@@ -71,7 +74,8 @@ class ShoppingList extends Component {
                     })
                     this.setState({
                         shoppingListBackend: newObj
-                    })
+                    })}
+                    console.log(this.state.shoppingListBackend)
                 })
         ).catch((err) => { console.log(err) })
     }
@@ -86,7 +90,7 @@ class ShoppingList extends Component {
         this.setState({
             shoppingListBackend: list
         })
-        console.log(this.state.shoppingListBackend, 'ingredients added')
+        // console.log(this.state.shoppingListBackend, 'ingredients added')
 
     }
 
