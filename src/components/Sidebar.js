@@ -14,7 +14,7 @@ class Sidebar extends Component {
                 <Menu>
                     <Link to={'/search'} id="msearch" className="menu-item">Search</Link>
                     <Link to={'/shoppinglist'} id="mshoppinglists" className="menu-item" >Shopping Lists</Link>
-                    <Link to={'/history'} id="mhistory" className="menu-item" >History</Link>
+                    {/* <Link to={'/history'} id="mhistory" className="menu-item" >History</Link> */}
                     <Link to={'/profile'} id="mprofile" className="menu-item" >Profile</Link>
                     <a href='/auth/logout'><div id='logoutButton'>Log out</div></a>
                     {/* <a onClick={ this.showSettings } className="menu-item--small" href="">Settings</a> */}

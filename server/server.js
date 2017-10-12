@@ -144,19 +144,17 @@ app.get('/api/favoriteRecipe/:id', (req, res) => {
 })
 
 app.get('/api/getFavorites', (req, res) => {
-    userID = app.get('user')
-    if (userID) {
-        userID = userID.id
-    }
-    app.get('db').get_favorites([userID])
+    let user = app.get('user')
+    app.get('db').get_favorites([user.id])
         .then(response => {
+            if (response && response[0] && response[0].length>0 && response[0].user_favorites){
             let favorites = response[0].user_favorites
             favorites = favorites.slice(0, favorites.length - 1)
             let queryString = `SELECT recipe_id, title, image_url from recipes WHERE recipe_id IN (${favorites});`
             app.get('db').run(queryString)
                 .then(response => {
                     res.status('200').send(response);
-                })
+                })}
         })
 })
 
@@ -641,19 +639,18 @@ app.get('/api/getShoppingList', (req, res) => {
 
 
 app.post('/api/updateShoppingList', (req, res) => {
-    // let user = app.get('user');
-    let id = req.body.user.id;
-    console.log(id)
-    app.get('db').update_shopping_list([id, req.body.items])
-        // .then((res) => {
-        //     res.status('200').send('Cart Successfully Updated')
-        // })
+    let user = app.get('user')
+    app.get('db').update_shopping_list([user.id, req.body.items])
+        .then((res) => {
+            res.status('200').send('Cart Successfully Updated')
+        })
 })
 
 app.post('/api/appendShoppingList', (req, res) => {
-    app.get('db').get_shopping_list([req.user.id])
+    let user = app.get('user')
+    app.get('db').get_shopping_list([user.id])
         .then((response) => {
-            axios.post('http://localhost:3005/api/updateShoppingList', {
+            app.post('/api/updateShoppingList', {
                     items: response[0].items + req.body.items,
                     user: req.user
                 })
@@ -666,7 +663,8 @@ app.post('/api/appendShoppingList', (req, res) => {
 
 app.post('/api/blacklist', (req, res) => {
     let { ingredients, type } = req.body
-    app.get('db').get_blacklist([req.user.id]).then((oldList) => {
+    let user = app.get('user')
+    app.get('db').get_blacklist([user.id]).then((oldList) => {
         console.log("oldList", oldList)
         oldList = oldList[0].blacklist.split(',')
         let newList = []
@@ -688,7 +686,8 @@ app.post('/api/blacklist', (req, res) => {
         }
 
         newList = newList.join(',')
-        app.get('db').update_blacklist([newList, req.user.id]).then((response) => {
+        let user = app.get('user')
+        app.get('db').update_blacklist([newList,user.id]).then((response) => {
             return res.status(200).send(response)
         })
     })
@@ -696,7 +695,8 @@ app.post('/api/blacklist', (req, res) => {
 
 
 app.get('/api/getBlacklist', (req, res) => {
-    app.get('db').get_blacklist([req.user.id])
+    let user = app.get('user')
+    app.get('db').get_blacklist([user.id])
         .then(response => {
             res.status('200').send(response[0].blacklist)
         }), () => { res.status('500').send("Couldn't get blacklist") }

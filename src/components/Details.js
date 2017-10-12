@@ -30,8 +30,6 @@ class Details extends Component {
 
     handleClick(e) {
         this.setState({ csseffect: true });
-
-        console.log(e.target)
         setTimeout(_ => {
             console.log(this)
             this.props.history.push('/recipe')
@@ -41,10 +39,7 @@ class Details extends Component {
 
     handleClick2(e) {
         this.setState({ csseffect2: true });
-
-        // console.log(e.target)
         setTimeout(_ => {
-            // console.log(this)
             this.props.history.push('/add')
         }, 1000);
     }
@@ -52,16 +47,26 @@ class Details extends Component {
 
 
     render() {
-        let ingredients = this.state.results[0].ingredients
-
+        let ingredients = this.state.results[0].ingredients;
         const ingredientsMap = ingredients.map((ingredient, i) => {
-
             return <div key={i} className='oneingredient'> •&nbsp;<div className='unit'>
-                {ingredient.DisplayQuantity} {ingredient.Unit} </div> &nbsp; {ingredient.Name} </div>
+            {ingredient.DisplayQuantity} {ingredient.Unit} </div> &nbsp; {ingredient.Name} </div>
         })
+        let titles = this.state.results[0].title;
+        let image = this.state.results[0].hero_photo_url;
 
+        // let titles = "Error loading Page";
+        // let ingredientsMap = "No Ingredients";
+        // let image = "error loading image";
+        // if(this.state && this.state.results && this.state.results[0] && this.state.results[0].length>0 && this.state.results[0].title){
+        // titles = this.state.results[0].title;
+        // let ingredients = this.state.results[0].ingredients;
+        // image= this.state.results[0].hero_photo_url;
+        // ingredientsMap = ingredients.map((ingredient, i) => {
+        //     return <div key={i} className='oneingredient'> •&nbsp;<div className='unit'>
+        //         {ingredient.DisplayQuantity} {ingredient.Unit} </div> &nbsp; {ingredient.Name} </div>
+        // })}
 
-        let titles = this.state.results[0].title
         return (
 
             <div className='detailsContainer'>
@@ -70,7 +75,7 @@ class Details extends Component {
                 </div>
 
                 <div id='detailsMainContainer' className="detailsson">
-                    <img src={this.state.results[0].hero_photo_url} alt="photourl" />
+                    <img src={image} alt="photourl" />
                     <div className='titlebackground'>
                         <div id='foodtitle'>{titles}</div>
                     </div>
