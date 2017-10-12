@@ -92,10 +92,12 @@ app.get('/auth/me', (req, res, next) => {
 })
 
 app.get('/atla40', (req, res) => {
-    app.get('db').user_lookup([req.user.id])
+    let userInfoID = app.get('user')
+    userInfoID = userInfoID.id
+    app.get('db').user_lookup([userInfoID])
         .then(response => {
             if (response[0].init_login) {
-                app.get('db').update_init_login([req.user.id])
+                app.get('db').update_init_login([userInfoID])
                     .then(() => {
                         res.redirect('http://localhost:3000/#/initialSetup')
                     }),
@@ -123,7 +125,9 @@ app.get('/api/getProfile', (req, res) => {
 
 
 app.get('/api/getPreferences', (req, res) => {
-    app.get('db').get_preferences([req.user.id]).then(response => {
+    let userInfoID = app.get('user')
+    userInfoID = userInfoID.id
+    app.get('db').get_preferences([userInfoID]).then(response => {
         return res.status(200).send(response);
     })
 })
@@ -131,8 +135,10 @@ app.get('/api/getPreferences', (req, res) => {
 
 app.get('/api/favoriteRecipe/:id', (req, res) => {
     let { recipe_id } = req.params.id;
+    let userInfoID = app.get('user')
+    userInfoID = userInfoID.id
 
-    app.get('db').get_favorites([req.user.id]).then((response) => {
+    app.get('db').get_favorites([userInfoID]).then((response) => {
         response = response[0].user_favorites
         if (!response.includes(`,${recipe_id},`)) {
             response += recipe_id + ','
@@ -641,16 +647,20 @@ app.get('/api/getShoppingList', (req, res) => {
 
 
 app.post('/api/updateShoppingList', (req, res) => {
+    let userInfoID = app.get('user')
+    userInfoID = userInfoID.id
     // let user = app.get('user');
-    app.get('db').update_shopping_list([req.user.id, req.body.items])
+    app.get('db').update_shopping_list([userInfoID, req.body.items])
         .then((response) => {
             res.status('200').send('Cart Successfully Updated')
         })
 })
 
 app.post('/api/appendShoppingList', (req, res) => {
+    let userInfoID = app.get('user')
+    userInfoID = userInfoID.id
     // let user = app.get('user');
-    app.get('db').get_shopping_list([req.user.id])
+    app.get('db').get_shopping_list([userInfoID])
         .then((response) => {
             axios.post('http://localhost:3005/api/updateShoppingList', {
                     items: response[0].items + req.body.items
@@ -664,7 +674,9 @@ app.post('/api/appendShoppingList', (req, res) => {
 
 app.post('/api/blacklist', (req, res) => {
     let { ingredients, type } = req.body
-    app.get('db').get_blacklist([req.user.id]).then((oldList) => {
+    let userInfoID = app.get('user')
+    userInfoID = userInfoID.id
+    app.get('db').get_blacklist([userInfoID]).then((oldList) => {
         console.log("oldList", oldList)
         oldList = oldList[0].blacklist.split(',')
         let newList = []
@@ -686,7 +698,7 @@ app.post('/api/blacklist', (req, res) => {
         }
 
         newList = newList.join(',')
-        app.get('db').update_blacklist([newList, req.user.id]).then((response) => {
+        app.get('db').update_blacklist([newList, userInfoID]).then((response) => {
             return res.status(200).send(response)
         })
     })
@@ -705,10 +717,11 @@ app.get('/api/getBlacklist', (req, res) => {
 })
 
 app.post('/api/pantrySetup', (req, res) => {
+    let userInfoID = app.get('user')
+    userInfoID = userInfoID.id
     console.log(req.body)
     var pantryItems = req.body.join(',')
-    console.log("pantry", pantryItems)
-    app.get('db').pantry_setup([req.user.id, pantryItems])
+    app.get('db').pantry_setup([userInfoID, pantryItems])
         .then(() => {
             res.status('200').send('Successfully added pantry items!')
         }), error => {
