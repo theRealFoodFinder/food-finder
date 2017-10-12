@@ -1,12 +1,26 @@
 import React, { Component } from 'react';
 import { bubble as Menu } from 'react-burger-menu'
 import {Link} from 'react-router-dom'
-class Sidebar extends Component {
-    
+import axios from 'axios'
 
-    showSettings (event) {
-        
-      }
+class Sidebar extends Component {
+
+     constructor(props){
+        super(props)
+
+        this.state = {
+
+        }
+        this.handleLogout = this.handleLogout.bind(this)
+    }
+
+
+    handleLogout(){
+        axios.get('http://localhost:3005/auth/logout').then((response) => {
+            this.props.fixmepls.push('/')
+        })
+    }
+
 
     render() {
         return (
@@ -16,7 +30,7 @@ class Sidebar extends Component {
                     <Link to={'/shoppinglist'} id="mshoppinglists" className="menu-item" >Shopping Lists</Link>
                     {/* <Link to={'/history'} id="mhistory" className="menu-item" >History</Link> */}
                     <Link to={'/profile'} id="mprofile" className="menu-item" >Profile</Link>
-                    <a href='/auth/logout'><div id='logoutButton'>Log out</div></a>
+                    <div id='logoutButton' onClick={this.handleLogout}>Log out</div>
                     {/* <a onClick={ this.showSettings } className="menu-item--small" href="">Settings</a> */}
                 </Menu>
             </div>

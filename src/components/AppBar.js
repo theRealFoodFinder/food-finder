@@ -1,13 +1,31 @@
 import React, { Component } from 'react';
 import Sidebar from '../components/Sidebar'
 import {withRouter} from 'react-router-dom'
+import axios from 'axios'
 
 class AppBar extends Component {
+
+    constructor(props){
+        super(props)
+
+        this.state = {
+
+        }
+        this.handleLogout = this.handleLogout.bind(this)
+    }
+
+
+    handleLogout(){
+        axios.get('http://localhost:3005/auth/logout').then((response) => {
+            this.props.history.push('/')
+        })
+    }
+
     render() {
         // console.log(this.props)
         return (
             <div className='appbarcontainer'>
-                <Sidebar />
+                <Sidebar fixmepls={this.props.history} />
                 <div className='Appbarserchtitle'>
                     {this.props.location.pathname==='/search' && <span>Search</span>}
                     {this.props.location.pathname==='/add' &&
@@ -26,8 +44,7 @@ class AppBar extends Component {
                     <span>Profile</span>}
 
 
-
-                    <a href='/auth/logout'><span className='logoutButton'>Log Out</span></a>
+                    <span className='logoutButton' onClick={this.handleLogout}>Log Out</span>
                 </div>
             </div>
         );
