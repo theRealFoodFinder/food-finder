@@ -695,8 +695,13 @@ app.post('/api/blacklist', (req, res) => {
 
 
 app.get('/api/getBlacklist', (req, res) => {
-    let user = app.get('user')
-    app.get('db').get_blacklist([user.id])
+
+    userID = app.get('user')
+    if (userID) {
+        userID = userID.id
+    }
+    app.get('db').get_blacklist([userID])
+
         .then(response => {
             res.status('200').send(response[0].blacklist)
         }), () => { res.status('500').send("Couldn't get blacklist") }
