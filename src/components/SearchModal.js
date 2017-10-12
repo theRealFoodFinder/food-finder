@@ -101,9 +101,9 @@ class SearchModal extends Component {
             <div className='modalcontainer'>
                 <div className='buttonfamily'>
                     <div className='selectfamily'>
-                    <button 
-                    onClick={this.props.handleFilter}
-                    >X</button>
+                        {/* <button id='SearchModalCloseButton'onClick={this.props.handleFilter}>
+                            X
+                        </button> */}
                         <select className='nutritionselect' onChange={(e) => {this.handleSelectNutrition(e.target.value)}}>
                             {nutritionOptionsMap}
                         </select>
@@ -111,7 +111,13 @@ class SearchModal extends Component {
                             {calorieOptionsMap}
                         </select>
                     </div>
-                <button id='searchmodalbutton' onClick={this.submitAdd}>Submit</button>
+                    <div className='SearchModalTwoButtons'>    
+                    <button id='SearchModalCloseButton'onClick={this.props.handleFilter}>
+                            X
+                        </button>
+                    <button id='searchmodalbutton' onClick={this.submitAdd}>Submit</button>
+                    
+                        </div>
                 </div>
             </div>
         );

@@ -164,7 +164,7 @@ export default class SearchPage extends Component {
                     } /> : <button onClick={this.handleFilter} className='SearchPageButton' id='noAniButton'>Filter
                     </button> } 
 
-                    <button onClick={e => this.handleSearch(e)} className={this.state.csseffect && 'dothateffect'}>Get Recipes
+                    <button onClick={e => this.handleSearch(e)} className={this.state.csseffect && 'dothateffect'} id='SearchPageGetRecipesButton'>Get Recipes
                     </button>
 
                 </div>

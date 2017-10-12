@@ -3,12 +3,12 @@
     // top:0;
     // left:0;
     width: 70%;
-    height: 40%;
+    height: 30%;
     background-color: rgba(104, 104, 104, 0.87);
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    // z-index: 2;
+    z-index: 99999;
     
 }
 
@@ -16,7 +16,7 @@
     width:80px;
     height:20px;
     background-color: #FFCD29;
-    font-size: 13px;
+    font-size: 15px;
 
 }
 
@@ -35,6 +35,7 @@ option{
     width:80px;
     height: 30px;
     background-color: orange;
+    margin-top: 70px !important;
 }
 
 .buttonfamily{
@@ -44,6 +45,17 @@ option{
     align-items: center;
 }
 
+ #SearchModalCloseButton{
+    margin-left:60px;
+    width:30px !important;
+    height: 30px !important;
+}
+
+.SearchModalTwoButtons{
+    padding-top: 70px;
+}
+
 .selectfamily{
-    
+    margin-top: 70px;
+    padding-left:10px;
 }
