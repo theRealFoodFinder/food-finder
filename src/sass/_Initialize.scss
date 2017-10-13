@@ -1,0 +1,117 @@
+.initializeContainer{
+    background-image: url("../img/profileBackground.jpg");
+    background-position: center;
+    min-height:100vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: white;
+    position: relative;
+    .top{
+    font-size: 1em;
+    position: relative;
+    top:22vh;
+text-align: center;
+
+    }
+    .addtocartbutton{
+        position: relative;
+        top: 2vh;
+    button{
+        min-height: 100%;
+    }
+    }
+    .initCupboardmap{
+     position: relative;
+     left:47vw;
+     top: 15vh;
+ }
+   }
+
+   
+//    #welcome{
+//        position: relative;
+//        top: 85px;
+//        height: 25px;
+//        font-size: 20px;
+//        padding: 10px;
+//        text-align: center;
+//        color:#F3F3F3;
+//        background: rgba(10, 10, 10, 0.47);
+      
+       
+//    }
+   
+//    .welcomebacktitle{
+//        font-size: 20px;
+//        padding-top: 2px;
+//    }
+   
+//    .profilefavorites{
+//        // position: relative;
+//        margin-top:8%;
+//        padding: 4%;
+//        background: rgba(10, 10, 10, 0.47);
+//    }
+   
+//    .favoriteTitle{
+//        padding-top:5px;;
+//        text-shadow: 1.3px 1.3px #050505;
+//        text-decoration: underline;
+//    }
+   
+//    .favoriteBody{
+//        margin-top:3%;
+//        text-shadow: 1.3px 1.3px #050505;
+//        color:#D1D1D1 !important;
+//    }
+   
+//    li{
+//        padding:2.5px;
+//        list-style-type: none;
+//    }
+   
+//    //why it doesn't work?
+//    // .favoriteBody>li{
+//    //     padding:2px;
+//    // }
+   
+//    .blacklist{
+//        margin-top:20px;
+       
+//    }
+   
+//    .blacklistinput{
+//        display: flex;
+//        justify-content: center;
+//        align-items: center;
+//    }
+   
+//    .dislikebutton{
+//        display: flex;
+//        justify-content: center;
+//    }
+   
+   
+//    .dislikeAllergyButton{
+//        width:180px;
+//        font-size: 13px;
+//    }
+   
+//    input{
+//        font-size: 15px;
+//    }
+   
+//    .resultText{
+//        width: 300px;
+//        // height: 140px;
+//        background-color: rgba(255, 192, 204, 0.31);
+//        margin: 0 auto;
+//        border-radius: 10px;
+//    }
+   
+//    .resultsbutton{
+//        margin-left:45%;
+//        margin-top: 10px;
+//        width: 40px;
+//        height: 30px;
+//    }

@@ -25,22 +25,22 @@ class Initialize extends Component {
         this.handleBoxChecked=this.handleBoxChecked.bind(this);
         this.addtoCupboard = this.addtoCupboard.bind(this);
         
-    }// /api/pantrysetup
+    }
 
     addtoCupboard(){
         axios.post('/api/pantrySetup', this.state.userCupboard).then(console.log('pantry setup'))
     }
 
     handleBoxChecked(e){
-            // let listItem = e.target.className
-            // let list = this.state.initCupboard
-            // list[listItem]=!list[listItem]
-            // console.log(listItem)
-            // // console.log(list);
-            // this.setState({
-            //     initCupboard: list
-            // })
-            // console.log(this.state.initCupboard, 'ingredients added') 
+            let listItem = e.target.className
+            let list = this.state.initCupboard
+            list[listItem]=!list[listItem]
+            console.log(listItem)
+            // console.log(list);
+            this.setState({
+                initCupboard: list
+            })
+            console.log(this.state.initCupboard, 'ingredients added') 
         }
          
     render() {
@@ -48,21 +48,21 @@ class Initialize extends Component {
         let recipeItems = this.state.initCupboard.map((list, i) => {
             // console.log(list)
             return(
-                <div className={list}>{list}<input onChange={this.handleBoxChecked} className={list} type="checkbox" key={i} />
+                <div key={list} className={list}><input onChange={this.handleBoxChecked} className={list} type="checkbox" key={i} />{list}
                     </div>
                 )
             })
         return (
-            <div>
+            <div className='initializeContainer'>
                 <div className='allappbarcomponents'>
                     <AppBar />
                 </div>
-                <div className='addtocart'><p>Check to add to Shopping Cart...</p></div>
-                <div className='addToListContainer initCupboardmap'>
-                    {recipeItems}
-                </div>
+                <div className='top'>Select Ingredients You have Currently at Home</div>
                 <div className='addtocartbutton'>
                     <a href='/recipe'><button onClick={this.addtoCupboard}>add to Cupboard and search</button></a>
+                </div>
+                <div className='addToListContainer initCupboardmap'>
+                    {recipeItems}
                 </div>
             </div>
         );

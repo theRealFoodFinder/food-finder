@@ -101,7 +101,7 @@ class ShoppingList extends Component {
             let list = this.state.shoppingList;
             recipeItems = list.map((list, i) => {
                 return (
-                    <div className={list}>{list}<input onChange={this.handleBoxChecked} className={list} type="checkbox" key={i} /></div>
+                    <div key={i}className={list}>{list}<input onChange={this.handleBoxChecked} className={list} type="checkbox" key={i} /></div>
                 )
             })
 
