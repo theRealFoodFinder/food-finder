@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import bgvid from '../videos/landingvideo - converted.mp4'
 import logo from '../img/logobigsize.png'
 import bgfullscreenvid from '../videos/landingvideo - fullscreen.mp4'
-import axios from 'axios';
+// import axios from 'axios';
 class Landing extends Component {
     
     // componentWillMount() {
