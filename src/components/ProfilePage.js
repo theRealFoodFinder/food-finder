@@ -21,8 +21,6 @@ class ProfilePage extends Component {
         }
         this.blacklistChange = this.blacklistChange.bind(this);
         this.blacklistClick = this.blacklistClick.bind(this);
-        // this.preferredChange = this.preferredChange.bind(this);
-        // this.preferredClick = this.preferredClick.bind(this);
         this.removeItem = this.removeItem.bind(this);
     }
     //on mount get favs list, set to state
@@ -71,7 +69,7 @@ class ProfilePage extends Component {
             )
             ).then(
             axios.get('/api/getBlacklist').then((res) => {
-                console.log(res.data[0].blacklist, 'line63profile')
+                // console.log(res.data[0].blacklist, 'line63profile')
                 if (res && res.data && res.data[0] && res.data[0].blacklist && res.data[0].blacklist.length > 0) {
                     res = res.data[0].blacklist.split(',');
                     while (!res[0]) {
@@ -88,19 +86,17 @@ class ProfilePage extends Component {
 
     //onClick 
     removeItem(index) {
+        console.log(index)
         let items = this.state.results;
         let removed = items.splice(index, 1)
         this.setState({
             results: items,
             item: ""
         })
-        // if (this.state.inputType === "Preferred") {
-        //     axios.put('/api/blacklist', items).then(console.log('preferred item removed'));
-        // } else
         //needs type add or remove and string seperated by commas
         if (this.state.inputType === "Blacklist") {
-            let tempArray = { items: "remove", ingredients: removed };
-            axios.post('http://localhost:3005/api/blacklist', tempArray).then(console.log('blacklist item removed')).catch((err) => { console.log(err) })
+            let tempArray = { type: "remove", ingredients: removed };
+            axios.post('/api/blacklist', tempArray).then(console.log('blacklist item removed')).catch((err) => { console.log(err) })
         } else { console.log("Unknown inputType on state", this.state) }
     }
 
@@ -135,7 +131,7 @@ class ProfilePage extends Component {
         let results = () => {
             if (this.state && this.state.results && this.state.results.length > 0) {
                 return this.state.results.map((item, i) => {
-                    return <span key={i} className="results">{item}<button key={i} onClick={(e) => this.removeItem(e.target.key)} className='resultsbutton'>X</button></span>
+                    return <span key={i} className="results">{item}<button value={i} key={i} onClick={(e) => this.removeItem(e.target.value)} className='resultsbutton'>X</button></span>
                 })
             } else
                 return <p>No Results</p>
