@@ -25,7 +25,7 @@ class ProfilePage extends Component {
     }
     //on mount get favs list, set to state
     componentWillUnmount() {
-        console.log(this.state, 'state leaving profile page')
+        // console.log(this.state, 'state leaving profile page')
     }
 
 

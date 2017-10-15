@@ -654,15 +654,19 @@ app.post('/api/getRecipe', (req, res) => {
 
 
 app.get('/api/getShoppingList', (req, res) => {
-    let user = app.get('user')
-    app.get('db').get_shopping_list(user.id)
+    let user = app.get('user');
+    // console.log(user,'user')
+    // console.log(req.user,'req.user')
+    app.get('db').get_shopping_list([user.id])
         .then((response) => {
-            res.status(200).send(response[0].items)
+            console.log(response)
+            res.status(200).send(response)
         })
 })
 
 
 app.post('/api/updateShoppingList', (req, res) => {
+    console.log(req.user)
     let user = app.get('user')
     app.get('db').update_shopping_list([user.id, req.body.items])
         .then((res) => {
