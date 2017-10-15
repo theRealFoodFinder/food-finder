@@ -7,22 +7,26 @@ class AddToList extends Component {
         axios.get('api/getprofile').then((res) => {
             if (!res.data.first || !res.data.last || !res.data.id || !res.data.email) {
                 this.props.history.push('/');
-            } else if (
+            } else 
+            
+            // console.log(this.props)
+            if (
                 this.props.recipe &&
                 this.props.recipe.length > 0 &&
                 this.props.recipe[0].ingredients &&
                 this.props.recipe[0].ingredients.length > 0) {
                 let ingredients = this.props.recipe[0].ingredients;
                 let recipe = this.props.recipe[0];
-                let tempObj = ingredients.map((e,i,a)=>{
-                    return tempObj[e]=false;
+                let tempObj = {}
+                ingredients.map((e,i,a)=>{
+                    return tempObj[e.Name]=false;
                 })
+                console.log(tempObj, 'tempobj')
                 this.setState({
                     recipe: recipe,
                     addIngredients: ingredients,
                     addIngredientsBackend:tempObj
                 })
-                console.log(this.state)
             }else console.log('props on state aren\'t as expected')
         })
         .catch((err)=>console.log(err))
@@ -44,38 +48,31 @@ class AddToList extends Component {
         // false = add to pantry
         let tempObj = this.state.addIngredientsBackend;
         let tempObj2 = {};
+        //str can be used to add items using string method
         let str = "";
         for(let key in tempObj){
             if(tempObj[key]===true){
                 str +="," + key
-            }else {tempObj[key]=false}
+            }
         }
         tempObj2.items = str;
-        console.log(tempObj2);
+        // console.log(tempObj, '#1');
+        // console.log(tempObj2, '#2');
         //api/postShoppingList - Accepts an object with key value pair, ingredient: true/false. True values get put on shopping list. False go to the pantry in the users table. Ex: {chicken: true, cheese: false}
         axios.post('api/postShoppingList', tempObj)
             .then((res) => {
-                console.log(res, 'res from before the push in addtolist')
                 this.props.history.push('/shoppinglist')
-                // console.log(res)
             })
             .catch((err) => console.log(err))
-
     }
 
     handleBoxChecked(e) {
-        
-        // console.log(this.state.addIngredientsBackend, 'backend')
-        let listItem = e.target.className
-        // let isChecked = e.target.checked
-        let list = this.state.addIngredientsBackend
-        list[listItem] = !list[listItem]
-        // console.log(list);
+        let listItem = e.target.className;
+        let list = this.state.addIngredientsBackend;
+        list[listItem] = !list[listItem];
         this.setState({
             addIngredientsBackend: list
         })
-        // console.log(this.state.addIngredientsBackend, 'ingredients added')
-
     }
 
     render() {
