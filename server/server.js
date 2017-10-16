@@ -264,11 +264,11 @@ app.post('/api/getRecipe', (req, res) => {
     let search = req.body
     let searchParams = []
 
-    console.log('userInfoID', userInfoID)
+    // console.log('userInfoID', userInfoID)
 
     function filterBlacklist(oldRecipes) {
         let myRecipeList = []
-        console.log('user info id', userInfoID)
+        // console.log('user info id', userInfoID)
         return app.get('db').get_blacklist([userInfoID]).then((blacklist) => {
             //does the response from database contain anything (blacklisted items)?
             if (blacklist.length < 0) {
@@ -666,24 +666,26 @@ app.get('/api/getShoppingList', (req, res) => {
 
 
 app.post('/api/updateShoppingList', (req, res) => {
-    console.log(req.user)
+    console.log('updateshoppinglist')
     let user = app.get('user')
     app.get('db').update_shopping_list([user.id, req.body.items])
         .then((res) => {
-            res.status('200').send('Cart Successfully Updated')
-        })
+            res.status('200').send(res, 'cart updated')
+        }).catch((err)=>console.log(err))
 })
 
 app.post('/api/appendShoppingList', (req, res) => {
+    console.log('append shopping list')
     let user = app.get('user')
     app.get('db').get_shopping_list([user.id])
         .then((response) => {
+            console.log('response from get shopping list --682', response)
             app.post('/api/updateShoppingList', {
                 items: response[0].items + req.body.items,
-                user: req.user
             })
                 .then((res) => {
-                    res.status(200).send("Appended Cart!")
+                    console.log(res,'res line 687')
+                    res.status(200).send(res, "Appended Cart!")
                 })
         })
 })
