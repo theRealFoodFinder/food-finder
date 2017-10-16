@@ -14,7 +14,6 @@ class Results extends Component {
             recipePicked: {},
             history: []
         }
-        this.handleFavIcon = this.handleFavIcon.bind(this);
         this.toggleDetailedView = this.toggleDetailedView.bind(this);
     }
 
@@ -38,14 +37,6 @@ class Results extends Component {
                     })
                 })
         }
-    }
-
-
-
-
-
-    handleFavIcon(id) {
-        axios.get('http://localhost/3005/api/favoriteRecipe/' + id).then(console.log('Recipe added to favorites'));
     }
 
     toggleDetailedView(recipeId) {
@@ -74,7 +65,6 @@ class Results extends Component {
             return this.state.results.map((el, i) => {
                 return <div key={i}>
                     <Link to='/details'><div key={i} className='imgDiv' >
-                        <div onClick={(e) => { this.handleFavIcon(el.recipe_id) }} className='favicon' >&#9829;</div>
                         <img alt={i} key={el.recipe_id} onClick={() => this.toggleDetailedView(el.recipe_id)} src={el.hero_photo_url}></img>
                     </div></Link>
                     <h3 className='resultsTitle'>{el.title}</h3>

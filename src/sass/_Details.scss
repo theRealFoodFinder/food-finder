@@ -3,6 +3,15 @@
     width: 100vw;
     min-height: 100vh;
     background-color: #920000;
+    .favicon{
+        padding:6px;
+        position: relative;
+        top:65px;
+        left:10px;
+        border:3px solid red;
+        border-radius: 25px;
+        color:white;
+    }
     .detailsson{
         img{
             width:100vw;

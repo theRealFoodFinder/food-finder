@@ -149,7 +149,7 @@ app.get('/api/favoriteRecipe/:id', (req, res) => {
         response = response[0].user_favorites
         if (!response.includes(`,${recipe_id},`)) {
             response += recipe_id + ','
-            app.get('db').add_to_favorites([response, 1]).then((responseTwo) => {
+            app.get('db').add_to_favorites([response, userID]).then((responseTwo) => {
                 res.status(200).send(responseTwo);
             })
         } else res.status(200).send(response);
