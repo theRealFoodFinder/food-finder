@@ -206,23 +206,21 @@ app.post('/api/postShoppingList', (req, res) => {
     if (userID) {
         userID = userID.id
     }
-    console.log(userID,'userID')
+    // console.log(userID,'userID')
     app.get('db').get_pantry_list([userID])
         .then((res) => {
-            console.log(res, 'res currentIngredients')
+            // console.log(res, 'res...current pantry')
             currentIngredients = res;
-            if (res && res.data && res.data[0]) {
-                app.post('db').post_ingredient_list([userID, formatIngredients(ingredients).join(', ') + ',' + currentIngredients[0].items])
-
-
+            if (currentIngredients && currentIngredients[0]) {
+                app.get('db').post_ingredient_list([userID, formatIngredients(ingredients).join(', ') + ',' + currentIngredients[0].items]).then(console.log('success')).catch(err=>console.log(err,'line215'))
                 app.get('db').get_shopping_list([userID])
                     .then((res) => {
-                        console.log(res, 'res currentShoppingList')
+                        console.log(res, 'res...current ShoppingList')
                         currentShoppingList = res;
-                        if (res && res.data && res.data[0]) {
-                            app.post('db').post_shopping_list([userID, shoppingList.join(', ') + ',' + currentShoppingList[0].items])
+                        if (currentShoppingList && currentShoppingList[0]) {
+                            app.get('db').update_shopping_list([userID, shoppingList.join(', ') + ',' + currentShoppingList[0]])
                         }else console.log('data in post shoppinglist incompatible~~line 222')
-                    })
+                    }).then(console.log('success')).catch(err=>console.log(err,'line225'))
             }
         })
     res.status('200').send("success");
@@ -672,7 +670,7 @@ app.get('/api/getShoppingList', (req, res) => {
     // console.log(req.user,'req.user')
     app.get('db').get_shopping_list([user.id])
         .then((response) => {
-            console.log(response)
+            // console.log(response)
             res.status(200).send(response)
         })
 })
@@ -682,9 +680,8 @@ app.post('/api/updateShoppingList', (req, res) => {
     console.log('updateshoppinglist')
     let user = app.get('user')
     app.get('db').update_shopping_list([user.id, req.body.items])
-        .then((res) => {
-            res.status('200').send(res, 'cart updated')
-        }).catch((err) => console.log(err))
+        .then(console.log('cart updated')
+        ).catch((err) => console.log(err,'line 684'))
 })
 
 app.post('/api/appendShoppingList', (req, res) => {
