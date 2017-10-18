@@ -174,7 +174,7 @@ app.get('/api/getFavorites', (req, res) => {
                     })
             } else
                 res.status('200').send(response);
-        }).catch((err)=>console.log(err))
+        }).catch((err) => console.log(err))
 })
 
 
@@ -202,15 +202,28 @@ app.post('/api/postShoppingList', (req, res) => {
             ingredients.push(i)
         }
     }
+    userID = app.get('user')
+    if (userID) {
+        userID = userID.id
+    }
+    console.log(userID,'userID')
+    app.get('db').get_pantry_list([userID])
+        .then((res) => {
+            console.log(res, 'res currentIngredients')
+            currentIngredients = res;
+            if (res && res.data && res.data[0]) {
+                app.post('db').post_ingredient_list([userID, formatIngredients(ingredients).join(', ') + ',' + currentIngredients[0].items])
 
-    app.get('db').get_pantry_list([req.body.id])
-        .then((currentIngredients) => {
-            app.get('db').post_ingredient_list([req.body.id, formatIngredients(ingredients).join(', ') + ',' + currentIngredients[0].items])
-        })
 
-    app.get('db').get_shopping_list([req.body.id])
-        .then((currentShoppingList) => {
-            app.get('db').post_shopping_list([req.body.id, shoppingList.join(', ') + ',' + currentShoppingList[0].items])
+                app.get('db').get_shopping_list([userID])
+                    .then((res) => {
+                        console.log(res, 'res currentShoppingList')
+                        currentShoppingList = res;
+                        if (res && res.data && res.data[0]) {
+                            app.post('db').post_shopping_list([userID, shoppingList.join(', ') + ',' + currentShoppingList[0].items])
+                        }else console.log('data in post shoppinglist incompatible~~line 222')
+                    })
+            }
         })
     res.status('200').send("success");
 })
@@ -671,7 +684,7 @@ app.post('/api/updateShoppingList', (req, res) => {
     app.get('db').update_shopping_list([user.id, req.body.items])
         .then((res) => {
             res.status('200').send(res, 'cart updated')
-        }).catch((err)=>console.log(err))
+        }).catch((err) => console.log(err))
 })
 
 app.post('/api/appendShoppingList', (req, res) => {
@@ -684,7 +697,7 @@ app.post('/api/appendShoppingList', (req, res) => {
                 items: response[0].items + req.body.items,
             })
                 .then((res) => {
-                    console.log(res,'res line 687')
+                    console.log(res, 'res line 687')
                     res.status(200).send(res, "Appended Cart!")
                 })
         })
@@ -706,18 +719,18 @@ app.post('/api/blacklist', (req, res) => {
                     newList.push(oldList[i])
                 }
             }
-        } else 
-        if (type === 'add') {
-            // console.log('bl2')
-            newList = [];
-            newList.push(...oldList)
-            ingredients.split(',').map((e, i, a) => {
-                if (!oldList.includes(e)) {
-                    newList.push(e)
-                }
-            })
         } else
-            console.log('unknown data type passed into api/blacklist', oldlist)
+            if (type === 'add') {
+                // console.log('bl2')
+                newList = [];
+                newList.push(...oldList)
+                ingredients.split(',').map((e, i, a) => {
+                    if (!oldList.includes(e)) {
+                        newList.push(e)
+                    }
+                })
+            } else
+                console.log('unknown data type passed into api/blacklist', oldlist)
 
         newList = newList.join(',')
         let user = app.get('user')
@@ -735,9 +748,9 @@ app.get('/api/getBlacklist', (req, res) => {
         userID = userID.id
     }
     app.get('db').get_blacklist([userID])
-    .then(response => {
-        console.log(response, '733')
-                res.status('200').send(response)
+        .then(response => {
+            console.log(response, '733')
+            res.status('200').send(response)
         }).catch((res) => { res.status('500').send("Couldn't get blacklist") })
 })
 

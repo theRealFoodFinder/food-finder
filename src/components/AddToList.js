@@ -33,7 +33,7 @@ class AddToList extends Component {
     }
 
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             addIngredients: [],
             addIngredientsBackend: {},
@@ -56,11 +56,11 @@ class AddToList extends Component {
             }
         }
         tempObj2.items = str;
-        // console.log(tempObj, '#1');
-        // console.log(tempObj2, '#2');
+        console.log(tempObj, '#1');
+        console.log(tempObj2, '#2');
         //api/postShoppingList - Accepts an object with key value pair, ingredient: true/false. True values get put on shopping list. False go to the pantry in the users table. Ex: {chicken: true, cheese: false}
-         axios.post('http://localhost:3005/api/appendShoppingList', tempObj2).then(
-        // axios.post('http://localhost:3005/api/postShoppingList', tempObj).then(
+        //  axios.post('http://localhost:3005/api/appendShoppingList', tempObj2).then(
+        axios.post('http://localhost:3005/api/postShoppingList', tempObj).then(
             (res) => {
                 console.log(res)
                 this.props.history.push('/shoppinglist')

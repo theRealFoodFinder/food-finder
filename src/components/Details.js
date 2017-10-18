@@ -39,7 +39,7 @@ class Details extends Component {
             this.setState({
                 results: this.props.recipe,
             })
-            console.log(this.props.recipe)
+            // console.log(this.props.recipe)
         }
     }
 
