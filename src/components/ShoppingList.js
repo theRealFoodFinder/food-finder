@@ -20,75 +20,77 @@ class ShoppingList extends Component {
             // console.log(res, 'profile')
             if (!res.data.first || !res.data.last) {
                 this.props.history.push('/')
+
             } else {
                 this.setState({
                     profile: res.data
                 })
-                axios.get('/api/getShoppingList')
-                    .then((res) => {
-                        console.log(res, 'getshoppinglist')
-                        let newObj = {};
-                        res = res.data.split(',')
+            }
+            axios.get('/api/getShoppingList')
+                .then((res) => {
+                    if (res && res.data && res.data.length>0 && res.data[0].items) {
+                        res = res.data[0].items.split(',');
+                        while (!res[0]) {
+                            res.shift()
+                        }
                         this.setState({
                             shoppingList: res
                         })
-                        res.forEach((item, i, array) => {
-                            newObj[item] = false
-                        })
-                        this.setState({
-                            shoppingListBackend: newObj
-                        })
-                        console.log(this.state.shoppingListBackend)
-                    })
-            }
-        })
-    }
-    // console.log(this.state.shoppingListBackend, 'shopping list mounted')
-
+                    } else console.log(res, "res from getshoppinglist not compatible")
+                }).catch((err) => { console.log(err, 'err in shoppinglist retrieve') })
+        }
+    )}
 
 
     // /api/updateShoppingList - Accepts an object. 'items' as the key, and a string of comma separated items to replace the current shopping list in shopping_lists. Ex: {items: "chicken, cheese"}
     sendList() {
-        let food = this.state.shoppingListBackend;
-        let newObj = { items: [] }
+        let list = this.state.shoppingList;
+        let newObj = { items: "" }
         let str = ""
-        for (let key in food) {
-            if (food[key] === false) {
-                str = str + ',' + key;
-            }
-        }
+        if (list.length>0){
+        for (let i=0;i<list.length;i++){
+            str=+ ',' + list[i];
+        }}
         newObj.items = str;
         axios.post('http://localhost:3005/api/updateShoppingList', newObj).then(
-            axios.get('/api/getShoppingList')
-                .then((res) => {
+        // axios.post('http://localhost:3005/api/updateShoppingList', {items:'string,apple,banana,pickles,random,house,maxim,yelp,m&m\'s,pear'}).then(
+            // axios.get('/api/getShoppingList')
+            //     .then((res) => {
                     //res.data comes back as string ex: ",sdfsdf,sdfsd,sdfsd,sdf,sdfgsdg,ssdfg"
-                    console.log(res.data, 'res.data shoppinglist')
-                    if(res && res.data){
-                    let newObj = {};
-                    res = res.data.split(',')
-                    this.setState({
-                        shoppingList: res
-                    })
-                    res.forEach((item, i, array) => {
-                        newObj[item] = false
-                    })
-                    this.setState({
-                        shoppingListBackend: newObj
-                    })}
-                    console.log(this.state.shoppingListBackend)
-                })
-        ).catch((err) => { console.log(err) })
+    //                 console.log(res.data, 'res.data shoppinglist')
+    //                 if (res && res.data && res.data.length>0 && res.data[0].items) {
+    //                     res = res.data[0].items.split(',');
+    //                     while (!res[0]) {
+    //                         res.shift()
+    //                     }
+    //                     console.log(res)
+    //                     //sets state to array
+    //                     this.setState({
+    //                         shoppingList: res
+    //                     })
+    //                     res.forEach((item, i, array) => {
+    //                         newObj[item] = false
+    //                     })
+    //                     this.setState({
+    //                         shoppingListBackend: newObj
+    //                     })
+    //                 }
+                    this.props.history.push('search')
+                )
+        // ).catch((err) => { console.log(err) })
     }
 
     handleBoxChecked(e) {
-
+// console.log(e.target.className, 'e in checkbox')
         let listItem = e.target.className
         // let isChecked = e.target.checked
-        let list = this.state.shoppingListBackend
-        list[listItem] = !list[listItem]
-        // console.log(list);
+        let list = this.state.shoppingList
+        if (list.indexOf(listItem)>=0){
+            list.splice(list.indexOf(listItem),1)
+        }
+        
         this.setState({
-            shoppingListBackend: list
+            shoppingList: list
         })
         // console.log(this.state.shoppingListBackend, 'ingredients added')
 
@@ -101,7 +103,7 @@ class ShoppingList extends Component {
             let list = this.state.shoppingList;
             recipeItems = list.map((list, i) => {
                 return (
-                    <div className={list}>{list}<input onChange={this.handleBoxChecked} className={list} type="checkbox" key={i} /></div>
+                    <div key={i} className={list}><input onChange={this.handleBoxChecked} className={list} type="checkbox" key={i} />{list}</div>
                 )
             })
 
@@ -117,7 +119,7 @@ class ShoppingList extends Component {
                     {recipeItems}
                 </div>
                 <div className='sendListbutton'>
-                    <button id='removefromcartbutton'onClick={this.sendList}>remove from cart</button>
+                    <button id='removefromcartbutton' onClick={this.sendList}>return to search page</button>
                 </div>
             </div>
         );

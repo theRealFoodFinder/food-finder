@@ -38,7 +38,7 @@ passport.use(new Auth0Strategy({
     clientID: config.AUTH_CLIENT_ID,
     clientSecret: config.AUTH_CLIENT_SECRET,
     callbackURL: config.AUTH_CALLBACK
-}, function(accessToken, refreshToken, extraParams, profile, done) {
+}, function (accessToken, refreshToken, extraParams, profile, done) {
 
     const db = app.get('db');
     db.find_session_user([profile._json.email])
@@ -66,13 +66,13 @@ passport.use(new Auth0Strategy({
 
 }));
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
 
     let sessionUser = { id: user.user_id, first: user.first_name, last: user.last_name, email: user.user_email, initLogin: user.init_login }
     done(null, sessionUser);
 })
 
-passport.deserializeUser(function(user, done) {
+passport.deserializeUser(function (user, done) {
     app.set('user', user)
     if (user) {
         return done(null, user)
@@ -92,7 +92,11 @@ app.get('/auth/me', (req, res, next) => {
 })
 
 app.get('/atla40', (req, res) => {
-    app.get('db').user_lookup([req.user.id])
+    userID = app.get('user')
+    if (userID) {
+        userID = userID.id
+    }
+    app.get('db').user_lookup([userID])
         .then(response => {
             if (response[0].init_login) {
                 app.get('db').update_init_login([req.user.id])
@@ -125,7 +129,11 @@ app.get('/api/getProfile', (req, res) => {
 
 
 app.get('/api/getPreferences', (req, res) => {
-    app.get('db').get_preferences([req.user.id]).then(response => {
+    userID = app.get('user')
+    if (userID) {
+        userID = userID.id
+    }
+    app.get('db').get_preferences([userID]).then(response => {
         return res.status(200).send(response);
     })
 })
@@ -133,12 +141,15 @@ app.get('/api/getPreferences', (req, res) => {
 
 app.get('/api/favoriteRecipe/:id', (req, res) => {
     let { recipe_id } = req.params.id;
-
-    app.get('db').get_favorites([req.user.id]).then((response) => {
+    userID = app.get('user')
+    if (userID) {
+        userID = userID.id
+    }
+    app.get('db').get_favorites([userID]).then((response) => {
         response = response[0].user_favorites
         if (!response.includes(`,${recipe_id},`)) {
             response += recipe_id + ','
-            app.get('db').add_to_favorites([response, 1]).then((responseTwo) => {
+            app.get('db').add_to_favorites([response, userID]).then((responseTwo) => {
                 res.status(200).send(responseTwo);
             })
         } else res.status(200).send(response);
@@ -146,18 +157,24 @@ app.get('/api/favoriteRecipe/:id', (req, res) => {
 })
 
 app.get('/api/getFavorites', (req, res) => {
-    let user = app.get('user')
-    app.get('db').get_favorites([user.id])
+    userID = app.get('user')
+    if (userID) {
+        userID = userID.id
+    }
+    app.get('db').get_favorites([userID])
         .then(response => {
-            if (response && response[0] && response[0].length>0 && response[0].user_favorites){
-            let favorites = response[0].user_favorites
-            favorites = favorites.slice(0, favorites.length - 1)
-            let queryString = `SELECT recipe_id, title, image_url from recipes WHERE recipe_id IN (${favorites});`
-            app.get('db').run(queryString)
-                .then(response => {
-                    res.status('200').send(response);
-                })}
-        })
+            if (response && response[0] && response[0].length > 0 && response[0].user_favorites) {
+                let favorites = response[0].user_favorites
+                favorites = favorites.slice(0, favorites.length - 1)
+                let queryString = `SELECT recipe_id, title, image_url from recipes WHERE recipe_id IN (${favorites});`
+                app.get('db').run(queryString)
+                    .then(response => {
+                        // console.log(response,'gettfavorites')
+                        res.status('200').send(response);
+                    })
+            } else
+                res.status('200').send(response);
+        }).catch((err) => console.log(err))
 })
 
 
@@ -185,15 +202,26 @@ app.post('/api/postShoppingList', (req, res) => {
             ingredients.push(i)
         }
     }
-
-    app.get('db').get_pantry_list([req.body.id])
-        .then((currentIngredients) => {
-            app.get('db').post_ingredient_list([req.body.id, formatIngredients(ingredients).join(', ') + ',' + currentIngredients[0].items])
-        })
-
-    app.get('db').get_shopping_list([req.body.id])
-        .then((currentShoppingList) => {
-            app.get('db').post_shopping_list([req.body.id, shoppingList.join(', ') + ',' + currentShoppingList[0].items])
+    userID = app.get('user')
+    if (userID) {
+        userID = userID.id
+    }
+    // console.log(userID,'userID')
+    app.get('db').get_pantry_list([userID])
+        .then((res) => {
+            // console.log(res, 'res...current pantry')
+            currentIngredients = res;
+            if (currentIngredients && currentIngredients[0]) {
+                app.get('db').post_ingredient_list([userID, formatIngredients(ingredients).join(', ') + ',' + currentIngredients[0].items]).then(console.log('success')).catch(err=>console.log(err,'line215'))
+                app.get('db').get_shopping_list([userID])
+                    .then((res) => {
+                        console.log(res, 'res...current ShoppingList')
+                        currentShoppingList = res;
+                        if (currentShoppingList && currentShoppingList[0]) {
+                            app.get('db').update_shopping_list([userID, shoppingList.join(', ') + ',' + currentShoppingList[0]])
+                        }else console.log('data in post shoppinglist incompatible~~line 222')
+                    }).then(console.log('success')).catch(err=>console.log(err,'line225'))
+            }
         })
     res.status('200').send("success");
 })
@@ -247,11 +275,11 @@ app.post('/api/getRecipe', (req, res) => {
     let search = req.body
     let searchParams = []
 
-    console.log('userInfoID', userInfoID)
+    // console.log('userInfoID', userInfoID)
 
     function filterBlacklist(oldRecipes) {
         let myRecipeList = []
-        console.log('user info id', userInfoID)
+        // console.log('user info id', userInfoID)
         return app.get('db').get_blacklist([userInfoID]).then((blacklist) => {
             //does the response from database contain anything (blacklisted items)?
             if (blacklist.length < 0) {
@@ -599,15 +627,20 @@ app.post('/api/getRecipe', (req, res) => {
 })
 
 // app.put('/api/addToBlacklist', (req, res)=> {
-//     let {items} = req.body
-//     app.get('db').get_blacklist([req.user.id]).then((response)=>{
-//          response = response[0]
-//         if (response){
-//             response += ',' + items
-//             app.get('db').update_blacklist([response]).then((response)=>{
-//                 res.status(200).send(response)
-//             })
-//         }
+// let {items} = req.body
+// console.log(req.body, 'line619 server')
+// let user = app.get('user')
+// app.get('db').get_blacklist([user.id]).then((response)=>{
+//     console.log(response[0].blacklist, 'response')
+//     if (response && response[0] && response[0].length>0 && response[0].blacklist){
+//      response = response[0].blacklist
+//         response += ',' + items
+//         console.log('response2', response)
+// app.get('db').update_blacklist([response]).then((response)=>{
+//     res.status(200).send(response)
+// })
+// }else
+//         console.log('error in response from db in addtoblacklist line 617 in server.js')
 //     })
 // })
 
@@ -632,32 +665,37 @@ app.post('/api/getRecipe', (req, res) => {
 
 
 app.get('/api/getShoppingList', (req, res) => {
-    let user = app.get('user')
-    app.get('db').get_shopping_list(user.id)
+    let user = app.get('user');
+    // console.log(user,'user')
+    // console.log(req.user,'req.user')
+    app.get('db').get_shopping_list([user.id])
         .then((response) => {
-            res.status(200).send(response[0].items)
+            // console.log(response)
+            res.status(200).send(response)
         })
 })
 
 
 app.post('/api/updateShoppingList', (req, res) => {
+    console.log('updateshoppinglist')
     let user = app.get('user')
     app.get('db').update_shopping_list([user.id, req.body.items])
-        .then((res) => {
-            res.status('200').send('Cart Successfully Updated')
-        })
+        .then(console.log('cart updated')
+        ).catch((err) => console.log(err,'line 684'))
 })
 
 app.post('/api/appendShoppingList', (req, res) => {
+    console.log('append shopping list')
     let user = app.get('user')
     app.get('db').get_shopping_list([user.id])
         .then((response) => {
+            console.log('response from get shopping list --682', response)
             app.post('/api/updateShoppingList', {
-                    items: response[0].items + req.body.items,
-                    user: req.user
-                })
+                items: response[0].items + req.body.items,
+            })
                 .then((res) => {
-                    res.status(200).send("Appended Cart!")
+                    console.log(res, 'res line 687')
+                    res.status(200).send(res, "Appended Cart!")
                 })
         })
 })
@@ -672,24 +710,29 @@ app.post('/api/blacklist', (req, res) => {
         let newList = []
 
         if (type === 'remove') {
+            console.log('bl1')
             for (var i = 0; i < oldList.length; i++) {
                 if (!ingredients.includes(oldList[i])) {
                     newList.push(oldList[i])
                 }
             }
-        } else if (type === 'add') {
-            newList = [];
-            newList.push(...oldList)
-            ingredients.split(',').map((e, i, a) => {
-                if (!oldList.includes(e)) {
-                    newList.push(e)
-                }
-            })
-        }
+        } else
+            if (type === 'add') {
+                // console.log('bl2')
+                newList = [];
+                newList.push(...oldList)
+                ingredients.split(',').map((e, i, a) => {
+                    if (!oldList.includes(e)) {
+                        newList.push(e)
+                    }
+                })
+            } else
+                console.log('unknown data type passed into api/blacklist', oldlist)
 
         newList = newList.join(',')
         let user = app.get('user')
-        app.get('db').update_blacklist([newList,user.id]).then((response) => {
+        app.get('db').update_blacklist([newList, user.id]).then((response) => {
+            // console.log('bl3')
             return res.status(200).send(response)
         })
     })
@@ -697,20 +740,19 @@ app.post('/api/blacklist', (req, res) => {
 
 
 app.get('/api/getBlacklist', (req, res) => {
-
     userID = app.get('user')
     if (userID) {
         userID = userID.id
     }
     app.get('db').get_blacklist([userID])
-
         .then(response => {
-            res.status('200').send(response[0].blacklist)
-        }), () => { res.status('500').send("Couldn't get blacklist") }
+            console.log(response, '733')
+            res.status('200').send(response)
+        }).catch((res) => { res.status('500').send("Couldn't get blacklist") })
 })
 
 app.post('/api/pantrySetup', (req, res) => {
-    console.log(req.body)
+    // console.log(req.body)
     var pantryItems = req.body.join(',')
     console.log("pantry", pantryItems)
     app.get('db').pantry_setup([req.user.id, pantryItems])
