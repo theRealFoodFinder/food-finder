@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "proxy": "http://localhost:3005",
   "private": true,
+  "homepage": "https://FreeFlight-Code.github.io/food-finder",
   "dependencies": {
     "axios": "^0.16.2",
     "body-parser": "^1.18.2",
