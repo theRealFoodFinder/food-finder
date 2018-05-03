@@ -33,6 +33,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+console.log('SERVING FILES FORM BACKEND', __dirname)
+app.use(express.static(__dirname + '/../build'));
+
 passport.use(new Auth0Strategy({
     domain: config.AUTH_DOMAIN,
     clientID: config.AUTH_CLIENT_ID,
@@ -668,7 +671,8 @@ app.get('/api/getShoppingList', (req, res) => {
     let user = app.get('user');
     // console.log(user,'user')
     // console.log(req.user,'req.user')
-    app.get('db').get_shopping_list([user.id])
+    // app.get('db').get_shopping_list([user.id])
+    app.get('db').get_shopping_list([17])
         .then((response) => {
             // console.log(response)
             res.status(200).send(response)

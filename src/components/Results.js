@@ -29,7 +29,7 @@ class Results extends Component {
         if (!this.props.search) { this.props.history.push('/search') }
         else {
             let search = this.props.search
-            axios.post('http://localhost:3005/api/getRecipe', search)
+            axios.post('/api/getRecipe', search)
                 .then((res) => {
                     this.setState({
                         results: res.data,

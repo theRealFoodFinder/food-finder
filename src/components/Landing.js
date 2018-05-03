@@ -30,7 +30,7 @@ handleClick(){
             <div className='landing'>
                 <img alt='' src={logo} className='logo'></img>
                 {/* <div className='logo'></div> */}
-                <a href='http://localhost:3005/auth'>
+                <a href='/auth'>
                 <div className='signin' onClick={this.handleClick}><p id='signintext'>SIGN IN</p></div>
                 </a>
 

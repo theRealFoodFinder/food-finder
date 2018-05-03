@@ -42,7 +42,7 @@ class ProfilePage extends Component {
                 }
             }
         ).then(
-            axios.get('http://localhost:3005/api/getfavorites').then(
+            axios.get('/api/getfavorites').then(
                 (res) => {
                     console.log(res.data[0], 'res return')
                 //     let favArray = [];
@@ -119,7 +119,7 @@ class ProfilePage extends Component {
             let tempObj = {};
             tempObj = { type: 'add', ingredients: item }
             //type: add, ingredients: "list, of, ingredients"
-            axios.post('http://localhost:3005/api/blacklist', tempObj).then(console.log('Item Added', tempObj)).catch((err) => { console.log(err) });
+            axios.post('/api/blacklist', tempObj).then(console.log('Item Added', tempObj)).catch((err) => { console.log(err) });
         }
     }
 

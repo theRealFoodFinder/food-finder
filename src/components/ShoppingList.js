@@ -52,7 +52,7 @@ class ShoppingList extends Component {
             str=+ ',' + list[i];
         }}
         newObj.items = str;
-        axios.post('http://localhost:3005/api/updateShoppingList', newObj).then(
+        axios.post('/api/updateShoppingList', newObj).then(
         // axios.post('http://localhost:3005/api/updateShoppingList', {items:'string,apple,banana,pickles,random,house,maxim,yelp,m&m\'s,pear'}).then(
             // axios.get('/api/getShoppingList')
             //     .then((res) => {
