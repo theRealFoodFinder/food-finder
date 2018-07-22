@@ -61,10 +61,10 @@ class AddToList extends Component {
         console.log(shoppingList, 'shopping list');
         console.log(pantryList, 'pantry list');
         //api/postShoppingList - Accepts an object with key value pair, ingredient: true/false. True values get put on shopping list. False go to the pantry in the users table. Ex: {chicken: true, cheese: false}
-        axios.post('http://localhost:3005/api/updateShoppingList', shoppingList)
+        axios.post('http://localhost:3005/api/appendShoppingList', shoppingList)
             .then(res=>console.log(res))
             .catch((err) => console.log(err));
-        axios.post('http://localhost:3005/api/updatePantryList', pantryList)
+        axios.post('http://localhost:3005/api/appendPantryList', pantryList)
             .then(res=>console.log(res))
             .catch((err) => console.log(err));
         this.props.history.push('/shoppinglist');

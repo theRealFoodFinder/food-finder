@@ -26,22 +26,23 @@ class AppBar extends Component {
         return (
             <div className='appbarcontainer'>
                 <Sidebar fixmepls={this.props.history} />
-                <div className='Appbarserchtitle'>
-                    {this.props.location.pathname==='/search' && <span>Search</span>}
+                <div className='appBarSearchTitle'>
+                    {this.props.location.pathname==='/search' &&
+                        <span>Search</span>}
                     {this.props.location.pathname==='/add' &&
-                    <span>Add</span>}
+                        <span>Add</span>}
                     {this.props.location.pathname==='/shoppinglist' &&
-                    <span>Shopping List</span>}
+                        <span>Shopping List</span>}
                     {this.props.location.pathname==='/recipe' &&
-                    <span>Recipe</span>}
+                        <span>Recipe</span>}
                     {this.props.location.pathname==='/history' &&
-                    <span>History</span>}
+                        <span>History</span>}
                     {this.props.location.pathname==='/results' &&
-                    <span>Recipes</span>}
+                        <span>Recipes</span>}
                     {this.props.location.pathname==='/details' &&
-                    <span>Preview</span>}
+                        <span>Preview</span>}
                     {this.props.location.pathname==='/profile' &&
-                    <span>Profile</span>}
+                        <span>Profile</span>}
 
 
                     <span className='logoutButton' onClick={this.handleLogout}>Log Out</span>

@@ -674,7 +674,7 @@ app.get('/api/getShoppingList', (req, res) => {
             if(response)res.status(200).send(response)
         })
 })
-app.post('/api/updatePantryList',
+app.post('/api/appendPantryList',
     (req, res)=>{
         let user = app.get('user');//id number
         let newListArray = req.body; //array of strings
@@ -686,11 +686,11 @@ app.post('/api/updatePantryList',
             if(res &&res.length && res[0].items) existingPantryList = res[0].items.split(',');
             filteredList = newListArray.filter(item=>existingPantryList.indexOf(item)<0);
 
-            console.log(res, '...items on res...')
-            console.log(newListArray, '...req.body is an array of strings')
-            console.log(existingPantryList, '...existingPantryList is an string')
-            console.log(filteredList, '...filtered list is an array of strings');
-            console.log(existingPantryList.concat(filteredList).toString(), '...combined list')
+            // console.log(res, '...items on res...')
+            // console.log(newListArray, '...req.body is an array of strings')
+            // console.log(existingPantryList, '...existingPantryList is an string')
+            // console.log(filteredList, '...filtered list is an array of strings');
+            // console.log(existingPantryList.concat(filteredList).toString(), '...combined list')
 
             if(!existingPantryList.length){
                 console.log('add new pantry cart')
@@ -699,13 +699,13 @@ app.post('/api/updatePantryList',
                 console.log('update pantry cart')
                 app.get('db').update_pantries([user.id, existingPantryList.concat(filteredList).toString()]);
             }
-            // return res.status(200).send(response)
+            if(res)res.status(200).send(res)
         })
         .catch(err=>console.log(err))
     }
 )
 
-app.post('/api/updateShoppingList',
+app.post('/api/appendShoppingList',
     (req, res) => {
         let user = app.get('user');//id number
         let newListArray = req.body; //array of strings
@@ -717,11 +717,11 @@ app.post('/api/updateShoppingList',
             if(res &&res.length && res[0].items) existingShoppingListArray = res[0].items.split(',');
             filteredList = newListArray.filter(item=>existingShoppingListArray.indexOf(item)<0);
 
-            console.log(res, '...items on res...')
-            console.log(newListArray, '...req.body is an array of strings')
-            console.log(existingShoppingListArray, '...existingShoppingListArray is an string')
-            console.log(filteredList, '...filtered list is an array of strings');
-            console.log(existingShoppingListArray.concat(filteredList).toString(), '...combined list')
+            // console.log(res, '...items on res...')
+            // console.log(newListArray, '...req.body is an array of strings')
+            // console.log(existingShoppingListArray, '...existingShoppingListArray is an string')
+            // console.log(filteredList, '...filtered list is an array of strings');
+            // console.log(existingShoppingListArray.concat(filteredList).toString(), '...combined list')
 
             if(!existingShoppingListArray.length){
                 app.get('db').post_shopping_list([user.id, filteredList.toString()]);
@@ -733,6 +733,35 @@ app.post('/api/updateShoppingList',
             // return res.status(200).send(response)
         })
         .catch(err=>console.log(err))
+    }
+)
+app.post('/api/replaceShoppingList',
+    (req, res) => {
+        let user = app.get('user');//id number
+        let newListArray = req.body; //array of strings
+            console.log(newListArray, '...req.body is an array of strings')
+            console.log(newListArray.toString(), '...combined list')
+
+            if(newListArray.length){
+                app.get('db').update_shopping_list([user.id, newListArray.toString()], (req, res)=>{
+                    console.log(res, 'res on BE replace shopping cart')
+                    return res.status(200).send(res)
+                })
+                .catch(err=>console.log(err))
+            }
+    }
+)
+app.post('/api/replacePantryList',
+    (req, res) => {
+        let user = app.get('user');//id number
+        let newListArray = req.body; //array of strings
+            console.log(newListArray, '...req.body is an array of strings')
+            console.log(newListArray.toString(), '...combined list')
+
+            if(newListArray.length){
+                app.get('db').update_pantries([user.id, newListArray.toString()]);
+            }
+            return res.status(200).send(res)
     }
 )
 
