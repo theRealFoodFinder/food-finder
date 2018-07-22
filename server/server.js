@@ -30,6 +30,7 @@ app.use(session({
     saveUninitialized: false
 }));
 
+app.use(express.static('build'))
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -41,6 +42,7 @@ passport.use(new Auth0Strategy({
 }, function (accessToken, refreshToken, extraParams, profile, done) {
 
     const db = app.get('db');
+    console.log(profile, 'profile from AUTH')
     db.find_session_user([profile._json.email])
         .then(user => {
             if (user[0]) {
@@ -63,6 +65,7 @@ passport.use(new Auth0Strategy({
                 }
             }
         })
+        .catch(err=>console.log(err))
 
 }));
 
@@ -83,8 +86,8 @@ app.get('/auth', passport.authenticate('auth0'));
 
 
 app.get('/auth/callback', passport.authenticate('auth0', {
-    successRedirect: 'http://localhost:3005/atla40',
-    failureRedirect: 'http://localhost:3000/#/failed'
+    successRedirect: '/atla40',
+    failureRedirect: '/failed'
 }));
 
 app.get('/auth/me', (req, res, next) => {
@@ -101,14 +104,14 @@ app.get('/atla40', (req, res) => {
             if (response[0].init_login) {
                 app.get('db').update_init_login([req.user.id])
                     .then(() => {
-                        res.redirect('http://localhost:3000/#/initialSetup')
+                        res.redirect('/initialSetup')
                     }),
                     () => {
                         console.log("Couldnt update init setup.  Passing to search page")
-                        res.status('500').redirect('http://localhost:3000/#/search')
+                        res.status('500').redirect('/search')
                     }
             } else {
-                res.status('200').redirect('http://localhost:3000/#/search')
+                res.status('200').redirect('/search')
             }
         })
 })

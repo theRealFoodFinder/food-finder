@@ -123,7 +123,7 @@ class ProfilePage extends Component {
                 })
                 let addItem = { type: 'add', ingredients: item }
                 //type: add, ingredients: "list, of, ingredients"
-                axios.post('http://localhost:3005/api/blacklist', addItem)
+                axios.post('/api/blacklist', addItem)
                     .then(console.log('Item Added', addItem))
                     .catch((err) => { console.log(err) });
             }

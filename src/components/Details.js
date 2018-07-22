@@ -19,7 +19,7 @@ class Details extends Component {
     handleFavIcon() {
         if (this.state.results && this.state.results.length > 0 && this.state.results[0].recipe_id) {
             let id = this.state.results[0].recipe_id
-            axios.get('http://localhost/3005/api/favoriteRecipe/:' + id).then((res)=>{
+            axios.get('/api/favoriteRecipe/' + id).then((res)=>{
                 if (res && res.data){console.log(res, 'res success')}
             }).catch((err)=>console.log(err))
         }

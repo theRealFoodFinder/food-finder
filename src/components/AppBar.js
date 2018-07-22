@@ -16,7 +16,7 @@ class AppBar extends Component {
 
 
     handleLogout(){
-        axios.get('http://localhost:3005/auth/logout').then((response) => {
+        axios.get('/auth/logout').then((response) => {
             this.props.history.push('/')
         })
     }

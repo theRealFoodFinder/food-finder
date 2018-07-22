@@ -47,7 +47,7 @@ class ShoppingList extends Component {
     sendList() {
         let list = this.state.shoppingList;
         //console.log(list, 'shoppingList on shoppingCart')// list = array of strings
-        axios.post('http://localhost:3005/api/replaceShoppingList', list)
+        axios.post('/api/replaceShoppingList', list)
             .then(this.props.history.push('search'))
             .catch((err) => { console.log(err) })
     }

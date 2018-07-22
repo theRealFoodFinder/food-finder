@@ -23,10 +23,10 @@ componentWillMount() {
 
 
 handleSearch(e) {
-    
+
     this.setState({csseffect: true});
 
-    console.log(e.target)        
+    console.log(e.target)
     setTimeout(_=> {
         console.log(this)
         this.props.history.push('/results')
@@ -39,8 +39,10 @@ handleSearch(e) {
         let ingredients = this.state.results[0].ingredients
 
        const ingredientsMap = ingredients.map(( ingredient,i ) => {
-           return <div key={i} className='oneingredient'> •&nbsp;<div className='unit'>
-{ingredient.DisplayQuantity} {ingredient.Unit} </div> &nbsp; {ingredient.Name} </div>
+            return (
+            <div key={i} className='oneingredient'> •&nbsp;
+                <div className='unit'> {ingredient.DisplayQuantity} {ingredient.Unit} </div> &nbsp; {ingredient.Name}
+            </div>)
         })
 
 
@@ -49,7 +51,7 @@ handleSearch(e) {
         let nutritionrender = Object.entries(nutritioninfo).map((c,i)=>{
             return <li key={i}>{`${c[0]} : ${Math.ceil(c[1])}`} </li>
         })
-        
+
        let titles = this.state.results[0].title
        let instruction =this.state.results[0].instructions
        let category = this.state.results[0].category
@@ -63,14 +65,14 @@ handleSearch(e) {
 
                 <div className="detailsson">
                     <img src={this.state.results[0].hero_photo_url} alt="photourl"/>
-                    
+
                     <div className='titlebackground'>
                         <div id='foodtitle'>{titles}</div>
                     </div>
 
 
                     <div className="detailsson" id='seconddetailsson'>
-                        
+
 
                         <div className='superdetailcategory'>
                             Category: {category}
@@ -84,7 +86,7 @@ handleSearch(e) {
 
                         <div id='instruction'>
                             <div className='instructionTitle'>Instruction:</div>
-                            
+
                             <div className='instructionBody'><NewLineFunc string={instruction} /></div>
                         </div>
 
@@ -107,7 +109,7 @@ handleSearch(e) {
                         </div>
                     </div>
                 </div>
-            
+
             </div>
         );
     }
