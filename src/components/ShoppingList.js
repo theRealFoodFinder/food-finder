@@ -8,8 +8,8 @@ class ShoppingList extends Component {
         super(props);
         this.state = {
             profile: {},
-            shoppingListBackend: {},
-            shoppingList: []
+            shoppingList: [],
+            pantryList: []
         }
         this.sendList = this.sendList.bind(this);
         this.handleBoxChecked = this.handleBoxChecked.bind(this);
@@ -27,8 +27,9 @@ class ShoppingList extends Component {
                 })
             }
             axios.get('/api/getShoppingList')
-                .then((res) => {
+                .then((res) => { //res.data[0].items = string
                     if (res && res.data && res.data.length>0 && res.data[0].items) {
+                        // console.log('data going to shoppingcart', res.data[0].items)
                         res = res.data[0].items.split(',');
                         while (!res[0]) {
                             res.shift()
@@ -52,19 +53,20 @@ class ShoppingList extends Component {
     }
 
     handleBoxChecked(e) {
-// console.log(e.target.className, 'e in checkbox')
-        let listItem = e.target.className
-        // let isChecked = e.target.checked
+        let listItem = e.target.className //className is the index of item
+        console.log(listItem, '...checked')
+        let isChecked = e.target.checked
         let list = this.state.shoppingList
         if (list.indexOf(listItem)>=0){
-            list.splice(list.indexOf(listItem),1)
+            this.state.pantryList.push(
+                list.splice(
+                    list.indexOf(listItem),1)
+            );
         }
 
         this.setState({
             shoppingList: list
         })
-        // console.log(this.state.shoppingListBackend, 'ingredients added')
-
     }
 
     render() {
