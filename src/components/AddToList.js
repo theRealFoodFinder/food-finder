@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import AppBar from './AppBar'
+// import { resolve } from 'path';
 
 class AddToList extends Component {
     componentWillMount() {
         axios.get('api/getprofile').then((res) => {
             if (!res.data.first || !res.data.last || !res.data.id || !res.data.email) {
                 this.props.history.push('/');
-            } else 
-            
+            } else
+
             // console.log(this.props)
             if (
                 this.props.recipe &&
-                this.props.recipe.length > 0 &&
+                this.props.recipe.length &&
                 this.props.recipe[0].ingredients &&
-                this.props.recipe[0].ingredients.length > 0) {
+                this.props.recipe[0].ingredients.length) {
                 let ingredients = this.props.recipe[0].ingredients;
                 let recipe = this.props.recipe[0];
                 let tempObj = {}
@@ -47,25 +48,26 @@ class AddToList extends Component {
         // true = shopping list
         // false = add to pantry
         let tempObj = this.state.addIngredientsBackend;
-        let tempObj2 = {};
         //str can be used to add items using string method
-        let str = "";
+        let shoppingList = [];
+        let pantryList = [];
         for(let key in tempObj){
             if(tempObj[key]===true){
-                str +="," + key
+                shoppingList.push(key)
+            } else {
+                pantryList.push(key)
             }
         }
-        tempObj2.items = str;
-        console.log(tempObj, '#1');
-        console.log(tempObj2, '#2');
+        console.log(shoppingList, 'shopping list');
+        console.log(pantryList, 'pantry list');
         //api/postShoppingList - Accepts an object with key value pair, ingredient: true/false. True values get put on shopping list. False go to the pantry in the users table. Ex: {chicken: true, cheese: false}
-        //  axios.post('http://localhost:3005/api/appendShoppingList', tempObj2).then(
-        axios.post('http://localhost:3005/api/postShoppingList', tempObj).then(
-            (res) => {
-                console.log(res)
-                this.props.history.push('/shoppinglist')
-            })
-            .catch((err) => console.log(err))
+        axios.post('http://localhost:3005/api/updateShoppingList', shoppingList)
+            .then(res=>console.log(res))
+            .catch((err) => console.log(err));
+        axios.post('http://localhost:3005/api/updatePantryList', pantryList)
+            .then(res=>console.log(res))
+            .catch((err) => console.log(err));
+        this.props.history.push('/shoppinglist');
     }
 
     handleBoxChecked(e) {

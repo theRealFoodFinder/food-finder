@@ -212,15 +212,15 @@ app.post('/api/postShoppingList', (req, res) => {
             // console.log(res, 'res...current pantry')
             currentIngredients = res;
             if (currentIngredients && currentIngredients[0]) {
-                app.get('db').post_ingredient_list([userID, formatIngredients(ingredients).join(', ') + ',' + currentIngredients[0].items]).then(console.log('success')).catch(err=>console.log(err,'line215'))
+                app.get('db').post_ingredient_list([userID, formatIngredients(ingredients).join(', ') + ',' + currentIngredients[0].items]).then(console.log('success')).catch(err => console.log(err, 'line215'))
                 app.get('db').get_shopping_list([userID])
                     .then((res) => {
                         console.log(res, 'res...current ShoppingList')
                         currentShoppingList = res;
                         if (currentShoppingList && currentShoppingList[0]) {
                             app.get('db').update_shopping_list([userID, shoppingList.join(', ') + ',' + currentShoppingList[0]])
-                        }else console.log('data in post shoppinglist incompatible~~line 222')
-                    }).then(console.log('success')).catch(err=>console.log(err,'line225'))
+                        } else console.log('data in post shoppinglist incompatible~~line 222')
+                    }).then(console.log('success')).catch(err => console.log(err, 'line225'))
             }
         })
     res.status('200').send("success");
@@ -313,12 +313,13 @@ app.post('/api/getRecipe', (req, res) => {
 
     function ingredientPercentage(recipes) {
         let percentage = 0;
-        let pantryIngredients = undefined;
+        let pantryIngredients;
 
         return app.get('db').get_pantry_list([userInfoID]).then((response) => {
             pantryIngredients = response;
             // console.log(pantry)
-            pantryIngredients = pantryIngredients[0].items.split(',')
+            if (pantryIngredients && pantryIngredients[0] && pantryIngredients[0].items)
+                pantryIngredients = pantryIngredients[0].items.split(',')
 
             let newRecipeList = []
 
@@ -339,6 +340,7 @@ app.post('/api/getRecipe', (req, res) => {
             console.log('final list:', newRecipeList.length)
             return newRecipeList
         })
+            .catch(err => console.log(err))
     }
 
     // ========================================================================================================================================================================================
@@ -666,39 +668,75 @@ app.post('/api/getRecipe', (req, res) => {
 
 app.get('/api/getShoppingList', (req, res) => {
     let user = app.get('user');
-    // console.log(user,'user')
-    // console.log(req.user,'req.user')
     app.get('db').get_shopping_list([user.id])
         .then((response) => {
-            // console.log(response)
-            res.status(200).send(response)
+            console.log(response, '...the response from get shopping list')
+            if(response)res.status(200).send(response)
         })
 })
+app.post('/api/updatePantryList',
+    (req, res)=>{
+        let user = app.get('user');//id number
+        let newListArray = req.body; //array of strings
+        let existingPantryList = [];//array of strings
+        let filteredList = [];
+        app.get('db').get_pantry_list([user.id])
+        .then(res=>{
+            console.log(typeof res, 'type of res')
+            if(res &&res.length && res[0].items) existingPantryList = res[0].items.split(',');
+            filteredList = newListArray.filter(item=>existingPantryList.indexOf(item)<0);
 
+            console.log(res, '...items on res...')
+            console.log(newListArray, '...req.body is an array of strings')
+            console.log(existingPantryList, '...existingPantryList is an string')
+            console.log(filteredList, '...filtered list is an array of strings');
+            console.log(existingPantryList.concat(filteredList).toString(), '...combined list')
 
-app.post('/api/updateShoppingList', (req, res) => {
-    console.log('updateshoppinglist')
-    let user = app.get('user')
-    app.get('db').update_shopping_list([user.id, req.body.items])
-        .then(console.log('cart updated')
-        ).catch((err) => console.log(err,'line 684'))
-})
-
-app.post('/api/appendShoppingList', (req, res) => {
-    console.log('append shopping list')
-    let user = app.get('user')
-    app.get('db').get_shopping_list([user.id])
-        .then((response) => {
-            console.log('response from get shopping list --682', response)
-            app.post('/api/updateShoppingList', {
-                items: response[0].items + req.body.items,
-            })
-                .then((res) => {
-                    console.log(res, 'res line 687')
-                    res.status(200).send(res, "Appended Cart!")
-                })
+            if(!existingPantryList.length){
+                console.log('add new pantry cart')
+                app.get('db').pantry_setup([user.id, filteredList.toString()]);
+            } else {
+                console.log('update pantry cart')
+                app.get('db').update_pantries([user.id, existingPantryList.concat(filteredList).toString()]);
+            }
+            // return res.status(200).send(response)
         })
-})
+        .catch(err=>console.log(err))
+    }
+)
+
+app.post('/api/updateShoppingList',
+    (req, res) => {
+        let user = app.get('user');//id number
+        let newListArray = req.body; //array of strings
+        let existingShoppingListArray = [];//array of strings
+        let filteredList = [];
+        app.get('db').get_shopping_list([user.id])
+        .then(res=>{
+            console.log(typeof res, 'type of res')
+            if(res &&res.length && res[0].items) existingShoppingListArray = res[0].items.split(',');
+            filteredList = newListArray.filter(item=>existingShoppingListArray.indexOf(item)<0);
+
+            console.log(res, '...items on res...')
+            console.log(newListArray, '...req.body is an array of strings')
+            console.log(existingShoppingListArray, '...existingShoppingListArray is an string')
+            console.log(filteredList, '...filtered list is an array of strings');
+            console.log(existingShoppingListArray.concat(filteredList).toString(), '...combined list')
+
+            if(!existingShoppingListArray.length){
+                app.get('db').post_shopping_list([user.id, filteredList.toString()]);
+                console.log('add new shopping cart')
+            } else {
+                console.log('update shopping cart')
+                app.get('db').update_shopping_list([user.id, existingShoppingListArray.concat(filteredList).toString()]);
+            }
+            // return res.status(200).send(response)
+        })
+        .catch(err=>console.log(err))
+    }
+)
+
+
 
 
 app.post('/api/blacklist', (req, res) => {
@@ -710,7 +748,7 @@ app.post('/api/blacklist', (req, res) => {
         let newList = []
 
         if (type === 'remove') {
-            console.log('bl1')
+            console.log('blacklist remove item')
             for (var i = 0; i < oldList.length; i++) {
                 if (!ingredients.includes(oldList[i])) {
                     newList.push(oldList[i])
@@ -718,7 +756,7 @@ app.post('/api/blacklist', (req, res) => {
             }
         } else
             if (type === 'add') {
-                // console.log('bl2')
+                console.log('blacklist add item')
                 newList = [];
                 newList.push(...oldList)
                 ingredients.split(',').map((e, i, a) => {
@@ -746,7 +784,7 @@ app.get('/api/getBlacklist', (req, res) => {
     }
     app.get('db').get_blacklist([userID])
         .then(response => {
-            console.log(response, '733')
+            console.log(response, '...response from getBlackList')
             res.status('200').send(response)
         }).catch((res) => { res.status('500').send("Couldn't get blacklist") })
 })
