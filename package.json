@@ -24,10 +24,12 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "concurrently": "3.5.0"
+    "concurrently": "3.5.0",
+    "gh-pages": "^1.2.0"
   },
   "scripts": {
     "start": "concurrently \"npm run watch-css\" \"npm run start-js\"",
+    "deploy": "gh-pages -d build",
     "build": "npm run build-css && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
