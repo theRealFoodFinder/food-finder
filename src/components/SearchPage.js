@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import SearchModal from './SearchModal';
-// import { Link } from 'react-router-dom';
 import AppBar from './AppBar';
 import axios from 'axios';
 
@@ -8,11 +7,12 @@ export default class SearchPage extends Component {
 
     componentWillMount() {
         axios.get('/api/getProfile').then((res) => {
-            if (!res.data.first || !res.data.last){
-                this.props.history.push('/')
-            }
+            // if (!res.data.first || !res.data.last){
+            //     this.props.history.push('/')
+            // }
+            console.log(res)
         }
-    )}     
+    )}
     constructor(props) {
         super(props)
         this.state = {
@@ -29,7 +29,7 @@ export default class SearchPage extends Component {
                 "sodium": '',
                 "sugar":'',
                 "total_fat": "",
-            }, 
+            },
         searchInput: "",  //ingredient to add
         searchByIngredients: []  //ingredients sent to back
         }
@@ -70,9 +70,9 @@ export default class SearchPage extends Component {
             searchByIngredients: tempArray,
             searchInput:""
         })}
-        else 
+        else
         alert('Please input an ingredient!')
-       
+
         setTimeout(_=> {this.setState({addingreeffect: false})
         }, 500);
     }
@@ -90,8 +90,8 @@ export default class SearchPage extends Component {
         }
         this.props.passSearchParams(profile)
 
-        
-        // console.log(e.target)        
+
+        // console.log(e.target)
         setTimeout(_=> {
             // console.log(this)
             this.props.history.push('/results')
@@ -105,7 +105,7 @@ export default class SearchPage extends Component {
         })
     }
 
-    
+
 
 
     handleChange(e) {
@@ -122,7 +122,7 @@ export default class SearchPage extends Component {
 
 
 
-    
+
     render() {
 
 
@@ -130,12 +130,12 @@ export default class SearchPage extends Component {
             this.state.searchByIngredients.map((el, i)=> {
                 // console.log(el, i)
             return  <h4 key={el}><span key={i}onClick={(e)=>{this.removeIngredient(e.target.className)}} className={i}>{el}</span></h4>}) : <h4>No ingredients found</h4>
-        
+
             var filterRender =  (obj)=> {
                 let array = [];
                 for (let key in obj)
                   if(obj[key]){array.push(key)}
-                  else 
+                  else
                   return array.map((item, i)=>{
                       return <h4 onClick={(e)=>{this.removeIngredient(e.target.className)}} className={i}>{item}</h4>
                   })
@@ -163,7 +163,7 @@ export default class SearchPage extends Component {
                     </div>
                     { this.state.filterModal===true ? <SearchModal handleFilter={this.handleFilter} handleGetFilters={this.handleGetFilters
                     } /> : <button onClick={this.handleFilter} className='SearchPageButton' id='noAniButton'>Filter
-                    </button> } 
+                    </button> }
 
                     <button onClick={e => this.handleSearch(e)} className={this.state.csseffect && 'dothateffect'} id='SearchPageGetRecipesButton'>Get Recipes
                     </button>

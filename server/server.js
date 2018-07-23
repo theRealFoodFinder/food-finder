@@ -104,14 +104,14 @@ app.get('/atla40', (req, res) => {
             if (response[0].init_login) {
                 app.get('db').update_init_login([req.user.id])
                     .then(() => {
-                        res.redirect('/initialSetup')
+                        res.redirect('/#/initialSetup')
                     }),
                     () => {
                         console.log("Couldnt update init setup.  Passing to search page")
-                        res.status('500').redirect('/search')
+                        res.status('500').redirect('/#/search')
                     }
             } else {
-                res.status('200').redirect('/search')
+                res.status('200').redirect('/#/search')
             }
         })
 })
@@ -172,7 +172,7 @@ app.get('/api/getFavorites', (req, res) => {
                 let queryString = `SELECT recipe_id, title, image_url from recipes WHERE recipe_id IN (${favorites});`
                 app.get('db').run(queryString)
                     .then(response => {
-                        // console.log(response,'gettfavorites')
+                        // console.log(response,'get favorites')
                         res.status('200').send(response);
                     })
             } else
