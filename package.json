@@ -3,7 +3,6 @@
   "main": "server/server.js",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://FreeFlight-Code.github.io/food-finder",
   "dependencies": {
     "axios": "^0.16.2",
     "body-parser": "^1.18.2",
